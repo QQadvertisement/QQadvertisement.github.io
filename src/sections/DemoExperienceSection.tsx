@@ -8,9 +8,14 @@ export default function DemoExperienceSection() {
         This is what your customers will see — a fully interactive, brand-safe mini-game that boosts engagement and drives results.
       </p>
 
-      <div className="w-full max-w-4xl mx-auto aspect-video bg-gray-200 rounded-xl border-2 border-dashed border-teal-300 flex items-center justify-center text-gray-400 text-lg">
-        {/* Replace this with actual widget or iframe */}
-        MVP Demo Placeholder
+      <div className="w-full max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-xl border-2 border-teal-300">
+        <iframe
+          src="https://qqadvertisement.github.io/qqkneadgame/"
+          title="Quantum Quokkas Kneading Demo"
+          className="w-full h-full"
+          loading="lazy"
+          style={{ border: "none" }}
+        />
       </div>
 
       <div className="mt-10">

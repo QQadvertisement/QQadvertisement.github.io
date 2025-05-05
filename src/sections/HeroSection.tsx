@@ -1,5 +1,5 @@
 import React from "react";
-import mascot from "../assets/logos/qq-jump.png";
+import mascot from "../assets/logos/qq-jump-aura.png";
 
 export default function HeroSection() {
   return (
@@ -25,6 +25,8 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6">
+        
+        
         {/* Headline + CTA */}
         <div className="text-center md:text-left md:w-1/2 md:pr-12 max-w-xl mt-12 md:mt-0">
           <h1 className="text-4xl font-extrabold mb-4 leading-tight text-gray-900">
@@ -57,6 +59,7 @@ export default function HeroSection() {
             className="w-80 h-auto animate-float drop-shadow-xl"
           />
         </div>
+        
       </div>
     </section>
   );
