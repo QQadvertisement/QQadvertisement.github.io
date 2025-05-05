@@ -1,0 +1,24 @@
+{
+    "name": "QQ Advertisement",
+    "short_name": "QQ Ads",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f0fdfa",
+    "theme_color": "#0f766e",
+    "orientation": "portrait",
+    "scope": "/",
+    "icons": [
+      {
+        "src": "/assets/icons/icon-192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/assets/icons/icon-512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "description": "QQ Advertisement helps B2B brands turn engagement into results through gamified ad experiences that are fun, energetic, and data-driven.",
+    "lang": "en-US"
+  }
