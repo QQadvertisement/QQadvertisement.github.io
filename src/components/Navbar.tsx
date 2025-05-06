@@ -8,10 +8,9 @@ export default function Navbar() {
 
   const navLinks = (
     <>
-      <a href="#demo" className="hover:text-teal-600 block py-2 md:inline-block md:py-0">Demo</a>
-      <a href="#case-studies" className="hover:text-teal-600 block py-2 md:inline-block md:py-0">Case Studies</a>
-      <a href="#testimonials" className="hover:text-teal-600 block py-2 md:inline-block md:py-0">Testimonials</a>
-      <a href="#contact" className="hover:text-teal-600 block py-2 md:inline-block md:py-0">Contact</a>
+      <a href="/about" className="hover:text-teal-600 block py-2 md:inline-block md:py-0">About</a>
+      <a href="/products" className="hover:text-teal-600 block py-2 md:inline-block md:py-0">Products</a>
+      <a href="/case-studies" className="hover:text-teal-600 block py-2 md:inline-block md:py-0">Case Studies</a>
     </>
   );
 

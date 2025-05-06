@@ -6,6 +6,7 @@ import CTASection from "../sections/CTASection";
 import DemoExperienceSection from "../sections/DemoExperienceSection";
 import TestimonialsSection from "../sections/TestimonialsSection";
 import CaseStudiesSection from "../sections/CaseStudiesSection";
+import ContactSection from "../sections/ContactSection";
 
 export default function Home() {
   return (
@@ -31,6 +32,7 @@ export default function Home() {
       <section id="contact">
         <CTASection />
       </section>
+        <ContactSection />
     </main>
   );
 }

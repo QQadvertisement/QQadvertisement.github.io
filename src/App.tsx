@@ -1,7 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/NavBar";
+import Navbar from "./components/NavBar"; // Please ignore error. It works.
 import Home from "./pages/Home";
+import About from "./pages/About";
+import Products from "./pages/Products";
+
+import Footer from "./components/Footer";
+import NotFoundPage from "./pages/404";
 
 export default function App() {
   return (
@@ -9,8 +14,14 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/products" element={<Products />} />
         {/* Future routes can be added here */}
+
+        {/* 👇 Catch-all 404 route */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }
