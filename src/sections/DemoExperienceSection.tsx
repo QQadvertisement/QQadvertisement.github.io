@@ -10,7 +10,7 @@ export default function DemoExperienceSection() {
 
       <div className="w-full max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-xl border-2 border-teal-300">
         <iframe
-          src="https://qqadvertisement.github.io/qqkneadgame/"
+          src="https://qqadvertisement.com/qqkneadgame/"
           title="Quantum Quokkas Kneading Demo"
           className="w-full h-full"
           loading="lazy"
