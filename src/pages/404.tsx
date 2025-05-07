@@ -31,14 +31,18 @@ export default function NotFoundPage() {
         </div>
       </div>
 
-      {/* Demo MVP or Mini Game Placeholder */}
-      {/* <div className="px-6 py-12 ">
-        <div className="max-w-5xl mx-auto text-center border-2 border-dashed border-teal-300 rounded-xl py-20">
-          <p className="text-teal-500 font-medium text-lg">
-            Demo MVP Playground – Endless Runner or Ad Mini-Game goes here 🎮
-          </p>
+      {/* Demo MVP or Mini Game Embed */}
+      <div className="px-6 py-12">
+        <div className="max-w-5xl mx-auto text-center rounded-xl overflow-hidden shadow-lg aspect-video">
+          <iframe
+            src="https://qqadvertisement.com/qqkneadgame/"
+            title="Quantum Quokkas Kneading Demo"
+            className="w-full h-full"
+            loading="lazy"
+            style={{ border: "none" }}
+          />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
