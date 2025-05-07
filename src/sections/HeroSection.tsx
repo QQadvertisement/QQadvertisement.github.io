@@ -54,7 +54,7 @@ export default function HeroSection() {
           <img
             src={mascot}
             alt="Quantum Quokkas Mascot"
-            className="w-80 h-auto animate-float drop-shadow-xl"
+            className="w-90 h-auto animate-float drop-shadow-xl"
           />
         </div>
       </div>
