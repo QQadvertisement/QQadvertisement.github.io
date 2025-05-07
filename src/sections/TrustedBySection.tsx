@@ -3,18 +3,40 @@ import { trustedBrands } from "../data/trustedBy";
 
 export default function TrustedBySection() {
   return (
-    <section className="py-12 px-4 bg-gray-50 text-center">
-      <h2 className="text-xl font-semibold mb-6">Trusted by forward-thinking teams</h2>
-      <div className="flex justify-center flex-wrap gap-8 items-center">
+    <section className="py-16 px-4 bg-white text-center">
+      <h2 className="text-xl font-semibold mb-4 text-gray-700">Our Dream Clients</h2>
+      <p className="text-gray-500 max-w-xl mx-auto mb-8">
+        We build playful campaigns for bold brands. These are the kinds of teams we’re inspired by—and excited to support.
+      </p>
+      <div className="flex justify-center flex-wrap gap-8 items-center opacity-80">
         {trustedBrands.map((brand) => (
           <img
             key={brand.name}
             src={brand.logo}
             alt={brand.name}
-            className="h-12 w-auto opacity-70 hover:opacity-100 transition"
+            className="h-12 w-auto grayscale hover:grayscale-0 transition"
           />
         ))}
       </div>
+      <p className="text-sm text-gray-400 mt-6 italic">
+        Logos shown here represent brands we admire and hope to work with. No implied endorsement.
+      </p>
     </section>
   );
 }
+
+
+
+    // <section className="py-16 bg-white text-center">
+    //   <h3 className="text-xl font-medium text-gray-600">
+    //     Trusted by early-stage brands, startups, and marketers building the future of advertising.
+    //   </h3>
+
+    //   {/* Optional aesthetic: blurred logos or generic icons */}
+    //   <div className="mt-6 flex justify-center gap-6 opacity-40">
+    //     <div className="w-24 h-12 bg-gray-200 rounded animate-pulse" />
+    //     <div className="w-24 h-12 bg-gray-200 rounded animate-pulse" />
+    //     <div className="w-24 h-12 bg-gray-200 rounded animate-pulse" />
+    //     <div className="w-24 h-12 bg-gray-200 rounded animate-pulse" />
+    //   </div>
+    // </section>

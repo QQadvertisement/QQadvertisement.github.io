@@ -25,28 +25,26 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6">
-        
-        
         {/* Headline + CTA */}
         <div className="text-center md:text-left md:w-1/2 md:pr-12 max-w-xl mt-12 md:mt-0">
           <h1 className="text-4xl font-extrabold mb-4 leading-tight text-gray-900">
-            Turn Engagement Into Results <br className="hidden sm:block" /> with Gamified Ads
+            Gamified Ads That Actually Get Played
           </h1>
-          <p className="text-lg text-gray-700 mb-6 leading-relaxed">            
-            QQ Advertisement creates playful, powerful ad experiences through gamification. More fun. More engagement. More results.
+          <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+            Engage users 3x longer with playful, branded ad experiences across web, mobile, and real life. We help innovative marketers turn banner blindness into brand love.
           </p>
           <div className="flex justify-center md:justify-start gap-4">
             <a
               href="#demo"
               className="bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700"
             >
-              Try Demo
+              🎮 Try Live Demo
             </a>
             <a
               href="#case-studies"
               className="border border-teal-600 text-teal-600 px-6 py-3 rounded-xl font-semibold hover:bg-teal-50"
             >
-              See Examples
+              📈 See Real Results
             </a>
           </div>
         </div>
@@ -59,7 +57,6 @@ export default function HeroSection() {
             className="w-80 h-auto animate-float drop-shadow-xl"
           />
         </div>
-        
       </div>
     </section>
   );

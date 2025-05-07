@@ -8,7 +8,14 @@ import Products from "./pages/Products";
 import Footer from "./components/Footer";
 import NotFoundPage from "./pages/404";
 
+import { useEffect } from "react";
+import { initGoogleAnalytics } from "./lib/analytics";
+
 export default function App() {
+  useEffect(() => {
+    initGoogleAnalytics();
+  }, []);
+
   return (
     <Router>
       <Navbar />
