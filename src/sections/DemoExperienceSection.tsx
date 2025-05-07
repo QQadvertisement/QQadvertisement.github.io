@@ -12,7 +12,7 @@ export default function DemoExperienceSection() {
         className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-xl border-2 border-teal-300"
         style={{
           aspectRatio: "16 / 9", // still responsive
-          minHeight: "400px",     // ensures vertical space on mobile
+          minHeight: "700px",     // ensures vertical space on mobile
         }}
       >
         <iframe

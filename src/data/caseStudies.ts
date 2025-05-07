@@ -18,11 +18,11 @@ export const caseStudies = [
     image: "/assets/casestudies/Starbucksscopy.png"
   },
   {
-    title: "Burger King: ‘Escape the Clown’ AR Game",
-    stat: "1.5M app downloads in a week",
+    title: "Burger King: Gamified Coupon Promo",
+    stat: "1.5M app downloads in a week + sales skyrocketed",
     description:
-      "To steal attention (and market share) from McDonald’s, Burger King launched a Halloween-themed AR game. Users “escaped” Ronald McDonald through the app, unlocking a free Whopper for their trouble.",
-    tags: ["Augmented Reality", "App Downloads", "Event Marketing"],
+      "Burger King used gamification to turn a simple coupon into a viral event. Through a Halloween-themed AR game, users played to escape a creepy clown — and were rewarded with a free Whopper.",
+    tags: ["Promotional Campaign", "App Downloads", "Sales Growth"],
     source: "Forbes Coverage",
     image: "/assets/casestudies/BK.png"
   },
