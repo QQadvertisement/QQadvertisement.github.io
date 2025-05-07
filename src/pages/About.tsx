@@ -2,60 +2,59 @@ import React from "react";
 import LeftTextRightImageSection from "../sections/LeftText-RightImageSection";
 import LeftImageRightTextSection from "../sections/LeftImage-RightTextSection";
 import TextOnlySection from "../sections/TextOnlySection";
+
 import StatsSection from "../sections/StatsSection";
 import TestimonialsSection from "../sections/TestimonialsSection";
 import ContactSection from "../sections/ContactSection";
-
+import CTASection from "../sections/CTASection";
 
 export default function About() {
   return (
-    <main className="space-y-20 px-6 md:px-12 lg:px-24 py-16 text-gray-800">
-      <section id="about1">
-        <LeftTextRightImageSection
-          title="Who We Are"
-          paragraphs={[
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse."
-          ]}
-          imageSrc="/assets/logos/qq-joystick-bg.png"
-        />
-      </section>
+    <main className="space-y-24">
+      <LeftTextRightImageSection
+        title="Who We Are"
+        paragraphs={[
+          "QQ Advertisement is a creative ad studio that builds gamified campaigns people actually want to engage with.",
+          "We turn passive viewers into active participants — helping brands boost clicks, dwell time, and conversions through joyfully crafted ad experiences."
+        ]}
+        imageSrc="/assets/logos/qqads/7.png"
+        bgFrom="white"
+        bgTo="blue-50"
+      />
 
       <section id="about-text">
         <TextOnlySection
-          title="Why Gamified Ads Are the Future"
+          title="Our Mission & Values"
           paragraphs={[
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-            "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-            "Our mission is to bridge the gap between play and performance marketing..."
+            "We started QQ Advertisement not from a boardroom, but from a dorm room — as international students with bold ideas and even bolder ambitions. We didn’t wait for permission to build something different. We just built it. At our core, we believe in the power of play — not just as a gimmick, but as a transformative marketing tool. We use interactivity, joy, and experimentation to help brands create campaigns people actually enjoy.",            
+            "We’re driven by four values:",
+            "• Energy — We move fast, learn faster, and keep things fun. If it’s not exciting to us, it won’t be exciting to your audience.",
+            "• Connection — We care about attention with intention. Ads aren’t just about reach — they’re about relationships.",
+            "• Daring — We test, we play, we take creative risks. Because the best results come from the boldest experiments.",
+            "Our mission is simple:",
+            "To bridge the gap between performance marketing and playful design, and to prove that interactive ads can do more than sell — they can stick, surprise, and spark something real."
           ]}
+          bgColor="bg-red-100"
         />
       </section>
 
-      <section id="about2">
-        <LeftImageRightTextSection
-          title="Who We Are"
-          paragraphs={[
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse."
-          ]}
-          imageSrc="/assets/logos/qq-joystick-bg.png"
-        />
-        <StatsSection />
-        <TextOnlySection
-          title="Lorem Ipsum"
-          paragraphs={[
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit... Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-            "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-            "Our mission is to bridge the gap between play and performance marketing..."
-          ]}
-        />
-      </section>
-      <TestimonialsSection />
+      <LeftImageRightTextSection
+        title="Why Gamified Ads Are the Future"
+        paragraphs={[
+          "People skip traditional ads. But when ads feel like games — they play.",
+          "Gamification combines UX, behavioral science, and interactivity to create branded experiences that spark curiosity and drive action.",
+          "At QQ, we design mini-games and reward-based campaigns that turn marketing into entertainment. The result? More engagement, more loyalty, and more fun."
+        ]}
+        imageSrc="/assets/casestudies/BK.png"
+        bgFrom="white"
+        bgTo="white"
+      />
+
+      <StatsSection />
+      {/* <TestimonialsSection /> */}
+      {/* <CTASection/> */}
+
       <ContactSection />
-
     </main>
   );
 }

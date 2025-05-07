@@ -45,7 +45,7 @@ export default function LeftImageRightTextSection({
           <img
             src={imageSrc}
             alt={imageAlt}
-            className="max-w-sm w-full drop-shadow-xl rounded-2xl"
+            className="max-w-md w-full drop-shadow-xl rounded-2xl md:max-w-lg"
           />
         </div>
       </div>

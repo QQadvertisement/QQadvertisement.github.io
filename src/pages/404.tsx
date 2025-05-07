@@ -32,13 +32,13 @@ export default function NotFoundPage() {
       </div>
 
       {/* Demo MVP or Mini Game Placeholder */}
-      <div className="px-6 py-12 ">
+      {/* <div className="px-6 py-12 ">
         <div className="max-w-5xl mx-auto text-center border-2 border-dashed border-teal-300 rounded-xl py-20">
           <p className="text-teal-500 font-medium text-lg">
             Demo MVP Playground – Endless Runner or Ad Mini-Game goes here 🎮
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

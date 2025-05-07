@@ -4,7 +4,10 @@ import { testimonials } from "../data/testimonials";
 export default function TestimonialsSection() {
   return (
     <section className="bg-white py-20 px-6 text-center">
-      <h2 className="text-3xl font-bold mb-10">What Our Clients Are Saying</h2>
+      <h2 className="text-3xl font-bold mb-10">What Our Early Users Say</h2>
+      <p className="text-gray-600 max-w-2xl mx-auto mb-12">
+        These aren’t fake testimonials. They’re real reactions from early testers, advisors, and partners we’ve collaborated with during concept development.
+      </p>
       <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {testimonials.map((t) => (
           <div

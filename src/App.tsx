@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar"; //test action
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Products from "./pages/Products";
+import ContactSection from "./pages/Contact";
 
 import Footer from "./components/Footer";
 import NotFoundPage from "./pages/404";
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/contact" element={<ContactSection />} />
         {/* Future routes can be added here */}
 
         {/* 👇 Catch-all 404 route */}

@@ -18,16 +18,17 @@ export default function ContactSection() {
         {/* Text Column */}
         <div>
           <h2 className="text-4xl font-bold text-teal-700 mb-6">
-            Lorem ipsum dolor sit amet consectetur
+            Ready to Gamify Your Next Campaign?
           </h2>
           <p className="text-gray-700 text-lg mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet
-            lacus nec sapien dapibus malesuada nec vitae ante.
+            Let's turn your marketing into something people actually want to interact with. Book a free discovery call — we'll brainstorm your first gamified concept, on the house.
           </p>
           <p className="text-gray-700 text-lg">
-            Ut placerat mauris sed urna pharetra, et posuere eros aliquet. Vestibulum
-            commodo, purus et porta scelerisque, justo massa ultricies metus, sed
-            tincidunt nisl nunc ut nunc.
+            Whether you're launching a product, boosting loyalty, or just tired of boring ads — we've got ideas ready to roll.
+            <br></br>
+            ⸻
+            <br></br>
+            🛡️ We'll only use your info to contact you about your inquiry. No spam. Ever!!
           </p>
         </div>
 

@@ -36,13 +36,13 @@ export default function HeroSection() {
           <div className="flex justify-center md:justify-start gap-4">
             <a
               href="#demo"
-              className="bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700"
+              className="bg-teal-600 text-white px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base rounded-xl font-semibold hover:bg-teal-700 transition"
             >
               🎮 Try Live Demo
             </a>
             <a
               href="#case-studies"
-              className="border border-teal-600 text-teal-600 px-6 py-3 rounded-xl font-semibold hover:bg-teal-50"
+              className="border border-teal-600 text-teal-600 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base rounded-xl font-semibold hover:bg-teal-50 transition"
             >
               📈 See Real Results
             </a>

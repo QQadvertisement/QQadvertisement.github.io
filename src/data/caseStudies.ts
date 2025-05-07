@@ -1,31 +1,42 @@
 export const caseStudies = [
-    {
-      title: "📱 McPlay: Interactive Combo Game",
-      brand: "McDonald’s SEA",
-      outcome: "+245% engagement • 10x ROI",
-      summary: "We built a tap-to-win game that let users earn extra fries or drinks by completing quick, timed challenges on the McDonald's app.",
-      image: "/assets/casestudies/mcplay.png",
-    },
-    {
-      title: "🧠 Meta Trivia Sprint",
-      brand: "Meta",
-      outcome: "+61% CTR • 2x longer session time",
-      summary: "A knowledge-based race where creators answered branding trivia. Winners got access to limited beta features in Meta’s tools suite.",
-      image: "/assets/casestudies/meta-sprint.png",
-    },
-    {
-      title: "🏁 Shopify End-Year Arcade",
-      brand: "Shopify",
-      outcome: "10k+ plays • 3.6x share rate",
-      summary: "A nostalgic 8-bit arcade game themed around eCommerce hustle. Merchants unlocked perks based on their scores.",
-      image: "/assets/casestudies/shopify-arcade.png",
-    },
-    {
-      title: "👟 Adidas Originals Drop Run",
-      brand: "Adidas",
-      outcome: "+320% leads • 45s avg time played",
-      summary: "Gamified raffle run where sneakerheads competed in a virtual race. Tied to the ZX launch, resulting in record email signups.",
-      image: "/assets/casestudies/adidas-drop.png",
-    }
-  ];
-  
+  {
+    title: "Pandora: Gamified Lead Generation",
+    stat: "7x more email sign-ups",
+    description:
+      "Pandora swapped their standard subscription form for a playful gamified widget. The result? A 7x increase in email capture, turning casual browsers into loyal subscribers.",
+    tags: ["Retail", "Lead Gen", "Email Growth"],
+    source: "Promodo Case Study",
+    image: "/assets/casestudies/Pandoracopy.png"
+  },
+  {
+    title: "Starbucks: Reward System + Gamified Challenges",
+    stat: "34.3M active users • 20% revenue growth",
+    description:
+      "Starbucks integrated gamification into its mobile loyalty app with streaks, tiered points, and seasonal challenges. It led to higher frequency, bigger baskets, and 13% YoY growth in membership.",
+    tags: ["Loyalty", "Mobile App", "QSR"],
+    source: "SmartDev Breakdown",
+    image: "/assets/casestudies/Starbucksscopy.png"
+  },
+  {
+    title: "Burger King: ‘Escape the Clown’ AR Game",
+    stat: "1.5M app downloads in a week",
+    description:
+      "To steal attention (and market share) from McDonald’s, Burger King launched a Halloween-themed AR game. Users “escaped” Ronald McDonald through the app, unlocking a free Whopper for their trouble.",
+    tags: ["Augmented Reality", "App Downloads", "Event Marketing"],
+    source: "Forbes Coverage",
+    image: "/assets/casestudies/BK.png"
+  },
+  {
+    title: "Shopee: Habit Loops with Daily Gamified Tasks",
+    stat: "14+ mini-games • Top 5 app in SEA",
+    description:
+      "Shopee uses daily games like “Shopee Farm” and “Spin & Win” to reward check-ins, boost conversions, and keep shoppers returning daily. These gamified mechanics drive massive user retention and social sharing.",
+    tags: ["Ecommerce", "Habit Loop", "Daily Engagement"],
+    source: "Vulcan Post Analysis",
+    image: "/assets/casestudies/shoppeefarm.jpeg"
+  }
+];
+
+// https://www.promodo.com/case-studies/how-gamification-works-in-the-jewelry-niche-the-pandora-case-study?
+// https://community.braze.com/blog/built-on-braze/how-burger-king-is-driving-user-engagement-and-loyalty-through-gamification/11
+// https://livingonthecheap.com/lotc-cms/wp-content/uploads/2024/04/starbucks-spring-scavenger-hunt.jpg
