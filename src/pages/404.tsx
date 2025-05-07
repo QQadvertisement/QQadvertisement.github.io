@@ -30,22 +30,24 @@ export default function NotFoundPage() {
           </a>
         </div>
       </div>
-      
+
       {/* Demo MVP or Mini Game Embed */}
-      <div
-        className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-xl border-2 border-teal-300"
-        style={{
-          aspectRatio: "16 / 9", // still responsive
-          minHeight: "700px",     // ensures vertical space on mobile
-        }}
-      >
-        <iframe
-          src="https://qqadvertisement.com/qqkneadgame/"
-          title="Quantum Quokkas Kneading Demo"
-          className="w-full h-full"
-          loading="lazy"
-          style={{ border: "none" }}
-        />
+      <div className="px-6 py-12">
+        <div
+          className="w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-xl border-2 border-teal-300"
+          style={{
+            aspectRatio: "16 / 9", // still responsive
+            minHeight: "500px",     // ensures vertical space on mobile
+          }}
+        >
+          <iframe
+            src="https://qqadvertisement.com/qqkneadgame/"
+            title="Quantum Quokkas Kneading Demo"
+            className="w-full h-full"
+            loading="lazy"
+            style={{ border: "none" }}
+          />
+        </div>
       </div>
     </div>
   );
