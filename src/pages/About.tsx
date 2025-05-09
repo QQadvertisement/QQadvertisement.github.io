@@ -17,7 +17,7 @@ export default function About() {
           "QQ Advertisement is a creative ad studio that builds gamified campaigns people actually want to engage with.",
           "We turn passive viewers into active participants — helping brands boost clicks, dwell time, and conversions through joyfully crafted ad experiences."
         ]}
-        imageSrc="/assets/logos/qqads/7.png"
+        imageSrc="/assets/logos/qqads/2.png"
         bgFrom="white"
         bgTo="blue-50"
       />

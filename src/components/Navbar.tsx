@@ -17,8 +17,14 @@ export default function Navbar() {
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <div className="text-2xl font-bold text-teal-600">
-          <a href="/">QQ Advertisement</a>
+        <div className="flex items-center">
+          <a href="/">
+            <img
+              src="/assets/logos/qqads/qq-logo-tl.png"
+              alt="QQ Advertisement Logo"
+              className="h-8 md:h-10 w-auto md:w-[140px] object-contain"
+            />
+          </a>
         </div>
 
         {/* Desktop nav */}
