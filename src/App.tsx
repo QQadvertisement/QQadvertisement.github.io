@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Products from "./pages/Products";
 import ContactSection from "./pages/Contact";
+import EmaGame from "./pages/EmaGame"; // Import the new EmaGame component
 
 import Footer from "./components/Footer";
 import NotFoundPage from "./pages/404";
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/products" element={<Products />} />
         <Route path="/contact" element={<ContactSection />} />
+        <Route path="/emagame" element={<EmaGame />} /> {/* Add new EmaGame route */}
         {/* Future routes can be added here */}
 
         {/* 👇 Catch-all 404 route */}
