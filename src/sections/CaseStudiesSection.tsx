@@ -23,9 +23,20 @@ export default function CaseStudiesSection() {
                 />
               )}
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-800 group-hover:text-teal-700">
-                  {item.title}
-                </h3>
+                {item.link ? (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xl font-semibold text-gray-800 group-hover:text-teal-700 hover:underline"
+                  >
+                    {item.title}
+                  </a>
+                ) : (
+                  <h3 className="text-xl font-semibold text-gray-800 group-hover:text-teal-700">
+                    {item.title}
+                  </h3>
+                )}
                 <div className="text-sm text-gray-500 font-medium mt-1">
                   {item.stat}
                 </div>
