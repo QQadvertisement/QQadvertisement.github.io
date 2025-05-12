@@ -17,11 +17,11 @@ export default function Home() {
       <section id="trusted">
         <TrustedBySection />
       </section>
-      <section id="stats">
-        <StatsSection />
-      </section>
       <section id="demo">
         <DemoExperienceSection />
+      </section>
+      <section id="stats">
+        <StatsSection />
       </section>
       <section id="case-studies">
         <CaseStudiesSection />
