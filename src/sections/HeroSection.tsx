@@ -28,7 +28,7 @@ export default function HeroSection() {
         {/* Headline + CTA */}
         <div className="text-center md:text-left md:w-1/2 md:pr-12 max-w-xl mt-12 md:mt-0">
           <h1 className="text-4xl font-extrabold mb-4 leading-tight text-gray-900">
-            Gamified Ads That Actually Get Played
+            Create Interactive Mini-game for your Brand
           </h1>
           <p className="text-lg text-gray-700 mb-6 leading-relaxed">
             Engage users 3x longer with playful, branded ad experiences across web, mobile, and real life. We help innovative marketers turn banner blindness into brand love.
