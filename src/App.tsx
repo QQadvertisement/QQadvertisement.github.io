@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar"; //test action
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -12,6 +12,17 @@ import NotFoundPage from "./pages/404";
 
 import { useEffect } from "react";
 import { initGoogleAnalytics } from "./lib/analytics";
+import ReactGA from "react-ga4";
+
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
+  }, [location]);
+
+  return null;
+}
 
 export default function App() {
   useEffect(() => {
@@ -20,6 +31,7 @@ export default function App() {
 
   return (
     <Router>
+      <AnalyticsTracker />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
