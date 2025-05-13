@@ -56,7 +56,7 @@ export default function EmaGame() {
         overflow: 'visible',
       }}>
         <iframe
-          src="/ema_webgl/index.html"
+          src="https://ema-game-webgl.s3.us-east-2.amazonaws.com/index.html" // Replace this with your external WebGL URL
           title="Ema Kneading Game"
           className="unity-game-iframe"
           style={{
