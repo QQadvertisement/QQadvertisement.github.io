@@ -7,6 +7,15 @@
     <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QQ Advertisement</title>
+    
+    <!-- Mobile Debug Console -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>
+      // Only initialize Eruda if we're on the EmaGame route or in development
+      if (window.location.pathname.includes('emagame') || process.env.NODE_ENV === 'development') {
+        eruda.init();
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
