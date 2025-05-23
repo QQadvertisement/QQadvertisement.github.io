@@ -1,7 +1,7 @@
 import React from "react";
 import HeroSection from "../sections/HeroSection";
 import StatsSection from "../sections/StatsSection";
-import TrustedBySection from "../sections/TrustedBySection";
+import TargetClientsSection from "../sections/TargetClientsSection";
 import CTASection from "../sections/CTASection";
 import DemoExperienceSection from "../sections/DemoExperienceSection";
 import TestimonialsSection from "../sections/TestimonialsSection";
@@ -15,7 +15,7 @@ export default function Home() {
         <HeroSection />
       </section>
       <section id="trusted">
-        <TrustedBySection />
+        <TargetClientsSection />
       </section>
       <section id="demo">
         <DemoExperienceSection />

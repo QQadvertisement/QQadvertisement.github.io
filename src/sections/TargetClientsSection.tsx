@@ -1,7 +1,7 @@
 import React from "react";
-import { trustedBrands } from "../data/trustedBy";
+import { trustedBrands as targetBrands } from "../data/trustedBy";
 
-export default function TrustedBySection() {
+export default function TargetClientsSection() {
   return (
     <section className="py-16 px-4 bg-white text-center">
       <h2 className="text-xl font-semibold mb-4 text-gray-700">Our Dream Clients</h2>
@@ -9,7 +9,7 @@ export default function TrustedBySection() {
         We build playful campaigns for bold brands. These are the kinds of teams we’re inspired by—and excited to support.
       </p>
       <div className="flex justify-center flex-wrap gap-8 items-center opacity-80">
-        {trustedBrands.map((brand) => (
+        {targetBrands.map((brand) => (
           <img
             key={brand.name}
             src={brand.logo}

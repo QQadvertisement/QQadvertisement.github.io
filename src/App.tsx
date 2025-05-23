@@ -11,14 +11,14 @@ import Footer from "./components/Footer";
 import NotFoundPage from "./pages/404";
 
 import { useEffect } from "react";
-import { initGoogleAnalytics } from "./lib/analytics";
-import ReactGA from "react-ga4";
+import { initGoogleAnalytics, trackPageView } from "./lib/analytics";
 
 function AnalyticsTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    ReactGA.send({ hitType: "pageview", page: location.pathname });
+    // Track page views with enhanced path tracking
+    trackPageView(location.pathname + location.search);
   }, [location]);
 
   return null;
