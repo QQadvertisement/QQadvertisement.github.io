@@ -1,5 +1,5 @@
 import React from "react";
-import mascot from "../assets/logos/qq-jump-aura.png";
+import mascot from "../assets/logos/qq-jump-aura.webp";
 
 export default function HeroSection() {
   return (

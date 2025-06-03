@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+  xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="https://www.google.com/schemas/sitemap-image/1.1"
+>
+  <url>
+    <loc>https://qqadvertisement.github.io/</loc>
+    <lastmod>2025-06-03</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://qqadvertisement.github.io/about</loc>
+    <lastmod>2025-06-03</lastmod>
+  </url>
+  <url>
+    <loc>https://qqadvertisement.github.io/products</loc>
+    <lastmod>2025-06-03</lastmod>
+  </url>
+  <url>
+    <loc>https://qqadvertisement.github.io/contact</loc>
+    <lastmod>2025-06-03</lastmod>
+  </url>
+  <!-- Example future blog or project route -->
+  <url>
+    <loc>https://qqadvertisement.github.io/portfolio</loc>
+    <lastmod>2025-06-03</lastmod>
+  </url>
+</urlset>

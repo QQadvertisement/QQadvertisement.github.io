@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import LeftTextRightImageSection from "../sections/LeftText-RightImageSection";
 import LeftImageRightTextSection from "../sections/LeftImage-RightTextSection";
 import TextOnlySection from "../sections/TextOnlySection";
@@ -10,7 +11,13 @@ import CTASection from "../sections/CTASection";
 
 export default function About() {
   return (
-    <main className="space-y-24">
+    <>
+      <Helmet>
+        <title>About Us | QQ Advertisement</title>
+        <meta name="description" content="Learn about QQ Advertisement’s mission to bring joy to marketing through gamified ad campaigns and interactive brand experiences." />
+        <meta name="keywords" content="about QQ Advertisement, gamified ads, interactive marketing, ad agency mission, brand story" />
+      </Helmet>
+      <main className="space-y-24">
       <LeftTextRightImageSection
         title="Who We Are"
         paragraphs={[
@@ -56,5 +63,6 @@ export default function About() {
 
       <ContactSection />
     </main>
+    </>
   );
 }

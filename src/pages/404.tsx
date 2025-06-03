@@ -1,5 +1,5 @@
 import React from "react";
-import mascot from "../assets/404/404.png"; // Adjust path
+import mascot from "../assets/404/404.webp"; // Adjust path
 import { ArrowLeft } from "lucide-react";
 
 export default function NotFoundPage() {
