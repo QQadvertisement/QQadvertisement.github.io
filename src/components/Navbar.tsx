@@ -20,7 +20,7 @@ export default function Navbar() {
         <div className="flex items-center">
           <a href="/">
             <img
-              src="/assets/logos/qqads/qq-logo-tl.png"
+              src="/assets/logos/qqads/qq-logo-tl2.webp"
               alt="QQ Advertisement Logo"
               className="h-8 md:h-10 w-auto md:w-[140px] object-contain"
             />

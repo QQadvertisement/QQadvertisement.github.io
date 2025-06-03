@@ -24,7 +24,7 @@ export default function About() {
           "QQ Advertisement is a creative ad studio that builds gamified campaigns people actually want to engage with.",
           "We turn passive viewers into active participants — helping brands boost clicks, dwell time, and conversions through joyfully crafted ad experiences."
         ]}
-        imageSrc="/assets/logos/qqads/2.png"
+        imageSrc="/assets/logos/qqads/QQminimallogo.webp"
         bgFrom="white"
         bgTo="blue-50"
       />
@@ -52,7 +52,7 @@ export default function About() {
           "Gamification combines UX, behavioral science, and interactivity to create branded experiences that spark curiosity and drive action.",
           "At QQ, we design mini-games and reward-based campaigns that turn marketing into entertainment. The result? More engagement, more loyalty, and more fun."
         ]}
-        imageSrc="/assets/casestudies/BK.png"
+        imageSrc="/assets/casestudies/BK.webp"
         bgFrom="white"
         bgTo="white"
       />
