@@ -33,7 +33,7 @@ export default function Footer() {
               <Mail size={16} /> hello@qqadvertisement.com
             </li>
             <li className="flex items-start gap-2">
-              <Phone size={16} /> +1 (312) 555-7788
+              <Phone size={16} /> +1 (312) 709-7457
             </li>
             <li className="flex items-start gap-2">
               <MapPin size={16} /> New York / Chicago, USA
@@ -45,8 +45,8 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold mb-2 text-gray-100">Follow Us</h4>
           <ul className="flex gap-4 text-gray-400">
-            <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400">LinkedIn</a></li>
-            <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400">Instagram</a></li>
+            <li><a href="https://www.linkedin.com/company/107080115/" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400">LinkedIn</a></li>
+            {/* <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400">Instagram</a></li> */}
           </ul>
         </div>
       </div>
