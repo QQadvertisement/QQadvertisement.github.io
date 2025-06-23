@@ -46,6 +46,10 @@ export default function Home() {
           bgFrom="white"
           bgVia="red-50"
           bgTo="white"
+          primaryBtnText="Learn More"
+          primaryBtnLink="#"
+          secondaryBtnText="Schedule a Demo"
+          secondaryBtnLink="#"
         />
 
         {/* 4. Product Offer 2: Real-Time Analytics */}
@@ -59,6 +63,10 @@ export default function Home() {
           imageSrc="/images/placeholder-solution.webp"
           imageAlt="Analytics dashboard showing engagement metrics"
           reverseGradient={true}
+          primaryBtnText="Learn More"
+          primaryBtnLink="#"
+          secondaryBtnText="Schedule a Demo"
+          secondaryBtnLink="#"
         />
 
         {/* 7. Product Showcase */}
@@ -79,6 +87,10 @@ export default function Home() {
           bgFrom="white"
           bgVia="blue-50"
           bgTo="white"
+          primaryBtnText="Learn More"
+          primaryBtnLink="#"
+          secondaryBtnText="Schedule a Demo"
+          secondaryBtnLink="#"
         />
 
         {/* 6. Product Offer 4: Done-For-You Campaigns */}
@@ -92,6 +104,10 @@ export default function Home() {
           imageSrc="/images/placeholder-case-study.webp"
           imageAlt="Complete campaign development process"
           reverseGradient={true}
+          primaryBtnText="Learn More"
+          primaryBtnLink="#"
+          secondaryBtnText="Schedule a Demo"
+          secondaryBtnLink="#"
         />
 
         {/* 8. Social Proof & Case Studies */}

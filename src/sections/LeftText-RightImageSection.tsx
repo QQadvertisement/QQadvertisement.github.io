@@ -9,6 +9,10 @@ interface Props {
   bgVia?: string;
   bgTo?: string;
   reverseGradient?: boolean;
+  primaryBtnText?: string;
+  primaryBtnLink?: string;
+  secondaryBtnText?: string;
+  secondaryBtnLink?: string;
 }
 
 export default function LeftTextRightImageSection({
@@ -20,6 +24,10 @@ export default function LeftTextRightImageSection({
   bgVia = "teal-50",
   bgTo = "white",
   reverseGradient = false,
+  primaryBtnText,
+  primaryBtnLink,
+  secondaryBtnText,
+  secondaryBtnLink,
 }: Props) {
   const gradientClass = reverseGradient
     ? `bg-gradient-to-tl from-${bgFrom} via-${bgVia} to-${bgTo}`
@@ -53,6 +61,26 @@ export default function LeftTextRightImageSection({
               {text}
             </p>
           ))}
+          
+          {/* Buttons */}
+          <div className="flex items-center space-x-4 pt-4">
+            {primaryBtnText && primaryBtnLink && (
+              <a
+                href={primaryBtnLink}
+                className="inline-block bg-transparent text-teal-600 font-semibold px-6 py-3 rounded-lg border border-teal-600 hover:bg-teal-600 hover:text-white transition-colors duration-300"
+              >
+                {primaryBtnText}
+              </a>
+            )}
+            {secondaryBtnText && secondaryBtnLink && (
+              <a
+                href={secondaryBtnLink}
+                className="inline-block bg-transparent text-teal-600 font-semibold px-6 py-3 rounded-lg border border-teal-600 hover:bg-teal-600 hover:text-white transition-colors duration-300"
+              >
+                {secondaryBtnText}
+              </a>
+            )}
+          </div>
         </div>
 
         {/* Image Column */}

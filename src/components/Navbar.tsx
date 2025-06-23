@@ -15,8 +15,8 @@ export default function Navbar() {
   );
 
   return (
-    <header className="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <header className="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50 px-4 md:px-8">
+      <div className="max-w-7xl mx-auto py-4 flex justify-between items-center">
         <div className="flex items-center">
           <a href="/">
             <img
@@ -28,12 +28,12 @@ export default function Navbar() {
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex gap-6 text-gray-700 font-medium">
+        <nav className="hidden md:flex gap-6 text-gray-700 font-medium px-4 sm:px-6 lg:px-8">
           {navLinks}
         </nav>
 
         {/* Mobile Hamburger Icon */}
-        <div className="md:hidden">
+        <div className="md:hidden px-4 sm:px-6 lg:px-8">
           <button
             onClick={toggleMenu}
             className="text-gray-700 transition-transform duration-200 hover:scale-110"
