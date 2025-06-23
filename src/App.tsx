@@ -33,7 +33,7 @@ export default function App() {
     <Router>
       <AnalyticsTracker />
       <Navbar />
-      <Routes>
+      <Routes>image.png
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/products" element={<Products />} />

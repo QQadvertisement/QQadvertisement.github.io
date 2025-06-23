@@ -13,6 +13,7 @@
   "dependencies": {
     "@babel/core": "^7.27.1",
     "@babel/preset-react": "^7.27.1",
+    "liquid-glass-react": "^1.1.1",
     "lucide-react": "^0.507.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
