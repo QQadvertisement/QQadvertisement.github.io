@@ -13,6 +13,7 @@ interface Props {
   primaryBtnLink?: string;
   secondaryBtnText?: string;
   secondaryBtnLink?: string;
+  children?: React.ReactNode;
 }
 
 export default function LeftImageRightTextSection({
@@ -28,6 +29,7 @@ export default function LeftImageRightTextSection({
   primaryBtnLink,
   secondaryBtnText,
   secondaryBtnLink,
+  children,
 }: Props) {
   const gradientClass = reverseGradient
     ? `bg-gradient-to-tl from-${bgFrom} via-${bgVia} to-${bgTo}`
@@ -52,15 +54,16 @@ export default function LeftImageRightTextSection({
 
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col-reverse md:flex-row-reverse items-center gap-10">
         {/* Right Text Column */}
-        <div className="w-full md:w-1/2 space-y-6">
+        <div className="w-full md:w-1/2 space-y-4">
           <h2 className="text-4xl font-extrabold text-teal-800 leading-tight">
             {title}
           </h2>
           {paragraphs.map((text, index) => (
-            <p key={index} className="text-gray-700 text-lg leading-relaxed">
+            <p key={index} className="text-gray-700 text-base leading-normal mb-2">
               {text}
             </p>
           ))}
+          {children}
           {/* Buttons */}
           <div className="flex items-center space-x-4 pt-4">
             {primaryBtnText && primaryBtnLink && (

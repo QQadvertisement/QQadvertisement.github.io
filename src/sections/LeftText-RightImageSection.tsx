@@ -52,12 +52,12 @@ export default function LeftTextRightImageSection({
 
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
         {/* Text Column */}
-        <div className="w-full md:w-1/2 space-y-6">
+        <div className="w-full md:w-1/2 space-y-4">
           <h2 className="text-4xl font-extrabold text-teal-800 leading-tight">
             {title}
           </h2>
           {paragraphs.map((text, index) => (
-            <p key={index} className="text-gray-700 text-lg leading-relaxed">
+            <p key={index} className="text-gray-700 text-base leading-normal mb-2">
               {text}
             </p>
           ))}

@@ -13,6 +13,7 @@ import CTASection from "../sections/CTASection";
 import LeftTextRightImageSection from "../sections/LeftText-RightImageSection";
 import LeftImageRightTextSection from "../sections/LeftImage-RightTextSection";
 import CaseStudiesSection from "../sections/CaseStudiesSection";
+import InsightStatsSection from "../sections/InsightStatsSection";
 
 export default function Home() {
   return (
@@ -38,28 +39,22 @@ export default function Home() {
         <LeftTextRightImageSection
           title="Stop Losing Money on Ads People Ignore"
           paragraphs={[
-            "Your ads get 0.05% click rates. Customers scroll past without looking.",
-            "Interactive games that engage for 2-3 minutes instead of 2 seconds. Result: 300-500% higher engagement, 10x better brand recall.",
-            "Turn your ignored ads into entertainment people choose to play."
+            "Banner blindness affects 86% of consumers. Your display ads are filtered out before anyone even notices them. You're paying for impressions that generate zero impact.",
+            "Traditional banners now average just a 0.05% click-through rate. Customers' brains automatically tune out rectangular ad spaces, and your marketing budget disappears into ignored impressions."
           ]}
-          imageSrc="/images/placeholder-problem.webp"
+          imageSrc="/assets/home/tired.webp"
           imageAlt="Illustration showing low engagement with traditional ads"
           bgFrom="white"
           bgVia="red-50"
           bgTo="white"
-          primaryBtnText="Learn More"
-          primaryBtnLink="#"
-          secondaryBtnText="Schedule a Demo"
-          secondaryBtnLink="#"
         />
 
         {/* 4. Product Offer 2: Real-Time Analytics */}
         <LeftImageRightTextSection
-          title="Finally Know Which Ads Actually Work"
+          title="Turn Ads Into Experiences People Want to Engage With"
           paragraphs={[
-            "You're flying blind - impressions and clicks don't tell you if people care.",
-            "See exactly how long people engage, what they remember, what drives action. Result: Stop wasting budget on ads that don't work, double down on what does.",
-            "Stop guessing. Start knowing which creative actually moves the needle."
+            "Customer forget ads. They remember experience. That's why we don't do traditional ads, we build memroable gamified ads.",
+            "Mini-games spark curiosity, invite interaction, and keep your brand top-of-mind. Gamified ads don't just get seen,they get played, shared, and remembered. We turn passive scrollers into active participants, and boring impressions into measurable results."
           ]}
           imageSrc="/images/placeholder-solution.webp"
           imageAlt="Analytics dashboard showing engagement metrics"
@@ -68,7 +63,23 @@ export default function Home() {
           primaryBtnLink="#"
           secondaryBtnText="Schedule a Demo"
           secondaryBtnLink="#"
-        />
+        >
+          {/* Stat Row */}
+          <div className="flex flex-wrap gap-4 mt-4">
+            <div className="bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
+              <span className="text-2xl font-extrabold text-teal-700">300%</span>
+              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Higher Engagement</span>
+            </div>
+            <div className="bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
+              <span className="text-2xl font-extrabold text-teal-700">65%</span>
+              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Better Recall</span>
+            </div>
+            <div className="bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
+              <span className="text-2xl font-extrabold text-teal-700">+25.3%</span>
+              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Sales Conversions</span>
+            </div>
+          </div>
+        </LeftImageRightTextSection>
 
         {/* 7. Product Showcase */}
         <section id="product">
