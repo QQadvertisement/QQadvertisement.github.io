@@ -12,6 +12,7 @@ import CTASection from "../sections/CTASection";
 // Reusable Content Sections (for the new B2B flow)
 import LeftTextRightImageSection from "../sections/LeftText-RightImageSection";
 import LeftImageRightTextSection from "../sections/LeftImage-RightTextSection";
+import CaseStudiesSection from "../sections/CaseStudiesSection";
 
 export default function Home() {
   return (
@@ -112,6 +113,10 @@ export default function Home() {
 
         {/* 8. Social Proof & Case Studies */}
         <TestimonialsSection />
+
+        <section id="case-studies">
+          <CaseStudiesSection />
+        </section>
 
         {/* 9. Get Started */}
         <section id="contact">
