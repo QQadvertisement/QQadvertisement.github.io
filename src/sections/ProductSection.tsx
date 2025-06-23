@@ -50,7 +50,7 @@ export default function ProductSection() {
           </h2>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-12">
           {offerings.map((offering, index) => (
             <div key={offering.title} className="text-left">
               <div className="relative">
