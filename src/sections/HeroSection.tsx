@@ -3,7 +3,7 @@ import mascot from "../assets/logos/qq-jump-aura.webp";
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-br from-teal-100 to-white py-24 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-teal-100 to-white py-12 md:py-24 overflow-hidden">
       {/* Decorative background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-teal-300 opacity-10 blur-3xl z-0"></div>
@@ -30,10 +30,10 @@ export default function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6">
         {/* Headline + CTA with custom glassmorphism */}
         <div className="text-center md:text-left md:w-1/2 md:pr-16 max-w-xl mt-12 md:mt-0">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight text-gray-900">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 md:mb-6 leading-tight text-gray-900">
             Create Interactive Mini-game for your Brand
           </h1>
-          <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+          <p className="text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
             Engage users 3x longer with playful, branded ad experiences across web, mobile, and real life. We help innovative marketers turn banner blindness into brand love.
           </p>
           <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">

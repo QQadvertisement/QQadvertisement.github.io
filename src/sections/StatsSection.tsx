@@ -25,13 +25,13 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="py-20 px-6 bg-gradient-to-b from-white to-teal-50">
+    <section className="py-10 md:py-20 px-4 md:px-6 bg-gradient-to-b from-white to-teal-50">
       <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-3xl font-extrabold text-teal-800 mb-16">
+        <h2 className="text-3xl font-extrabold text-teal-800 mb-6 md:mb-16">
           Let the Numbers Speak for Themselves
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-12 gap-x-12 text-left sm:text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 md:gap-y-12 gap-x-4 md:gap-x-12 text-left sm:text-center">
           {stats.map((stat, index) => (
             <div key={index}>
               <div className="text-4xl font-extrabold text-teal-700">{stat.value}</div>

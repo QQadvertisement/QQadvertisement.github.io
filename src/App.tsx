@@ -6,12 +6,11 @@ import About from "./pages/About";
 import Products from "./pages/Products";
 import ContactSection from "./pages/Contact";
 import EmaGame from "./pages/EmaGame"; // Import the new EmaGame component
-
 import Footer from "./components/Footer";
 import NotFoundPage from "./pages/404";
-
 import { useEffect } from "react";
 import { initGoogleAnalytics, trackPageView } from "./lib/analytics";
+import ArticlePage from "./pages/articles/slug-template";
 
 function AnalyticsTracker() {
   const location = useLocation();
@@ -39,6 +38,7 @@ export default function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/contact" element={<ContactSection />} />
         <Route path="/emagame" element={<EmaGame />} /> {/* Add new EmaGame route */}
+        <Route path="/articles/:slug" element={<ArticlePage />} />
         {/* Future routes can be added here */}
 
         {/* 👇 Catch-all 404 route */}

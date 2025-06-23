@@ -40,7 +40,8 @@ export default function Home() {
           title="Stop Losing Money on Ads People Ignore"
           paragraphs={[
             "Banner blindness affects 86% of consumers. Your display ads are filtered out before anyone even notices them. You're paying for impressions that generate zero impact.",
-            "Traditional banners now average just a 0.05% click-through rate. Customers' brains automatically tune out rectangular ad spaces, and your marketing budget disappears into ignored impressions."
+            "Traditional banners now average just a 0.05% click-through rate. Customers' brains automatically tune out rectangular ad spaces, and your marketing budget disappears into ignored impressions.",
+            "But what if your ads could be impossible to ignore? Gamified experiences break through banner blindness by turning passive viewing into active engagement."
           ]}
           imageSrc="/assets/home/tired.webp"
           imageAlt="Illustration showing low engagement with traditional ads"
@@ -51,12 +52,13 @@ export default function Home() {
 
         {/* 4. Product Offer 2: Real-Time Analytics */}
         <LeftImageRightTextSection
-          title="Turn Ads Into Experiences People Want to Engage With"
+          title="Turn Ads Into Experiences People Want to Engage"
           paragraphs={[
-            "Customer forget ads. They remember experience. That's why we don't do traditional ads, we build memroable gamified ads.",
-            "Mini-games spark curiosity, invite interaction, and keep your brand top-of-mind. Gamified ads don't just get seen,they get played, shared, and remembered. We turn passive scrollers into active participants, and boring impressions into measurable results."
+            "Customers forget ads. They remember experiences. That's why we don't do traditional ads. Instead, we build memorable gamified experiences that stick.",
+            "Mini-games spark curiosity, invite interaction, and keep your brand top-of-mind. Gamified ads don't just get seen. They get played, shared, and remembered. We turn passive scrollers into active participants, and boring impressions into measurable results.",
+            "Every interaction becomes data. Every game completion becomes a conversion opportunity. Every share becomes free brand exposure."
           ]}
-          imageSrc="/assets/home/trygamified.png"
+          imageSrc="/assets/home/trygamified-no-bg.webp"
           imageAlt="Gamified ad experience mockup"
           reverseGradient={true}
           primaryBtnText="Learn More"
@@ -78,24 +80,25 @@ export default function Home() {
               <span className="text-2xl font-extrabold text-teal-700">+25.3%</span>
               <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Sales Conversions</span>
             </div>
+            {/* Mobile-only metric */}
+            <div className="md:hidden bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
+              <span className="text-2xl font-extrabold text-teal-700">+1 min</span>
+              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Engagement Time</span>
+            </div>
           </div>
         </LeftImageRightTextSection>
 
-        {/* 7. Product Showcase */}
-        <section id="product">
-          <ProductSection />
-        </section>
-
         {/* 5. Product Offer 3: White-Label for Agencies */}
         <LeftTextRightImageSection
-          title="Become The Agency That Delivers Results Others Can't"
+          title="White-Label Gamified Ads for Agencies"
           paragraphs={[
-            "Clients expect innovation but you're stuck offering the same old banner ads.",
-            "Sell cutting-edge interactive campaigns under your brand - we build, you profit. Result: Premium pricing, client retention, competitive differentiation.",
-            "Offer what your competitors can't. Keep 60% of revenue for work you don't do."
+            "Stand out as the agency with real innovation. Offer your clients interactive, gamified ad campaigns, fully white-labeled under your brand.",
+            "Most indie game projects take up to 12 months to publish. That's way too long for marketing! With us, your clients can launch a custom gamified campaign in 2 months or less, ready to drive results fast.",
+            "We build the games, you deliver the results. No dev team, no extra overhead. Unlock premium pricing, win new business, and keep clients coming back.",
+            "Let us handle the tech and creative. You focus on growing your agency and profits. Keep 60% of revenue for work you don't have to do."
           ]}
-          imageSrc="/images/placeholder-services.webp"
-          imageAlt="White-label platform interface"
+          imageSrc="/assets/home/white-label.webp"
+          imageAlt="White-label gamified ads platform for agencies"
           bgFrom="white"
           bgVia="blue-50"
           bgTo="white"
@@ -107,20 +110,26 @@ export default function Home() {
 
         {/* 6. Product Offer 4: Done-For-You Campaigns */}
         <LeftImageRightTextSection
-          title="Get Premium Campaigns Without The Premium Headaches"
+          title="See What Your Competitors Can't: Campaign Analytics"
           paragraphs={[
-            "You want breakthrough campaigns but lack the team/time/expertise to execute.",
-            "We handle everything - strategy, development, deployment, optimization. Result: Launch campaigns that win awards and drive results while you focus on your business.",
-            "Hand us your brief. Get back campaigns that make your competitors wonder how you did it."
+            "While your competitors guess what works, you'll know exactly what drives results. Our comprehensive analytics dashboard transforms raw engagement data into clear, actionable insights that actually matter for your business.",
+            "Track engagement patterns, identify user behavior trends, and understand what keeps players coming back. Our team doesn't just build games. We analyze every interaction to help you understand your audience and optimize future campaigns for maximum ROI.",
+            "Get detailed performance reports with human interpretation. We don't just show you numbers. We explain what they mean for your brand and how to apply these insights to your next campaign. Data-driven decisions made simple."
           ]}
           imageSrc="/images/placeholder-case-study.webp"
-          imageAlt="Complete campaign development process"
+          imageAlt="Analytics dashboard showing campaign performance metrics and user insights"
           reverseGradient={true}
-          primaryBtnText="Learn More"
+          primaryBtnText="See Dashboard Demo"
           primaryBtnLink="#"
-          secondaryBtnText="Schedule a Demo"
+          secondaryBtnText="Schedule Analytics Review"
           secondaryBtnLink="#"
         />
+        
+        {/* 7. Product Showcase */}
+        <section id="product">
+          <ProductSection />
+        </section>
+
 
         {/* 8. Social Proof & Case Studies */}
         <TestimonialsSection />

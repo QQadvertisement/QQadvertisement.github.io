@@ -4,28 +4,28 @@ const offerings = [
   {
     imageSrc: "/assets/products/product1.webp",
     title: "Branded Mini-Games",
-    description: "Tap games, puzzle games, leaderboard contests, etc.",
+    description: "Custom tap games, puzzle challenges, leaderboard contests, and interactive experiences that keep users engaged while building brand awareness.",
   },
   {
     imageSrc: "/assets/products/product2.webp",
     title: "Gamified Experience",
-    description: "Interactive discount unlocks, rewards, digital scratch cards.",
+    description: "Interactive discount unlocks, reward systems, digital scratch cards, and achievement mechanics that drive conversions and customer loyalty.",
   },
   {
     imageSrc: "/assets/products/product3.webp",
     title: "Analytics Dashboard",
-    description: "Engagement rates, user behavior, and conversion insights.",
+    description: "Real-time engagement tracking, user behavior analytics, conversion funnel insights, and performance metrics to optimize your campaigns.",
   },
   {
     imageSrc: "/assets/products/product4.webp",
     title: "Creative Consulting",
-    description: "Concept, art, copywriting, and user flow strategy.",
+    description: "End-to-end strategy including concept development, visual design, copywriting, and user experience optimization for maximum impact.",
   },
 ];
 
 export default function ProductSection() {
   return (
-    <section className="relative py-24 bg-white overflow-hidden">
+    <section className="relative py-10 md:py-24 bg-white overflow-hidden">
       {/* Pitch Deck Background */}
       <div className="absolute inset-0 z-0">
         {/* Grid */}
@@ -44,7 +44,7 @@ export default function ProductSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
             What We Offer
           </h2>

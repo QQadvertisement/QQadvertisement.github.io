@@ -13,8 +13,8 @@ export default function ContactSection() {
   }, []);
 
   return (
-    <section className="bg-gray-50 py-20 px-6">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-start">
+    <section className="bg-gray-50 py-10 md:py-20 px-4 md:px-6">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-start">
         {/* Text Column */}
         <div>
           <h2 className="text-4xl font-bold text-teal-700 mb-6">

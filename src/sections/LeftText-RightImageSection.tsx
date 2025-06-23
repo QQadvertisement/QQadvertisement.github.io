@@ -35,7 +35,7 @@ export default function LeftTextRightImageSection({
 
   return (
     <section
-      className={`relative ${gradientClass} py-20 px-6 overflow-hidden`}
+      className={`relative ${gradientClass} py-10 md:py-20 px-4 md:px-6 overflow-hidden`}
     >
       {/* Background Shapes */}
       {reverseGradient ? (
@@ -50,7 +50,7 @@ export default function LeftTextRightImageSection({
         </>
       )}
 
-      <div className="relative z-10 max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-4 md:gap-10">
         {/* Text Column */}
         <div className="w-full md:w-1/2 space-y-4">
           <h2 className="text-4xl font-extrabold text-teal-800 leading-tight">

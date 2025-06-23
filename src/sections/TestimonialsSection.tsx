@@ -2,11 +2,11 @@ import React from "react";
 
 export default function TestimonialsSection() {
   return (
-    <section className="bg-white py-24 px-6 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <section className="bg-white py-10 md:py-24 px-6 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-6 md:gap-16 items-center">
         {/* Left Column: Stats */}
         <div className="text-left">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-8 leading-tight">
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4 md:mb-8 leading-tight">
             Our customers see significant and immediate performance improvement.
           </h2>
           <div className="flex space-x-8">

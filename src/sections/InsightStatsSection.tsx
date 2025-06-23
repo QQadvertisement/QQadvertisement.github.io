@@ -28,8 +28,8 @@ const InsightStatsSection: React.FC<InsightStatsSectionProps> = ({
   secondaryBtnLink,
 }) => {
   return (
-    <section className="w-full py-12 px-4 md:px-0 flex flex-col md:flex-row items-center justify-center bg-white">
-      <div className="max-w-xl md:w-1/2 space-y-4">
+    <section className="w-full py-6 md:py-12 px-4 md:px-0 flex flex-col md:flex-row items-center justify-center bg-white">
+      <div className="max-w-xl md:w-1/2 space-y-2 md:space-y-4">
         <h2 className="text-3xl md:text-4xl font-bold text-teal-800 mb-2">{headline}</h2>
         <p className="text-lg text-gray-700 mb-4">{subheadline}</p>
         <ul className="space-y-2 mb-6">
@@ -45,7 +45,7 @@ const InsightStatsSection: React.FC<InsightStatsSectionProps> = ({
           <a href={secondaryBtnLink} className="px-5 py-2 rounded border border-teal-600 text-teal-600 font-semibold bg-white hover:bg-teal-50 transition">{secondaryBtnText}</a>
         </div>
       </div>
-      <div className="mt-10 md:mt-0 md:ml-12 md:w-1/2 w-full max-w-md bg-white border border-gray-100 rounded-xl shadow-sm p-6 flex flex-col gap-4">
+      <div className="mt-4 md:mt-10 md:ml-12 md:w-1/2 w-full max-w-md bg-white border border-gray-100 rounded-xl shadow-sm p-6 flex flex-col gap-2 md:gap-4">
         <h3 className="text-base font-semibold text-teal-700 mb-2">Performance Uplift</h3>
         <ul className="space-y-3">
           {stats.map((stat, i) => (

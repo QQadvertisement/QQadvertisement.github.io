@@ -1,46 +1,36 @@
-export const caseStudies = [
+export const insights = [
   {
     title: "Pandora: Gamified Lead Generation",
-    stat: "7x more email sign-ups",
-    description:
-      "Pandora swapped their standard subscription form for a playful gamified widget. The result? A 7x increase in email capture, turning casual browsers into loyal subscribers.",
-    tags: ["Retail", "Lead Gen", "Email Growth"],
-    source: "Promodo Case Study",
+    summary: "A playful widget outperformed standard forms, driving 7x more email sign-ups for Pandora.",
     image: "/assets/casestudies/Pandora.webp",
-    link: "https://www.promodo.com/case-studies/how-gamification-works-in-the-jewelry-niche-the-pandora-case-study?"
-  },
-  {
-    title: "Starbucks: Reward System + Gamified Challenges",
-    stat: "34.3M active users • 20% revenue growth",
-    description:
-      "Starbucks integrated gamification into its mobile loyalty app with streaks, tiered points, and seasonal challenges. It led to higher frequency, bigger baskets, and 13% YoY growth in membership.",
-    tags: ["Loyalty", "Mobile App", "QSR"],
-    source: "SmartDev Breakdown",
-    image: "/assets/casestudies/Starbucks.webp",
-    link: "https://smartdev.com/the-gamification-masterstroke-how-starbucks-redefined-customer-engagement/"
+    link: "https://qqadvertisement.com/emagame",
+    slug: "pandora-gamified-lead-generation",
+    published: "2023-04-12"
   },
   {
     title: "Burger King: Gamified Coupon Promo",
-    stat: "1.5M app downloads in a week + sales skyrocketed",
-    description:
-      "Burger King used gamification to turn a simple coupon into a viral event. Through a Halloween-themed AR game, users played to escape a creepy clown — and were rewarded with a free Whopper.",
-    tags: ["Promotional Campaign", "App Downloads", "Sales Growth"],
-    source: "Forbes Coverage",
+    summary: "A gamified campaign drove 1.5M app downloads in a week and boosted sales.",
     image: "/assets/casestudies/BK.webp",
-    link: "https://community.braze.com/blog/built-on-braze/how-burger-king-is-driving-user-engagement-and-loyalty-through-gamification/11"
+    link: "https://qqadvertisement.com/coupongame",
+    slug: "burger-king-gamified-coupon-promo",
+    published: "2023-10-31"
   },
   {
     title: "Shopee: Habit Loops with Daily Gamified Tasks",
-    stat: "14+ mini-games • Top 5 app in SEA",
-    description:
-      "Shopee uses daily games like “Shopee Farm” and “Spin & Win” to reward check-ins, boost conversions, and keep shoppers returning daily. These gamified mechanics drive massive user retention and social sharing.",
-    tags: ["Ecommerce", "Habit Loop", "Daily Engagement"],
-    source: "Vulcan Post Analysis",
+    summary: "Daily mini-games like Shopee Farm keep users engaged and drive massive retention.",
     image: "/assets/casestudies/shoppeefarm.webp",
-    link: "https://vulcanpost.com/865393/shopee-reigns-southeast-asia-e-commerce-tiktok-shop-surpasses-lazada/"
+    link: "https://qqadvertisement.com/farmgame",
+    slug: "shopee-habit-loops-gamified-tasks",
+    published: "2023-08-15"
   }
 ];
 
+// {
+//   title: "Starbucks: Reward System + Gamified Challenges",
+//   summary: "Gamified loyalty app features led to 20% revenue growth and 13% YoY membership gains.",
+//   image: "/assets/casestudies/Starbucks.webp",
+//   link: "https://smartdev.com/the-gamification-masterstroke-how-starbucks-redefined-customer-engagement/"
+// },
 // https://www.promodo.com/case-studies/how-gamification-works-in-the-jewelry-niche-the-pandora-case-study?
 // https://community.braze.com/blog/built-on-braze/how-burger-king-is-driving-user-engagement-and-loyalty-through-gamification/11
 // https://livingonthecheap.com/lotc-cms/wp-content/uploads/2024/04/starbucks-spring-scavenger-hunt.jpg
