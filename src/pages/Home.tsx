@@ -8,6 +8,7 @@ import ProductSection from "../sections/ProductSection";
 import TestimonialsSection from "../sections/TestimonialsSection";
 import ContactSection from "../sections/ContactSection";
 import CTASection from "../sections/CTASection";
+import DemoExperienceSection from "../sections/DemoExperienceSection";
 
 // Reusable Content Sections (for the new B2B flow)
 import LeftTextRightImageSection from "../sections/LeftText-RightImageSection";
@@ -58,13 +59,13 @@ export default function Home() {
             "Mini-games spark curiosity, invite interaction, and keep your brand top-of-mind. Gamified ads don't just get seen. They get played, shared, and remembered. We turn passive scrollers into active participants, and boring impressions into measurable results.",
             "Every interaction becomes data. Every game completion becomes a conversion opportunity. Every share becomes free brand exposure."
           ]}
-          imageSrc="/assets/home/trygamified-no-bg.webp"
+          imageSrc="/assets/home/trygmf1.png"
           imageAlt="Gamified ad experience mockup"
           reverseGradient={true}
           primaryBtnText="Learn More"
-          primaryBtnLink="#"
+          primaryBtnLink="/contact"
           secondaryBtnText="Schedule a Demo"
-          secondaryBtnLink="#"
+          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
         >
           {/* Stat Row */}
           <div className="flex flex-wrap gap-4 mt-4">
@@ -103,10 +104,15 @@ export default function Home() {
           bgVia="blue-50"
           bgTo="white"
           primaryBtnText="Learn More"
-          primaryBtnLink="#"
+          primaryBtnLink="/contact"
           secondaryBtnText="Schedule a Demo"
-          secondaryBtnLink="#"
+          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
         />
+
+        {/* 5.5. Demo Experience Section */}
+        <section id="demo">
+          <DemoExperienceSection />
+        </section>
 
         {/* 6. Product Offer 4: Done-For-You Campaigns */}
         <LeftImageRightTextSection
@@ -116,13 +122,13 @@ export default function Home() {
             "Track engagement patterns, identify user behavior trends, and understand what keeps players coming back. Our team doesn't just build games. We analyze every interaction to help you understand your audience and optimize future campaigns for maximum ROI.",
             "Get detailed performance reports with human interpretation. We don't just show you numbers. We explain what they mean for your brand and how to apply these insights to your next campaign. Data-driven decisions made simple."
           ]}
-          imageSrc="/images/placeholder-case-study.webp"
+          imageSrc="/assets/home/tryanal3.png"
           imageAlt="Analytics dashboard showing campaign performance metrics and user insights"
           reverseGradient={true}
-          primaryBtnText="See Dashboard Demo"
-          primaryBtnLink="#"
-          secondaryBtnText="Schedule Analytics Review"
-          secondaryBtnLink="#"
+          primaryBtnText="Learn more"
+          primaryBtnLink="/contact"
+          secondaryBtnText="Schedule a Demo"
+          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
         />
         
         {/* 7. Product Showcase */}

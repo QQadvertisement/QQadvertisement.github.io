@@ -12,7 +12,7 @@ export default function CTASection({
   title = "Turn Engagement Into Conversions",
   subtitle = "Our gamified ads aren't just fun. They work! From 7x email signups to 1.5M+ app downloads, we build campaigns that people actually interact with. Let's talk about what that'd look like for you.",
   buttonLabel = "👉 Schedule a Discovery Call",
-  buttonHref = "https://calendly.com/thitipun-snw/30min", // Replace with actual Tally URL
+  buttonHref = "https://calendly.com/hello-qqadvertisement/30min",
 }: CTAProps) {
   
   const handleCTAClick = () => {

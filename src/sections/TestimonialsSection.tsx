@@ -25,17 +25,17 @@ export default function TestimonialsSection() {
         {/* Right Column: Testimonial */}
         <div className="text-left bg-gray-50 p-8 rounded-2xl shadow-sm">
           <p className="text-2xl lg:text-3xl font-medium text-gray-700 italic leading-snug">
-            "They have some amazing tools to show us, and to teach us, really, which designs work the best."
+            "They gamified one of our survey campaigns. It's so good! Our customers are happier and we're seeing more returning eaters."
           </p>
           <div className="flex items-center mt-8">
             <img
-              src="/assets/avatars/jerry.webp" // Placeholder avatar
-              alt="Jerry"
+              src="/assets/logos/Friends-ramen.webp" // Placeholder avatar
+              alt="Friends Ramen"
               className="w-16 h-16 rounded-full object-cover"
             />
             <div className="ml-4">
-              <p className="font-bold text-gray-900">Jerry</p>
-              <p className="text-gray-600">Marketing Director, Example Corp</p>
+              <p className="font-bold text-gray-900">Friends Ramen</p>
+              <p className="text-gray-600">Owner, Friends Ramen</p>
               {/* If you have a company logo, it can go here */}
               {/* <img src="/path/to/company-logo.svg" alt="Example Corp" className="mt-2 h-6" /> */}
             </div>
