@@ -56,8 +56,8 @@ export default function Home() {
             "Customer forget ads. They remember experience. That's why we don't do traditional ads, we build memroable gamified ads.",
             "Mini-games spark curiosity, invite interaction, and keep your brand top-of-mind. Gamified ads don't just get seen,they get played, shared, and remembered. We turn passive scrollers into active participants, and boring impressions into measurable results."
           ]}
-          imageSrc="/images/placeholder-solution.webp"
-          imageAlt="Analytics dashboard showing engagement metrics"
+          imageSrc="/assets/home/trygamified.png"
+          imageAlt="Gamified ad experience mockup"
           reverseGradient={true}
           primaryBtnText="Learn More"
           primaryBtnLink="#"
