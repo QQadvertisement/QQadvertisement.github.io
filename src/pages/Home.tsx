@@ -42,7 +42,7 @@ export default function Home() {
           paragraphs={[
             "Banner blindness affects 86% of consumers. Your display ads are filtered out before anyone even notices them. You're paying for impressions that generate zero impact.",
             "Traditional banners now average just a 0.05% click-through rate. Customers' brains automatically tune out rectangular ad spaces, and your marketing budget disappears into ignored impressions.",
-            "But what if your ads could be impossible to ignore? Gamified experiences break through banner blindness by turning passive viewing into active engagement."
+            // "But what if your ads could be impossible to ignore? Gamified experiences break through banner blindness by turning passive viewing into active engagement."
           ]}
           imageSrc="/assets/home/tired.webp"
           imageAlt="Illustration showing low engagement with traditional ads"
@@ -51,7 +51,7 @@ export default function Home() {
           bgTo="white"
         />
 
-        {/* 4. Product Offer 2: Real-Time Analytics */}
+        {/* 4. Product Offer 2: Turn Ads Into Experiences */}
         <LeftImageRightTextSection
           title="Turn Ads Into Experiences People Want to Engage"
           paragraphs={[
@@ -89,62 +89,61 @@ export default function Home() {
           </div>
         </LeftImageRightTextSection>
 
-        {/* 5. Product Offer 3: White-Label for Agencies */}
+        {/* 5. See What Your Competitors Can't: Campaign Analytics */}
         <LeftTextRightImageSection
-          title="White-Label Gamified Ads for Agencies"
-          paragraphs={[
-            "Stand out as the agency with real innovation. Offer your clients interactive, gamified ad campaigns, fully white-labeled under your brand.",
-            "Most indie game projects take up to 12 months to publish. That's way too long for marketing! With us, your clients can launch a custom gamified campaign in 2 months or less, ready to drive results fast.",
-            "We build the games, you deliver the results. No dev team, no extra overhead. Unlock premium pricing, win new business, and keep clients coming back.",
-            "Let us handle the tech and creative. You focus on growing your agency and profits. Keep 60% of revenue for work you don't have to do."
-          ]}
-          imageSrc="/assets/home/white-label.webp"
-          imageAlt="White-label gamified ads platform for agencies"
-          bgFrom="white"
-          bgVia="blue-50"
-          bgTo="white"
-          primaryBtnText="Learn More"
-          primaryBtnLink="/contact"
-          secondaryBtnText="Schedule a Demo"
-          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
-        />
-
-        {/* 5.5. Demo Experience Section */}
-        <section id="demo">
-          <DemoExperienceSection />
-        </section>
-
-        {/* 6. Product Offer 4: Done-For-You Campaigns */}
-        <LeftImageRightTextSection
           title="See What Your Competitors Can't: Campaign Analytics"
           paragraphs={[
-            "While your competitors guess what works, you'll know exactly what drives results. Our comprehensive analytics dashboard transforms raw engagement data into clear, actionable insights that actually matter for your business.",
+            // "While your competitors guess what works, you'll know exactly what drives results. Our comprehensive analytics dashboard transforms raw engagement data into clear, actionable insights that actually matter for your business.",
             "Track engagement patterns, identify user behavior trends, and understand what keeps players coming back. Our team doesn't just build games. We analyze every interaction to help you understand your audience and optimize future campaigns for maximum ROI.",
-            "Get detailed performance reports with human interpretation. We don't just show you numbers. We explain what they mean for your brand and how to apply these insights to your next campaign. Data-driven decisions made simple."
+            "Get detailed performance reports with expert interpretation. We don't just show you numbers. We explain what they mean for your brand and how to apply these insights to your next campaign. Data-driven decisions made simple."
           ]}
           imageSrc="/assets/home/tryanal3.png"
           imageAlt="Analytics dashboard showing campaign performance metrics and user insights"
-          reverseGradient={true}
+          bgFrom="white"
+          bgVia="gray-50"
+          bgTo="white"
           primaryBtnText="Learn more"
           primaryBtnLink="/contact"
           secondaryBtnText="Schedule a Demo"
           secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
         />
+
+        {/* 6. Demo Experience Section */}
+        <section id="demo">
+          <DemoExperienceSection />
+        </section>
         
         {/* 7. Product Showcase */}
         <section id="product">
           <ProductSection />
         </section>
 
+        {/* 8. White-Label Gamified Ads for Agencies */}
+        <LeftImageRightTextSection
+          title="White-Label Gamified Ads for Agencies"
+          paragraphs={[
+            "Stand out as the agency with real innovation. Offer your clients interactive, gamified ad campaigns, fully white-labeled under your brand.",
+            "Most indie game projects take up to 12 months to publish. That's way too long for marketing! With us, your clients can launch a custom gamified campaign in 2 months or less, ready to drive results fast.",
+            "We build the games, you deliver the results. No dev team, no extra overhead. Unlock premium pricing, win new business, and keep clients coming back.",
+            "Let us handle the tech and creative. You focus on growing your agency and profits. This is a win-win for both of us."
+          ]}
+          imageSrc="/assets/home/white-label.webp"
+          imageAlt="White-label gamified ads platform for agencies"
+          reverseGradient={true}
+          primaryBtnText="Learn More"
+          primaryBtnLink="/contact"
+          secondaryBtnText="Schedule a Demo"
+          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
+        />
 
-        {/* 8. Social Proof & Case Studies */}
+        {/* 9. Social Proof & Case Studies */}
         <TestimonialsSection />
 
         <section id="case-studies">
           <CaseStudiesSection />
         </section>
 
-        {/* 9. Get Started */}
+        {/* 10. Get Started */}
         <section id="contact">
           <CTASection />
           <ContactSection />
