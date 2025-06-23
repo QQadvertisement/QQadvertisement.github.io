@@ -5,27 +5,27 @@ export const trustedBrands = [
     //   logo: "/assets/logos/Friends-ramen.webp",
     // },
     // Food & Bev
-    {
-      name: "McDonald",
-      logo: "/assets/logos/Mcdonald.webp",
-    },
+    // {
+    //   name: "McDonald",
+    //   logo: "/assets/logos/Mcdonald.webp",
+    // },
     {
       name: "Starbuck",
       logo: "/assets/logos/Starbucks.webp",
     },
-    {
-      name: "Dunkins",
-      logo: "/assets/logos/Dunkin.webp",
-    },
+    // {
+    //   name: "Dunkins",
+    //   logo: "/assets/logos/Dunkin.webp",
+    // },
     // Ecommerce
     {
       name: "Shoppify",
       logo: "/assets/logos/Shoppify.webp",
     },
-    {
-      name: "DoorDash",
-      logo: "/assets/logos/Doordash.webp",
-    },
+    // {
+    //   name: "DoorDash",
+    //   logo: "/assets/logos/Doordash.webp",
+    // },
     // CPG
     {
       name: "Adidas",

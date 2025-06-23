@@ -1,3 +1,9 @@
+// Directory structure for articles:
+// - src/pages/articles/         (directory for all article pages)
+// - src/pages/articles/[slug].tsx   (dynamic article page for each article)
+// - src/data/articles.ts        (metadata for articles)
+// - src/layouts/ArticleLayout.tsx   (layout for articles)
+
 import React from "react";
 import mascot from "../assets/404/404.webp"; // Adjust path
 import { ArrowLeft } from "lucide-react";
@@ -19,7 +25,7 @@ export default function NotFoundPage() {
           </h1>
           <p className="text-gray-700 mb-6 max-w-md">
             You might have picked the wrong link — or the page has been moved or deleted.
-            Let’s get you back on track.
+            Let's get you back on track.
           </p>
           <a
             href="/"

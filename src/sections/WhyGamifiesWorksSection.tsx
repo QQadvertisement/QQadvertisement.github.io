@@ -2,16 +2,16 @@ import React from "react";
 
 export default function WhyGamifiesWorksSection() {
   return (
-    <section className="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+    <section className="bg-gray-50 py-8 md:py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-teal-700 mb-4">
           Why Gamified Ads Work
         </h2>
-        <p className="text-gray-600 text-lg mb-12">
+        <p className="text-gray-600 text-lg mb-6 md:mb-12">
           Gamification turns passive viewers into active participants. With our ad games,
           users click, play, and convert — all while having fun.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 text-left">
           <div>
             <h3 className="text-xl font-semibold text-teal-600 mb-2">↑ Engagement</h3>
             <p className="text-gray-600">

@@ -3,12 +3,12 @@ import { trustedBrands as targetBrands } from "../data/trustedBy";
 
 export default function TargetClientsSection() {
   return (
-    <section className="py-16 px-4 bg-white text-center">
+    <section className="py-8 md:py-16 px-4 bg-white text-center">
       <h2 className="text-xl font-semibold mb-4 text-gray-700">Our Dream Clients</h2>
-      <p className="text-gray-500 max-w-xl mx-auto mb-8">
-        We build playful campaigns for bold brands. These are the kinds of teams we’re inspired by—and excited to support.
+      <p className="text-gray-500 max-w-xl mx-auto mb-4 md:mb-8">
+        We build playful campaigns for bold brands. These are the kinds of teams we're inspired by—and excited to support.
       </p>
-      <div className="flex justify-center flex-wrap gap-8 items-center opacity-80">
+      <div className="flex justify-center flex-wrap gap-4 md:gap-8 items-center opacity-80">
         {targetBrands.map((brand) => (
           <img
             key={brand.name}
@@ -18,7 +18,7 @@ export default function TargetClientsSection() {
           />
         ))}
       </div>
-      <p className="text-sm text-gray-400 mt-6 italic">
+      <p className="text-sm text-gray-400 mt-2 md:mt-6 italic">
         Logos shown here represent brands we admire and hope to work with. No implied endorsement.
       </p>
     </section>

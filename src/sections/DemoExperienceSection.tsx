@@ -22,9 +22,9 @@ export default function DemoExperienceSection() {
   };
 
   return (
-    <section ref={sectionRef} className="py-20 px-6 bg-gradient-to-br from-white to-teal-50 text-center">
+    <section ref={sectionRef} className="py-8 md:py-20 px-4 md:px-6 bg-gradient-to-br from-white to-teal-50 text-center">
       <h2 className="text-3xl font-extrabold mb-4">Try the Experience</h2>
-      <p className="text-lg mb-8 max-w-2xl mx-auto text-gray-700">
+      <p className="text-lg mb-4 md:mb-8 max-w-2xl mx-auto text-gray-700">
         This is what your customers will see — a fully interactive, brand-safe mini-game that boosts engagement and drives results.
       </p>
 
@@ -45,7 +45,7 @@ export default function DemoExperienceSection() {
         />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-4 md:mt-10">
         <a
           href="#contact"
           className="inline-block bg-teal-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-teal-700"
