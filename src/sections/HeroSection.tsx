@@ -29,7 +29,7 @@ export default function HeroSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6">
         {/* Headline + CTA with custom glassmorphism */}
-        <div className="text-center md:text-left md:w-1/2 md:pr-16 max-w-xl mt-16 md:mt-0">
+        <div className="text-center md:text-left md:w-1/2 md:pr-16 max-w-xl mt-12 md:mt-0">
           <div className="relative">
             {/* Custom glassmorphism effect background */}
             <div className="absolute inset-0 bg-white/15 backdrop-blur-2xl rounded-3xl border border-white/40 shadow-2xl" style={{boxShadow: '0 4px 32px 0 rgba(31, 38, 135, 0.10) inset'}}></div>
@@ -67,7 +67,7 @@ export default function HeroSection() {
             <img
               src={mascot}
               alt="Quantum Quokkas Mascot"
-              className="w-90 h-auto animate-float drop-shadow-2xl relative z-10"
+              className="w-64 md:w-96 h-auto animate-float drop-shadow-2xl relative z-10"
             />
           </div>
         </div>
