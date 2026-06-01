@@ -5,7 +5,7 @@ export default function WhyGamifiesWorksSection() {
     <section className="bg-gray-50 py-8 md:py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-teal-700 mb-4">
-          Why Gamified Ads Work
+          Why Playable Ads Work
         </h2>
         <p className="text-gray-600 text-lg mb-6 md:mb-12">
           Gamification turns passive viewers into active participants. With our ad games,

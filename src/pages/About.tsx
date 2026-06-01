@@ -14,14 +14,14 @@ export default function About() {
     <>
       <Helmet>
         <title>About Us | QQ Advertisement</title>
-        <meta name="description" content="Learn about QQ Advertisement’s mission to bring joy to marketing through gamified ad campaigns and interactive brand experiences." />
-        <meta name="keywords" content="about QQ Advertisement, gamified ads, interactive marketing, ad agency mission, brand story" />
+        <meta name="description" content="Learn about QQ Advertisement's mission to bring joy to marketing through playable ad campaigns and interactive brand experiences." />
+        <meta name="keywords" content="about QQ Advertisement, playable ads, interactive marketing, ad agency mission, brand story" />
       </Helmet>
       <main className="space-y-24">
       <LeftTextRightImageSection
         title="Who We Are"
         paragraphs={[
-          "QQ Advertisement is a creative ad studio that builds gamified campaigns people actually want to engage with.",
+          "QQ Advertisement is a creative ad studio that builds playable ads that people actually want to engage with.",
           "We turn passive viewers into active participants — helping brands boost clicks, dwell time, and conversions through joyfully crafted ad experiences."
         ]}
         imageSrc="/assets/logos/qqads/QQminimallogo.webp"
@@ -46,7 +46,7 @@ export default function About() {
       </section>
 
       <LeftImageRightTextSection
-        title="Why Gamified Ads Are the Future"
+        title="Why Playable Ads Are the Future"
         paragraphs={[
           "People skip traditional ads. But when ads feel like games — they play.",
           "Gamification combines UX, behavioral science, and interactivity to create branded experiences that spark curiosity and drive action.",

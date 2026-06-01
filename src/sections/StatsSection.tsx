@@ -4,7 +4,7 @@ const stats = [
   {
     value: "+25.3%",
     label: "Increase in Sales Conversions",
-    description: "Gamified flows drive real outcomes—not just engagement.",
+    description: "Playable ads drive real outcomes—not just engagement.",
   },
   {
     value: "1 min+",

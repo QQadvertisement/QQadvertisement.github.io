@@ -26,7 +26,7 @@ export default function CaseStudiesSection() {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-extrabold text-teal-800 mb-2 text-center">Case Studies & Success Stories</h2>
         <p className="text-lg text-gray-700 mb-8 text-center max-w-2xl mx-auto">
-          Real-world results from gamified ad campaigns—see how brands and marketers achieved measurable growth with our creative strategies.
+          Real-world results from playable ad campaigns—see how brands and marketers achieved measurable growth with our creative strategies.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
           {insights.map((item, idx) => (

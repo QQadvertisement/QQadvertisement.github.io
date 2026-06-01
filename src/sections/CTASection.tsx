@@ -9,9 +9,9 @@ type CTAProps = {
 };
 
 export default function CTASection({
-  title = "Turn Engagement Into Conversions",
-  subtitle = "Our gamified ads aren't just fun. They work! From 7x email signups to 1.5M+ app downloads, we build campaigns that people actually interact with. Let's talk about what that'd look like for you.",
-  buttonLabel = "👉 Schedule a Discovery Call",
+  title = "Ready to Launch Your First Playable Ad?",
+  subtitle = "Stop guessing on ad creatives. Build something interactive, fast, and proven to convert. Book a 30-min call—we'll map out your campaign, discuss timeline, and show you the playable ad opportunity for your brand.",
+  buttonLabel = "Book a Playable Ad Consultation",
   buttonHref = "https://calendly.com/hello-qqadvertisement/30min",
 }: CTAProps) {
   

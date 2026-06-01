@@ -5,145 +5,84 @@ import { Helmet } from "react-helmet-async";
 import HeroSection from "../sections/HeroSection";
 import TargetClientsSection from "../sections/TargetClientsSection";
 import ProductSection from "../sections/ProductSection";
-import TestimonialsSection from "../sections/TestimonialsSection";
 import ContactSection from "../sections/ContactSection";
 import CTASection from "../sections/CTASection";
-import DemoExperienceSection from "../sections/DemoExperienceSection";
-
-// Reusable Content Sections (for the new B2B flow)
-import LeftTextRightImageSection from "../sections/LeftText-RightImageSection";
-import LeftImageRightTextSection from "../sections/LeftImage-RightTextSection";
 import CaseStudiesSection from "../sections/CaseStudiesSection";
-import InsightStatsSection from "../sections/InsightStatsSection";
+
+// New Agency-Focused Sections
+import FeaturedCaseStudySection from "../sections/FeaturedCaseStudySection";
+import WhyPlayableAdsMatterSection from "../sections/WhyPlayableAdsMatterSection";
+import HowItWorksSection from "../sections/HowItWorksSection";
+
+// Reusable Content Sections
+import LeftTextRightImageSection from "../sections/LeftText-RightImageSection";
 
 export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Gamified Advertising Agency | QQ Advertisement</title>
-        <meta name="description" content="We build high-retention gamified ad campaigns for DTC and B2C brands. Drive engagement and loyalty with interactive mini-games." />
-        <meta name="keywords" content="gamified ads, ad agency, interactive advertising, DTC marketing, brand engagement, retention marketing" />
+        <title>Playable Ads Agency | QQ Advertisement</title>
+        <meta name="description" content="We build high-converting playable ads for DTC brands. 240% ROI, 4-week timeline, $8k all-in. Interactive ads convert 3-5x higher than static banners." />
+        <meta name="keywords" content="playable ads, interactive advertising, DTC marketing, ad agency, conversion optimization, mobile ads" />
       </Helmet>
       
       <main className="bg-white text-gray-900">
-        {/* 1. Hero Section */}
+        {/* 1. Hero Section - Problem-Led */}
         <section id="hero">
           <HeroSection />
         </section>
 
-        {/* 2. Trusted By Bar */}
-        <section id="trusted">
-          <TargetClientsSection />
+        {/* 2. Social Proof - Featured Case Study */}
+        <section id="case-study">
+          <FeaturedCaseStudySection />
         </section>
 
-        {/* 3. Product Offer 1: Stop Losing Money on Ads */}
+        {/* 3. Problem Section - Why Playable Ads Matter */}
+        <section id="why">
+          <WhyPlayableAdsMatterSection />
+        </section>
+
+        {/* 4. Agency Positioning - Speed & Pricing */}
         <LeftTextRightImageSection
-          title="Stop Losing Money on Ads People Ignore"
+          title="Agency Built for Speed"
           paragraphs={[
-            "Banner blindness affects 86% of consumers. Your display ads are filtered out before anyone even notices them. You're paying for impressions that generate zero impact.",
-            "Traditional banners now average just a 0.05% click-through rate. Customers' brains automatically tune out rectangular ad spaces, and your marketing budget disappears into ignored impressions.",
-            // "But what if your ads could be impossible to ignore? Gamified experiences break through banner blindness by turning passive viewing into active engagement."
+            "We're not a SaaS platform. We're an agency of builders. We do the work for you.",
+            "4-week timeline from brief to launch. $8k all-in cost. No hidden fees. No minimums. You get a custom playable ad built specifically for your brand, audience, and conversion goals.",
+            "Most agencies charge $30k+. Most take 3 months. We do better because we focus on playable ads only. It's all we build. We're damn good at it."
           ]}
           imageSrc="/assets/home/tired.webp"
-          imageAlt="Illustration showing low engagement with traditional ads"
+          imageAlt="Fast playable ad development"
           bgFrom="white"
-          bgVia="red-50"
+          bgVia="teal-50"
           bgTo="white"
+          primaryBtnText="Check Availability"
+          primaryBtnLink="#contact"
         />
 
-        {/* 4. Product Offer 2: Turn Ads Into Experiences */}
-        <LeftImageRightTextSection
-          title="Turn Ads Into Experiences People Want to Engage"
-          paragraphs={[
-            "Customers forget ads. They remember experiences. That's why we don't do traditional ads. Instead, we build memorable gamified experiences that stick.",
-            "Mini-games spark curiosity, invite interaction, and keep your brand top-of-mind. Gamified ads don't just get seen. They get played, shared, and remembered. We turn passive scrollers into active participants, and boring impressions into measurable results.",
-            "Every interaction becomes data. Every game completion becomes a conversion opportunity. Every share becomes free brand exposure."
-          ]}
-          imageSrc="/assets/home/trygmf1.png"
-          imageAlt="Gamified ad experience mockup"
-          reverseGradient={true}
-          primaryBtnText="Learn More"
-          primaryBtnLink="/contact"
-          secondaryBtnText="Schedule a Demo"
-          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
-        >
-          {/* Stat Row */}
-          <div className="flex flex-wrap gap-4 mt-4">
-            <div className="bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
-              <span className="text-2xl font-extrabold text-teal-700">300%</span>
-              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Higher Engagement</span>
-            </div>
-            <div className="bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
-              <span className="text-2xl font-extrabold text-teal-700">65%</span>
-              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Better Recall</span>
-            </div>
-            <div className="bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
-              <span className="text-2xl font-extrabold text-teal-700">+25.3%</span>
-              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Sales Conversions</span>
-            </div>
-            {/* Mobile-only metric */}
-            <div className="md:hidden bg-white/80 border border-teal-100 rounded-xl px-4 py-2 flex flex-col items-center shadow-sm">
-              <span className="text-2xl font-extrabold text-teal-700">+1 min</span>
-              <span className="text-xs font-medium text-gray-700 uppercase tracking-wide">Engagement Time</span>
-            </div>
+        {/* 5. Trusted By Section (optional, can be removed) */}
+        <section id="trusted" className="bg-gray-50 py-12 md:py-16 px-4 md:px-6">
+          <div className="max-w-6xl mx-auto text-center">
+            <h3 className="text-gray-600 font-semibold mb-6">Trusted by</h3>
+            <TargetClientsSection />
           </div>
-        </LeftImageRightTextSection>
-
-        {/* 5. See What Your Competitors Can't: Campaign Analytics */}
-        <LeftTextRightImageSection
-          title="See What Your Competitors Can't: Campaign Analytics"
-          paragraphs={[
-            // "While your competitors guess what works, you'll know exactly what drives results. Our comprehensive analytics dashboard transforms raw engagement data into clear, actionable insights that actually matter for your business.",
-            "Track engagement patterns, identify user behavior trends, and understand what keeps players coming back. Our team doesn't just build games. We analyze every interaction to help you understand your audience and optimize future campaigns for maximum ROI.",
-            "Get detailed performance reports with expert interpretation. We don't just show you numbers. We explain what they mean for your brand and how to apply these insights to your next campaign. Data-driven decisions made simple."
-          ]}
-          imageSrc="/assets/home/tryanal3.png"
-          imageAlt="Analytics dashboard showing campaign performance metrics and user insights"
-          bgFrom="white"
-          bgVia="gray-50"
-          bgTo="white"
-          primaryBtnText="Learn more"
-          primaryBtnLink="/contact"
-          secondaryBtnText="Schedule a Demo"
-          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
-        />
-
-        {/* 6. Demo Experience Section */}
-        <section id="demo">
-          <DemoExperienceSection />
         </section>
-        
-        {/* 7. Product Showcase */}
-        <section id="product">
+
+        {/* 6. Playable Ad Formats */}
+        <section id="formats">
           <ProductSection />
         </section>
 
-        {/* 8. White-Label Gamified Ads for Agencies */}
-        <LeftImageRightTextSection
-          title="White-Label Gamified Ads for Agencies"
-          paragraphs={[
-            "Stand out as the agency with real innovation. Offer your clients interactive, gamified ad campaigns, fully white-labeled under your brand.",
-            "Most indie game projects take up to 12 months to publish. That's way too long for marketing! With us, your clients can launch a custom gamified campaign in 2 months or less, ready to drive results fast.",
-            "We build the games, you deliver the results. No dev team, no extra overhead. Unlock premium pricing, win new business, and keep clients coming back.",
-            "Let us handle the tech and creative. You focus on growing your agency and profits. This is a win-win for both of us."
-          ]}
-          imageSrc="/assets/home/white-label.webp"
-          imageAlt="White-label gamified ads platform for agencies"
-          reverseGradient={true}
-          primaryBtnText="Learn More"
-          primaryBtnLink="/contact"
-          secondaryBtnText="Schedule a Demo"
-          secondaryBtnLink="https://calendly.com/hello-qqadvertisement/30min"
-        />
+        {/* 7. How It Works - 3-Step Process */}
+        <section id="process">
+          <HowItWorksSection />
+        </section>
 
-        {/* 9. Social Proof & Case Studies */}
-        <TestimonialsSection />
-
+        {/* 8. Additional Case Studies */}
         <section id="case-studies">
           <CaseStudiesSection />
         </section>
 
-        {/* 10. Get Started */}
+        {/* 9. Final CTA */}
         <section id="contact">
           <CTASection />
           <ContactSection />

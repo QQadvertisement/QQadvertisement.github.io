@@ -10,8 +10,8 @@ export default function Products() {
     <>
       <Helmet>
         <title>Products | QQ Advertisement</title>
-        <meta name="description" content="Explore QQ Advertisement’s gamified ad products and custom interactive mini-games that help brands capture and convert audiences." />
-        <meta name="keywords" content="gamified products, interactive ads, mini-games, marketing tools, QQ Advertisement offerings" />
+        <meta name="description" content="Explore QQ Advertisement's playable ad products and custom interactive mini-games that help brands capture and convert audiences." />
+        <meta name="keywords" content="playable ads, interactive ads, mini-games, marketing tools, QQ Advertisement offerings" />
       </Helmet>
       <main className="flex flex-col">
         <section className="text-center py-20 px-6 bg-gradient-to-b from-white to-teal-50">

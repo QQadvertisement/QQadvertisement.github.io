@@ -30,24 +30,27 @@ export default function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6">
         {/* Headline + CTA with custom glassmorphism */}
         <div className="text-center md:text-left md:w-1/2 md:pr-16 max-w-xl mt-12 md:mt-0">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 md:mb-6 leading-tight text-gray-900">
-            Create Interactive Mini-game for your Brand
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 md:mb-6 leading-tight text-gray-900">
+            Ads People Actually Want to Play
           </h1>
-          <p className="text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
-            Engage users 3x longer with playful, branded ad experiences across web, mobile, and real life. We help innovative marketers turn banner blindness into brand love.
+          <p className="text-xl text-gray-700 mb-2 md:mb-4 leading-relaxed font-semibold">
+            Not boring banners. Interactive playable ads.
+          </p>
+          <p className="text-lg text-gray-600 mb-6 md:mb-8 leading-relaxed">
+            3-5x higher conversions. Built in 4 weeks for $8k. Friends Ramen hit 240% ROI. Let's win with you.
           </p>
           <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
             <a
-              href="#demo"
+              href="#case-study"
               className="bg-teal-600/90 backdrop-blur-sm text-white px-8 py-4 text-base rounded-xl font-semibold hover:bg-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-white/20"
             >
-              🎮 Try Live Demo
+              See Friends Ramen Results
             </a>
             <a
-              href="#case-studies"
+              href="#contact"
               className="bg-white/30 backdrop-blur-sm text-teal-600 px-8 py-4 text-base rounded-xl font-semibold hover:bg-white/40 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-white/20"
             >
-              📈 See Real Results
+              Book a Call
             </a>
           </div>
         </div>

@@ -10,7 +10,7 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-bold mb-2 text-teal-400">QQ Advertisement</h3>
           <p className="text-gray-300">
-            We build gamified ad experiences that delight users and drive measurable results.
+            We build playable ad experiences that delight users and drive measurable results.
           </p>
         </div>
 

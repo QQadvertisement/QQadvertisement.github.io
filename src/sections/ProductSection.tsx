@@ -3,32 +3,31 @@ import React from "react";
 const offerings = [
   {
     imageSrc: "/assets/products/product1.webp",
-    title: "Branded Mini-Games",
-    description: "Custom tap games, puzzle challenges, leaderboard contests, and interactive experiences that keep users engaged while building brand awareness.",
+    title: "Spin-to-Win",
+    description: "Users tap, they spin, they unlock a discount or reward. Instant gratification. High engagement. Proven conversion driver. Perfect for first-time buyers.",
   },
   {
     imageSrc: "/assets/products/product2.webp",
-    title: "Gamified Experience",
-    description: "Interactive discount unlocks, reward systems, digital scratch cards, and achievement mechanics that drive conversions and customer loyalty.",
+    title: "Tap-to-Match Puzzle",
+    description: "Memory-style game with brand-themed cards. Engaging, replayable, addictive. Players keep tapping to beat their high score. Natural virality.",
   },
   {
     imageSrc: "/assets/products/product3.webp",
-    title: "Analytics Dashboard",
-    description: "Real-time engagement tracking, user behavior analytics, conversion funnel insights, and performance metrics to optimize your campaigns.",
+    title: "Scratch & Reveal",
+    description: "Digital scratch-off card. Instant discovery of what they won. Faster than physical. Mobile-native. Drives repeat plays and social shares.",
   },
   {
     imageSrc: "/assets/products/product4.webp",
-    title: "Creative Consulting",
-    description: "End-to-end strategy including concept development, visual design, copywriting, and user experience optimization for maximum impact.",
+    title: "Custom Interactive",
+    description: "Your brand's unique idea. Shooting games, trading games, quizzes, trivia, swipe-based experiences. We build it. No limits to creativity.",
   },
 ];
 
 export default function ProductSection() {
   return (
     <section className="relative py-10 md:py-24 bg-white overflow-hidden">
-      {/* Pitch Deck Background */}
+      {/* Background */}
       <div className="absolute inset-0 z-0">
-        {/* Grid */}
         <div
           className="absolute inset-0"
           style={{
@@ -38,39 +37,36 @@ export default function ProductSection() {
             opacity: 0.3,
           }}
         />
-        {/* Shapes */}
-        <div className="absolute top-0 left-0 w-[40vw] h-[50vh] bg-cyan-200/30 blur-3xl transform -translate-x-1/2 -translate-y-1/3 rotate-12" />
-        <div className="absolute top-0 left-0 w-[30vw] h-[60vh] bg-indigo-300/30 blur-3xl transform -translate-x-1/4 -translate-y-1/4 rotate-[30deg]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <div className="text-center mb-8 md:mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            What We Offer
+      <div className="relative z-10 max-w-4xl mx-auto px-6">
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6">
+            Playable Ad Formats We Build
           </h2>
+          <p className="text-lg text-gray-600 leading-relaxed">
+            No limits to creativity. We build custom playable ads tailored to your brand and campaign goals. Here are some formats we specialize in:
+          </p>
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-12">
+        <div className="space-y-8">
           {offerings.map((offering, index) => (
-            <div key={offering.title} className="text-left">
-              <div className="relative">
-                <span className="absolute -top-4 -left-4 text-7xl font-extrabold text-gray-200/80 -z-10">
-                  {index + 1}
-                </span>
-                <div className="aspect-[4/3] flex items-center justify-center mb-4">
-                  <img
-                    src={offering.imageSrc}
-                    alt={offering.title}
-                    className="max-h-full max-w-full"
-                  />
+            <div key={offering.title} className="bg-gradient-to-r from-teal-50 to-white rounded-xl p-8 border border-teal-100 hover:border-teal-300 transition-colors">
+              <div className="flex items-start gap-6">
+                <div className="flex-shrink-0">
+                  <span className="text-4xl font-extrabold text-teal-200">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <div className="flex-grow">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                    {offering.title}
+                  </h3>
+                  <p className="text-gray-700 text-lg leading-relaxed">
+                    {offering.description}
+                  </p>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
-                {offering.title}
-              </h3>
-              <p className="text-gray-600 text-base">
-                {offering.description}
-              </p>
             </div>
           ))}
         </div>

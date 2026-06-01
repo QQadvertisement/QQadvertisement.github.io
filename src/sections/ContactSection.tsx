@@ -32,17 +32,20 @@ export default function ContactSection() {
         {/* Text Column - Shows second on mobile, first on desktop */}
         <div className="order-2 md:order-1">
           <h2 className="text-4xl font-bold text-teal-700 mb-6">
-            Ready to Gamify Your Next Campaign?
+            Let's Build Your Playable Ad
           </h2>
           <p className="text-gray-700 text-lg mb-4">
-            Let's turn your marketing into something people actually want to interact with. Book a free discovery call — we'll brainstorm your first gamified concept, on the house.
+            We handle everything: concept, design, development, deployment, and optimization. You get a high-converting ad in 4 weeks.
+          </p>
+          <p className="text-gray-700 text-lg mb-4">
+            No long contracts. No surprises. Just results.
           </p>
           <p className="text-gray-700 text-lg">
-            Whether you're launching a product, boosting loyalty, or just tired of boring ads — we've got ideas ready to roll.
+            Fill out the form and let's talk about what's possible for your DTC brand.
             <br></br>
             ⸻
             <br></br>
-            🛡️ We'll only use your info to contact you about your inquiry. No spam. Ever!!
+            🛡️ We'll only use your info for your campaign consultation. Never spam. Ever.
           </p>
         </div>
       </div>

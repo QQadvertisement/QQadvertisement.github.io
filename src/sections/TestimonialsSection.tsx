@@ -25,7 +25,7 @@ export default function TestimonialsSection() {
         {/* Right Column: Testimonial */}
         <div className="text-left bg-gray-50 p-8 rounded-2xl shadow-sm">
           <p className="text-2xl lg:text-3xl font-medium text-gray-700 italic leading-snug">
-            "They gamified one of our survey campaigns. It's so fun! Our customers are happier and we're seeing more returning eaters."
+            "They built a playable ad for our survey campaign. It's so fun! Our customers are happier and we're seeing more returning eaters."
           </p>
           <div className="flex items-center mt-8">
             <img
