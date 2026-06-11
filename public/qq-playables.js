@@ -3,11 +3,11 @@
   "use strict";
 
   var ASSETS = {
-    idle: "assets/qq-idle.png",
-    knead: "assets/qq-knead.png",
-    finish: "assets/qq-finish.png",
-    runHappy: "assets/qq-run-happy.png",
-    runTired: "assets/qq-run-tired.png",
+    idle: "assets/qq/qq-idle.png",
+    knead: "assets/qq/qq-knead.png",
+    finish: "assets/qq/qq-finish.png",
+    runHappy: "assets/qq/qq-run-happy.png",
+    runTired: "assets/qq/qq-run-tired.png",
   };
 
   // preload
