@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 export default function EmaGame() {
   // Add CSS to document head to ensure no margins/padding affect the iframe

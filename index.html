@@ -2,65 +2,66 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#0f766e" />
+    <meta name="theme-color" content="#172a4a" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google Fonts: Plus Jakarta Sans (Headings) & Inter (Body) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
-    <title>Playable Ads Agency | QQ Advertisement</title>
-    <meta name="description" content="QQ Advertisement creates interactive playable ads to help brands boost conversions, engagement, and customer acquisition." />
-    <meta name="keywords" content="playable ads, ad agency, interactive advertising, mini-games, US marketing agency, brand engagement" />
+    <title>Playable Ads for Mobile App User Acquisition | QQ Advertisement</title>
+    <meta name="description" content="Custom HTML5 playable ads for Meta &amp; TikTok, designed and coded by one engineer. Players run your app's core loop before they tap Download — pre-qualifying every install." />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="QQ Advertisement" />
+    <link rel="canonical" href="https://qqadvertisement.com/" />
 
-    <!-- Open Graph for AI & social previews -->
-    <meta property="og:title" content="QQ Advertisement" />
-    <meta property="og:description" content="We help brands turn engagement into conversions with playable ads and interactive mini-games." />
+    <!-- Open Graph / social previews -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="QQ Advertisement" />
+    <meta property="og:title" content="Playable Ads for Mobile App User Acquisition | QQ Advertisement" />
+    <meta property="og:description" content="Custom HTML5 playable ads for Meta &amp; TikTok. Players run your app's core loop before they tap Download — pre-qualifying every install." />
     <meta property="og:image" content="https://qqadvertisement.com/QQadsOnePager.webp" />
-    <meta property="og:url" content="https://qqadvertisement.com" />
+    <meta property="og:url" content="https://qqadvertisement.com/" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- JSON-LD for AI indexing -->
+    <!-- Organization schema for search & AI indexing -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "QQ Advertisement",
       "url": "https://qqadvertisement.com",
-      "logo": "https://qqadvertisement.com/QQadsOnePager.webp",
+      "logo": "https://qqadvertisement.com/assets/icons/qq-1024.png",
+      "email": "hello@qqadvertisement.com",
+      "description": "QQ Advertisement is a playable ads agency building custom HTML5 interactive ads for AI and consumer app user acquisition on Meta and TikTok.",
       "sameAs": [
-        "https://linkedin.com/company/qqadvertisement",      
+        "https://linkedin.com/company/qqadvertisement"
       ],
-      "description": "QQ Advertisement builds playable ads and interactive mini-games that help brands increase customer engagement and conversions.",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "New York",
+        "addressLocality": "Flushing",
         "addressRegion": "NY",
         "addressCountry": "US"
-      }
+      },
+      "knowsAbout": [
+        "playable ads",
+        "interactive advertising",
+        "mobile app user acquisition",
+        "HTML5 game development"
+      ]
     }
-    </script>
-    
-    <!-- Mobile Debug Console -->
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>
-      // Only initialize Eruda if we're on the EmaGame route or in development
-      if (window.location.pathname.includes('emagame') || process.env.NODE_ENV === 'development') {
-        eruda.init();
-      }
     </script>
   </head>
   <body>
     <div id="root"></div>
+    <script src="/qq-playables.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
