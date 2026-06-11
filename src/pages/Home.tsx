@@ -127,29 +127,53 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
             </div>
           </article>
 
-          <article className="work-card case-slot reveal">
-            <span className="ph-tag">placeholder — real campaign data</span>
-            <h3 style={{ fontSize: 20, fontWeight: 800 }}>Case study slot</h3>
-            <p className="muted" style={{ fontSize: 15 }}>
-              First paid runs land here: client, vertical, and the numbers UA people actually check.
-            </p>
-            <div className="case-metrics">
-              <div><b>—</b>IPM</div>
-              <div><b>—</b>CPI Δ vs control</div>
-              <div><b>—</b>D1 retention</div>
+          <article className="work-card reveal">
+            <a
+              href="https://jenkaiwang.github.io/QQStudio-Game-Sample/"
+              target="_blank"
+              rel="noreferrer"
+              className="work-thumb"
+              style={{ background: "#d8fff5", border: "none", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink-deep)" }}
+              aria-label="Play Game Sample"
+            >
+              <span style={{ fontSize: 18, fontWeight: 800 }}>2D Game</span>
+              <span className="play-hint"><span>▶ PLAY IT</span></span>
+            </a>
+            <div className="work-meta">
+              <div className="work-tags">
+                <span className="tag">Sample</span>
+                <span className="tag">2D mechanics</span>
+              </div>
+              <h3>Game Sample</h3>
+              <p className="muted" style={{ fontSize: 15 }}>
+                Interactive 2D gameplay mechanics demo.
+              </p>
+              <a href="https://jenkaiwang.github.io/QQStudio-Game-Sample/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
             </div>
           </article>
 
-          <article className="work-card case-slot reveal">
-            <span className="ph-tag">placeholder — real campaign data</span>
-            <h3 style={{ fontSize: 20, fontWeight: 800 }}>Case study slot</h3>
-            <p className="muted" style={{ fontSize: 15 }}>
-              Reserved for the second published campaign — added only when a client signs off on sharing.
-            </p>
-            <div className="case-metrics">
-              <div><b>—</b>install rate</div>
-              <div><b>—</b>ROAS</div>
-              <div><b>—</b>creative win rate</div>
+          <article className="work-card reveal">
+            <a
+              href="https://jenkaiwang.github.io/QQStudio-Game-3D-Sample/"
+              target="_blank"
+              rel="noreferrer"
+              className="work-thumb"
+              style={{ background: "#c0e7ff", border: "none", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink-deep)" }}
+              aria-label="Play 3D Game Sample"
+            >
+              <span style={{ fontSize: 18, fontWeight: 800 }}>3D Game</span>
+              <span className="play-hint"><span>▶ PLAY IT</span></span>
+            </a>
+            <div className="work-meta">
+              <div className="work-tags">
+                <span className="tag">3D Sample</span>
+                <span className="tag">3D mechanics</span>
+              </div>
+              <h3>3D Game Sample</h3>
+              <p className="muted" style={{ fontSize: 15 }}>
+                Interactive 3D gameplay mechanics demo.
+              </p>
+              <a href="https://jenkaiwang.github.io/QQStudio-Game-3D-Sample/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
             </div>
           </article>
         </div>
