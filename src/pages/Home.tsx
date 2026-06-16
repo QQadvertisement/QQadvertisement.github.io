@@ -104,49 +104,25 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
           </article>
 
           <article className="work-card reveal">
-            <button
-              className="work-thumb"
-              onClick={() => onPlay("atta")}
-              style={{ background: "#ffa22c", border: "none", cursor: "pointer", padding: 0 }}
-              aria-label="Play Sprint to the Finish"
-            >
-              <img src="/assets/qq/qq-run-happy.png" alt="Atta runner playable — quokka sprinting" style={{ width: "86%", borderRadius: 16 }} />
-              <span className="play-hint"><span>▶ PLAY IT</span></span>
-            </button>
-            <div className="work-meta">
-              <div className="work-tags">
-                <span className="tag">Atta</span>
-                <span className="tag">tap-mash runner · 8s</span>
-              </div>
-              <h3>Sprint to the Finish</h3>
-              <p className="muted" style={{ fontSize: 15 }}>
-                Tap-rate runner with a win/lose end state — losing players replay, winning players convert. Either way they touched the loop.{" "}
-                <Link to="/case-studies/atta">Read the case study →</Link>
-              </p>
-              <button className="btn btn-ghost" onClick={() => onPlay("atta")}>▶&nbsp;Play it</button>
-            </div>
-          </article>
-
-          <article className="work-card reveal">
             <a
               href="https://jenkaiwang.github.io/QQStudio-Game-Sample/"
               target="_blank"
               rel="noreferrer"
               className="work-thumb"
-              style={{ background: "#d8fff5", border: "none", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink-deep)" }}
-              aria-label="Play Game Sample"
+              style={{ background: "#1a1208", border: "none", textDecoration: "none", padding: 0 }}
+              aria-label="Play Flappy Ramen"
             >
-              <span style={{ fontSize: 18, fontWeight: 800 }}>2D Game</span>
+              <img src="/assets/demo-card/flappyRamen.webp" alt="Flappy Ramen playable — a ramen bowl flapping between chopstick gaps" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <span className="play-hint"><span>▶ PLAY IT</span></span>
             </a>
             <div className="work-meta">
               <div className="work-tags">
-                <span className="tag">Sample</span>
-                <span className="tag">2D mechanics</span>
+                <span className="tag">2D · HTML5</span>
+                <span className="tag">tap-to-flap</span>
               </div>
-              <h3>Game Sample</h3>
+              <h3>Flappy Ramen</h3>
               <p className="muted" style={{ fontSize: 15 }}>
-                Interactive 2D gameplay mechanics demo.
+                One-tap arcade loop — keep the ramen bowl airborne through the gaps and chase a high score. Tight game feel, instant restart, end-card CTA. Built by Kevin (game developer).
               </p>
               <a href="https://jenkaiwang.github.io/QQStudio-Game-Sample/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
             </div>
@@ -158,20 +134,20 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
               target="_blank"
               rel="noreferrer"
               className="work-thumb"
-              style={{ background: "#c0e7ff", border: "none", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink-deep)" }}
-              aria-label="Play 3D Game Sample"
+              style={{ background: "#0a3a6b", border: "none", textDecoration: "none", padding: 0 }}
+              aria-label="Play Endless Runner"
             >
-              <span style={{ fontSize: 18, fontWeight: 800 }}>3D Game</span>
+              <img src="/assets/demo-card/3Drunner.webp" alt="3D endless runner playable — character sprinting down a neon track dodging obstacles and grabbing rings" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <span className="play-hint"><span>▶ PLAY IT</span></span>
             </a>
             <div className="work-meta">
               <div className="work-tags">
-                <span className="tag">3D Sample</span>
-                <span className="tag">3D mechanics</span>
+                <span className="tag">3D · WebGL</span>
+                <span className="tag">endless runner</span>
               </div>
-              <h3>3D Game Sample</h3>
+              <h3>Endless Runner</h3>
               <p className="muted" style={{ fontSize: 15 }}>
-                Interactive 3D gameplay mechanics demo.
+                Subway Surfers–style lane runner in 3D — swipe to dodge obstacles, grab rings, and outrun the track. Real-time WebGL right in the ad frame. Built by Kevin (game developer).
               </p>
               <a href="https://jenkaiwang.github.io/QQStudio-Game-3D-Sample/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
             </div>
