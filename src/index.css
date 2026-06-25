@@ -358,6 +358,19 @@ section { padding: clamp(56px, 8vw, 110px) 0; }
   grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   gap: 22px;
 }
+.customer-grid {
+  grid-template-columns: minmax(min(290px, 100%), 1fr);
+  max-width: calc((1120px - 44px) / 3);
+}
+.sample-game-grid {
+  grid-template-columns: repeat(2, minmax(min(290px, 100%), 1fr));
+  max-width: calc(((1120px - 44px) / 3 * 2) + 22px);
+}
+@media (max-width: 680px) {
+  .sample-game-grid {
+    grid-template-columns: minmax(min(290px, 100%), 1fr);
+  }
+}
 .work-card {
   border: 2.5px solid var(--ink);
   border-radius: var(--radius);

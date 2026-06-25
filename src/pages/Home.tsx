@@ -72,37 +72,13 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
     <section id="work">
       <div className="wrap">
         <div className="sec-head reveal">
-          <div className="eyebrow">02 — Live demos</div>
-          <h2 className="h-lg">Go play the work.</h2>
+          <div className="eyebrow">02 — Sample game & Our Clients</div>
+          <h2 className="h-lg">Sample games</h2>
           <p className="body-lg muted">
             These are craft samples — playables I designed and coded end-to-end. Open one, finish the loop, hit the fake Download. Then picture your app in the frame.
           </p>
         </div>
-        <div className="work-grid">
-          <article className="work-card reveal">
-            <button
-              className="work-thumb"
-              onClick={() => onPlay("knead")}
-              style={{ background: "#f5a727", border: "none", cursor: "pointer", padding: 0 }}
-              aria-label="Play Knead Rush"
-            >
-              <img src="/assets/qq/qq-idle.png" alt="Knead Rush playable — quokka kneading dough" />
-              <span className="play-hint"><span>▶ PLAY IT</span></span>
-            </button>
-            <div className="work-meta">
-              <div className="work-tags">
-                <span className="tag">Friends Ramen</span>
-                <span className="tag">tap loop · 10s</span>
-              </div>
-              <h3>Knead Rush</h3>
-              <p className="muted" style={{ fontSize: 15 }}>
-                Score-chase kneading mechanic with an end-card CTA. Concept, character art, game feel, code — all one pair of hands.{" "}
-                <Link to="/case-studies/friends-ramen">Read the case study →</Link>
-              </p>
-              <button className="btn btn-ghost" onClick={() => onPlay("knead")}>▶&nbsp;Play it</button>
-            </div>
-          </article>
-
+        <div className="work-grid sample-game-grid">
           <article className="work-card reveal">
             <a
               href="https://jenkaiwang.github.io/QQStudio-Game-Sample/"
@@ -150,6 +126,36 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
                 Subway Surfers–style lane runner in 3D — swipe to dodge obstacles, grab rings, and outrun the track. Real-time WebGL right in the ad frame. Built by Kevin (game developer).
               </p>
               <a href="https://jenkaiwang.github.io/QQStudio-Game-3D-Sample/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
+            </div>
+          </article>
+        </div>
+        <div className="sec-head reveal" style={{ marginTop: 56 }}>
+          <h2 className="h-lg">Our Clients</h2>
+        </div>
+        <div className="work-grid customer-grid">
+          <article className="work-card reveal">
+            <a
+              href="https://qqadvertisement.com/PL01FR1N3DR4M3NCH/"
+              target="_blank"
+              rel="noreferrer"
+              className="work-thumb"
+              style={{ background: "#f5a727", border: "none", textDecoration: "none", padding: 0 }}
+              aria-label="Play Ramen Slurping Challenge"
+            >
+              <img src="/assets/demo-card/ramen-slurping-challenge.jpg" alt="Ramen Slurping Challenge playable poster" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <span className="play-hint"><span>▶ PLAY IT</span></span>
+            </a>
+            <div className="work-meta">
+              <div className="work-tags">
+                <span className="tag">Friends Ramen</span>
+                <span className="tag">tap loop · 10s</span>
+              </div>
+              <h3>Ramen Slurping Challenge</h3>
+              <p className="muted" style={{ fontSize: 15 }}>
+                Take a quick break, play the Friends Ramen mini game. Challenge your crew for the top score and earn rewards.{" "}
+                <Link to="/case-studies/friends-ramen">Read the case study →</Link>
+              </p>
+              <a href="https://qqadvertisement.com/PL01FR1N3DR4M3NCH/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
             </div>
           </article>
         </div>
