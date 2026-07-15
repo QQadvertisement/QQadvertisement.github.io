@@ -59,8 +59,8 @@ export default function PlayableAdsExplained() {
             </p>
             <p>
               Want to feel the difference instead of reading about it? Two of our builds —{" "}
-              <Link to="/case-studies/friends-ramen">Knead Rush for Friends Ramen</Link> and{" "}
-              <Link to="/case-studies/atta">Sprint to the Finish for Atta</Link> — are live on
+              <Link to="/case-studies/friends-ramen">the Ramen Slurping Challenge for Friends Ramen</Link> and{" "}
+              <Link to="/case-studies/atta">Sync Your Day for Atta</Link> — are live on
               this site.
             </p>
 
@@ -92,8 +92,9 @@ export default function PlayableAdsExplained() {
 
             <h2>Types of playable ads</h2>
             <ul>
-              <li><span><strong>Tap and timing games</strong> — one-finger loops like our kneading score-chase; instantly legible, zero tutorial.</span></li>
-              <li><span><strong>Runners and reflex games</strong> — effort maps to outcome, like a tap-mash sprint with a win/lose end state.</span></li>
+              <li><span><strong>Tap and timing games</strong> — score-chase loops like our 10-second Ramen Slurping Challenge; instantly legible, one-line tutorial at most.</span></li>
+              <li><span><strong>Runners and reflex games</strong> — effort maps to outcome; tap fast or fall behind, with a real win/lose end state.</span></li>
+              <li><span><strong>Quizzes and personalization</strong> — the player answers about themselves, like our cycle-phase matching quiz for Atta, so the end card lands as advice instead of an ad.</span></li>
               <li><span><strong>Puzzle mechanics</strong> — a single satisfying solve that mirrors the app's "aha" moment.</span></li>
               <li><span><strong>Product demos</strong> — a guided interactive slice of the real UI, common for non-game apps.</span></li>
             </ul>

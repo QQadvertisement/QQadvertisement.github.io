@@ -1,13 +1,11 @@
-/* QQ playables — vanilla JS mini-games rendered into a .phone-screen element */
+/* QQ playables — mini-games and real client builds mounted into a .phone-screen element */
 (function () {
   "use strict";
 
   var ASSETS = {
-    idle: "assets/qq/qq-idle.png",
-    knead: "assets/qq/qq-knead.png",
-    finish: "assets/qq/qq-finish.png",
-    runHappy: "assets/qq/qq-run-happy.png",
-    runTired: "assets/qq/qq-run-tired.png",
+    idle: "/assets/qq/qq-idle.png",
+    knead: "/assets/qq/qq-knead.png",
+    finish: "/assets/qq/qq-finish.png",
   };
 
   // preload
@@ -29,7 +27,7 @@
     setTimeout(function () { t.remove(); }, 2500);
   }
 
-  /* ============ KNEAD RUSH (Friends Ramen) ============ */
+  /* ============ KNEAD RUSH (QQ house demo — hero toy, not client work) ============ */
   function createKneadGame(screenEl) {
     var DURATION = 10;
     var root = el("div", "game");
@@ -42,7 +40,7 @@
     function cover() {
       root.innerHTML = "";
       var s = el("div", "g-screen");
-      s.appendChild(el("div", "g-cover-sub", "Friends Ramen presents"));
+      s.appendChild(el("div", "g-cover-sub", "QQ Advertisement presents"));
       s.appendChild(el("div", "g-cover-title", "READY, SET,<br>KNEAD!"));
       var img = el("img", "g-sprite");
       img.src = ASSETS.idle;
@@ -149,124 +147,16 @@
     return { destroy: function () { clearTimers(); root.remove(); } };
   }
 
-  /* ============ ATTA DASH (runner) ============ */
+  /* ============ ATTA — SYNC YOUR DAY (actual production playable) ============
+     The real single-file MRAID unit shipped for Atta, embedded as-is.
+     Kept in /playables/ so the demo on the site is the exact ad file. */
   function createAttaGame(screenEl) {
-    var DURATION = 8;
-    var GOAL = 100;
-    var root = el("div", "game");
-    root.style.background = "#ffa22c";
-    screenEl.appendChild(root);
-    var timers = [];
-    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
-    function clearTimers() { timers.forEach(clearTimeout); timers = []; }
-
-    function cover() {
-      root.innerHTML = "";
-      var s = el("div", "g-screen");
-      s.appendChild(el("div", "g-cover-sub", "Atta presents"));
-      s.appendChild(el("div", "g-cover-title", "SPRINT TO<br>THE FINISH!"));
-      var img = el("img", "g-sprite");
-      img.src = ASSETS.runHappy;
-      img.alt = "QQ quokka running";
-      img.style.borderRadius = "20px";
-      s.appendChild(img);
-      var btn = el("button", "g-btn g-pulse", "▶&nbsp; RUN");
-      btn.addEventListener("click", play);
-      s.appendChild(btn);
-      s.appendChild(el("div", "g-cover-sub", "Tap fast — reach " + GOAL + "m in " + DURATION + "s"));
-      root.appendChild(s);
-    }
-
-    function play() {
-      root.innerHTML = "";
-      clearTimers();
-      var dist = 0;
-      var taps = [];
-      var ended = false;
-
-      var bar = el("div", "g-bar");
-      root.appendChild(bar);
-      var hud = el("div", "g-hud");
-      var distEl = el("div", "g-count", "0m");
-      var timeEl = el("div", "g-time", DURATION.toFixed(1) + "s");
-      hud.appendChild(distEl);
-      hud.appendChild(timeEl);
-      root.appendChild(hud);
-
-      var s = el("div", "g-screen");
-      s.style.cursor = "pointer";
-      var img = el("img", "g-sprite");
-      img.src = ASSETS.runTired;
-      img.alt = "QQ quokka sprinting";
-      img.style.maxWidth = "280px";
-      img.style.width = "84%";
-      img.style.borderRadius = "20px";
-      s.appendChild(img);
-      var track = el("div", "g-progress-track");
-      var fill = el("div", "g-progress-fill");
-      track.appendChild(fill);
-      s.appendChild(track);
-      var hint = el("div", "g-cover-sub", "TAP FAST TO SPRINT!");
-      s.appendChild(hint);
-      root.appendChild(s);
-
-      function onTap() {
-        if (ended) return;
-        var now = performance.now();
-        taps.push(now);
-        dist = Math.min(GOAL, dist + 2.5);
-        if (hint.parentNode) hint.remove();
-        if (navigator.vibrate) navigator.vibrate(8);
-      }
-      s.addEventListener("pointerdown", onTap);
-
-      var start = performance.now();
-      var bobPhase = 0;
-      function tick() {
-        if (ended) return;
-        var now = performance.now();
-        var elapsed = (now - start) / 1000;
-        var left = Math.max(0, DURATION - elapsed);
-        timeEl.textContent = left.toFixed(1) + "s";
-        bar.style.transform = "scaleX(" + left / DURATION + ")";
-        // tap rate over last second
-        taps = taps.filter(function (t) { return now - t < 1000; });
-        var fast = taps.length >= 4;
-        img.src = fast ? ASSETS.runHappy : ASSETS.runTired;
-        bobPhase += fast ? 0.35 : 0.15;
-        img.style.transform = "translateY(" + Math.sin(bobPhase) * 6 + "px)";
-        distEl.textContent = Math.round(dist) + "m";
-        fill.style.width = (dist / GOAL) * 100 + "%";
-        if (dist >= GOAL || left <= 0) { ended = true; end(dist, elapsed); return; }
-        requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    }
-
-    function end(dist, elapsed) {
-      root.innerHTML = "";
-      var won = dist >= GOAL;
-      var s = el("div", "g-screen");
-      var img = el("img", "g-sprite");
-      img.src = won ? ASSETS.runHappy : ASSETS.runTired;
-      img.alt = "QQ quokka at the finish line";
-      img.style.borderRadius = "20px";
-      s.appendChild(img);
-      s.appendChild(el("div", "g-end-title", won ? "PHOTO FINISH!" : "SO CLOSE!"));
-      s.appendChild(el("div", "g-end-score", won ? GOAL + "m IN " + elapsed.toFixed(1) + "s" : Math.round(dist) + "m / " + GOAL + "m"));
-      var dl = el("button", "g-btn g-btn-dl g-pulse", "⬇&nbsp; DOWNLOAD");
-      dl.addEventListener("click", function () {
-        showToast(root, "↗ In a live ad, this opens the Play Store");
-      });
-      s.appendChild(dl);
-      var rp = el("button", "g-replay", "↺ replay");
-      rp.addEventListener("click", cover);
-      s.appendChild(rp);
-      root.appendChild(s);
-    }
-
-    cover();
-    return { destroy: function () { clearTimers(); root.remove(); } };
+    var frame = document.createElement("iframe");
+    frame.src = "/playables/atta-sync-your-day.html";
+    frame.title = "Atta — Sync Your Day playable ad";
+    frame.style.cssText = "display:block;width:100%;height:100%;border:0;background:#F4EEE3;";
+    screenEl.appendChild(frame);
+    return { destroy: function () { frame.remove(); } };
   }
 
   window.QQPlayables = { createKneadGame: createKneadGame, createAttaGame: createAttaGame };

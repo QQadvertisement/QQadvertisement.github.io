@@ -25,7 +25,7 @@ const ROUTES = [
     path: "/our-work",
     title: "Playable Ads Portfolio — Our Work | QQ Advertisement",
     description:
-      "Playable ads designed and coded by QQ Advertisement: Knead Rush for Friends Ramen, Sprint to the Finish for Atta. Live demos and case studies of custom HTML5 playables for user acquisition.",
+      "Playable ads and gamified surveys designed and coded by QQ Advertisement: the Ramen Slurping Challenge for Friends Ramen, Sync Your Day for Atta. Live builds and case studies of custom HTML5 interactive creative.",
   },
   {
     path: "/about",
@@ -35,15 +35,15 @@ const ROUTES = [
   },
   {
     path: "/case-studies/friends-ramen",
-    title: "Friends Ramen Playable Ad Case Study — Knead Rush | QQ Advertisement",
+    title: "Friends Ramen Case Study — Ramen Slurping Challenge Gamified Survey | QQ Advertisement",
     description:
-      "How QQ Advertisement designed and coded Knead Rush, a 10-second tap-loop playable ad for Friends Ramen — concept, character art, game feel, and HTML5 build.",
+      "How QQ Advertisement built the Ramen Slurping Challenge for Friends Ramen — a gamified survey where diners play a 10-second tap game, chase a weekly gift-card leaderboard, and answer three feedback questions on the way to their score.",
   },
   {
     path: "/case-studies/atta",
-    title: "Atta Playable Ad Case Study — Sprint to the Finish | QQ Advertisement",
+    title: "Atta Playable Ad Case Study — Sync Your Day | QQ Advertisement",
     description:
-      "How QQ Advertisement built Sprint to the Finish for Atta — an 8-second tap-mash runner playable ad with a win/lose end state that drives replays and conversions.",
+      "How QQ Advertisement built Sync Your Day for Atta — a personalized quiz playable ad where players match food, work, and rest to their cycle phase, ending on a live App Store CTA.",
   },
   {
     path: "/playable-ads-explained",

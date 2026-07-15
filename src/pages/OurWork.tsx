@@ -12,7 +12,7 @@ export default function OurWork() {
     ...caseStudies.map((cs) => ({
       "@context": "https://schema.org",
       "@type": "CreativeWork",
-      name: `${cs.name} — playable ad for ${cs.client}`,
+      name: `${cs.name} — for ${cs.client}`,
       url: `${SITE_URL}/case-studies/${cs.slug}`,
       creator: { "@type": "Organization", name: "QQ Advertisement" },
       description: cs.summary,
@@ -23,7 +23,7 @@ export default function OurWork() {
     <>
       <Seo
         title="Playable Ads Portfolio — Our Work | QQ Advertisement"
-        description="Playable ads designed and coded by QQ Advertisement: Knead Rush for Friends Ramen, Sprint to the Finish for Atta. Live demos and case studies of custom HTML5 playables for user acquisition."
+        description="Playable ads and gamified surveys designed and coded by QQ Advertisement: the Ramen Slurping Challenge for Friends Ramen, Sync Your Day for Atta. Live builds and case studies of custom HTML5 interactive creative."
         path="/our-work"
         jsonLd={jsonLd}
       />
@@ -38,9 +38,9 @@ export default function OurWork() {
               <div className="eyebrow">Portfolio</div>
               <h1 className="h-xl">Our playable ads work</h1>
               <p className="body-lg muted">
-                Custom HTML5 playables for mobile app user acquisition — every one designed,
+                Custom HTML5 playables and gamified experiences — every one designed,
                 illustrated, and coded end-to-end by one engineer. Each project below links to a
-                full case study with a live, playable build.
+                full case study built around the real production build.
               </p>
             </div>
           </div>

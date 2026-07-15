@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Atta — Sync Your Day</title>
+<style>
+/* =========================================================================
+   ART DIRECTION TOKENS  (re-skin a new wellness app by editing these)
+   Palette: sage/olive, warm taupe, cream, dusty-rose. Serif headlines.
+   ========================================================================= */
+:root{
+  --cream:    #F4EEE3;
+  --cream-2:  #ECE3D2;
+  --sage:     #9DAE89;
+  --sage-deep:#7E9069;
+  --olive:    #61703F;
+  --taupe:    #B8A98F;
+  --rose:     #D2A6A1;
+  --rose-soft:#E6C9C4;
+  --ink:      #3C3A31;
+  --ink-soft: #726C5C;
+  --check:    #6E9A5F;   /* the app's green checkmark green */
+  --gold:     #C2A14E;
+  --glow:     rgba(157,174,137,0.55);
+  --card-bg:  #FBF7EF;
+  --line:     rgba(60,58,49,0.14);
+  --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Hoefler Text",Georgia,"Times New Roman",serif;
+  --sans:  -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,sans-serif;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--cream);overscroll-behavior:none;}
+body{font-family:var(--sans);color:var(--ink);}
+
+/* full-bleed, portrait, safe-area aware shell */
+#ad{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  user-select:none;-webkit-user-select:none;
+  touch-action:manipulation;
+}
+
+/* dreamy background mesh */
+.bg{
+  position:absolute;inset:-10%;z-index:0;
+  background:
+    radial-gradient(95% 70% at 22% 8%,  rgba(210,166,161,0.40), transparent 60%),
+    radial-gradient(95% 80% at 86% 26%, rgba(157,174,137,0.48), transparent 62%),
+    radial-gradient(120% 95% at 50% 105%, rgba(184,169,143,0.42), transparent 66%),
+    linear-gradient(180deg,#F6F0E6,#EEE5D5);
+  animation:drift 18s ease-in-out infinite alternate;
+}
+@keyframes drift{
+  0%{transform:translate3d(0,0,0) scale(1.02);}
+  100%{transform:translate3d(0,-2.2%,0) scale(1.07);}
+}
+.grain{
+  position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* a stage = one step of the flow */
+.stage{
+  position:relative;z-index:2;
+  flex:1;min-height:0;width:100%;
+  display:none;flex-direction:column;align-items:center;
+  padding:18px 20px 22px;
+}
+.stage.on{display:flex;}
+
+/* ----------------------------------------------------------------- INTRO */
+#intro{justify-content:center;gap:30px;text-align:center;}
+#intro.on{animation:fadeIn .8s ease both;}
+#intro.leaving{animation:fadeOut .55s ease both;}
+.logo-hero{width:148px;height:92px;filter:drop-shadow(0 8px 22px rgba(126,144,105,.35));}
+.logo-hero path{stroke-dasharray:560;stroke-dashoffset:560;animation:draw 1.7s ease .15s forwards, breathe 4.5s ease-in-out 1.9s infinite;}
+@keyframes draw{to{stroke-dashoffset:0;}}
+@keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.045);}}
+.headline{
+  font-family:var(--serif);font-weight:500;color:var(--ink);
+  font-size:clamp(28px,8.2vw,40px);line-height:1.12;letter-spacing:-.01em;
+  max-width:9.5em;margin:0;
+}
+.headline em{font-style:italic;color:var(--rose);font-weight:500;}
+#intro .headline{opacity:0;animation:rise .9s ease .55s both;}
+
+/* ------------------------------------------------------------------ PLAY */
+#play{justify-content:flex-start;gap:14px;}
+#play.on{animation:fadeIn .55s ease both;}
+
+/* cycle ring */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;margin-top:2px;}
+.ring{position:relative;width:118px;height:118px;}
+.ring svg{transform:rotate(-90deg);}
+.ring .tip{position:absolute;inset:0;}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
+.ring-day{font-family:var(--serif);font-size:30px;line-height:1;color:var(--ink);}
+.ring-day small{font-size:11px;letter-spacing:.16em;color:var(--ink-soft);text-transform:uppercase;display:block;margin-top:4px;}
+.ring-phase{font-size:12.5px;letter-spacing:.04em;color:var(--olive);font-weight:600;}
+.ring-phase b{color:var(--ink);font-weight:600;}
+
+/* slots */
+.slots{display:flex;gap:10px;width:100%;max-width:380px;margin-top:2px;}
+.slot{
+  position:relative;flex:1;height:96px;border-radius:20px;
+  border:1.5px dashed rgba(110,154,95,.45);
+  background:rgba(251,247,239,.5);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  transition:border-color .25s, background .25s, transform .25s, box-shadow .35s;
+}
+.slot .slot-ico{width:24px;height:24px;color:var(--sage-deep);opacity:.9;transition:opacity .2s;}
+.slot .slot-label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+.slot.hot{border-color:var(--sage-deep);background:rgba(157,174,137,.18);transform:translateY(-2px);}
+.slot.filled{
+  border-style:solid;border-color:rgba(110,154,95,.55);
+  box-shadow:0 0 0 0 var(--glow);animation:slotGlow .9s ease;
+}
+@keyframes slotGlow{0%{box-shadow:0 0 0 0 var(--glow);}40%{box-shadow:0 0 0 12px rgba(157,174,137,0);}100%{box-shadow:0 6px 18px rgba(126,144,105,.22);}}
+.slot.filled .slot-ico,.slot.filled .slot-label{display:none;}
+.check-badge{
+  position:absolute;top:-9px;right:-9px;width:26px;height:26px;border-radius:50%;
+  background:var(--check);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 8px rgba(110,154,95,.5);transform:scale(0);animation:pop .4s cubic-bezier(.2,1.4,.4,1) .05s forwards;
+}
+.check-badge svg{width:14px;height:14px;color:#fff;}
+@keyframes pop{to{transform:scale(1);}}
+
+.hint{font-size:12.5px;color:var(--ink-soft);letter-spacing:.02em;margin:2px 0 0;text-align:center;min-height:16px;transition:color .2s;}
+
+/* tray of cards */
+.tray{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  width:100%;max-width:400px;margin-top:auto;padding-top:4px;
+}
+.card{
+  position:relative;border-radius:18px;background:var(--card-bg);
+  border:1px solid var(--line);
+  box-shadow:0 4px 14px rgba(60,58,49,.10);
+  padding:11px 9px 10px;min-height:96px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;
+  touch-action:none;cursor:grab;
+  transition:box-shadow .2s, transform .28s cubic-bezier(.2,.9,.3,1);
+  will-change:transform;
+}
+.card .c-ico{width:26px;height:26px;color:var(--sage-deep);}
+.card .c-tag{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);font-weight:700;}
+.card .c-title{font-size:12px;line-height:1.18;color:var(--ink);font-weight:600;}
+.card.dragging{cursor:grabbing;z-index:50;box-shadow:0 16px 34px rgba(60,58,49,.26);transition:none;}
+.card.wobble{animation:wobble .5s ease;}
+@keyframes wobble{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px) rotate(-2deg);}40%{transform:translateX(6px) rotate(2deg);}60%{transform:translateX(-4px) rotate(-1deg);}80%{transform:translateX(3px);}}
+
+/* a card after it's locked into a slot */
+.slot .card.placed{
+  position:absolute;inset:5px;min-height:0;padding:8px 6px;border:none;
+  background:linear-gradient(180deg,#FBF8F1,#F0EBDF);
+  box-shadow:inset 0 0 0 1.5px rgba(110,154,95,.4);
+  animation:settle .35s ease;cursor:default;
+}
+.slot .card.placed .c-tag{display:none;}
+.slot .card.placed .c-ico{width:22px;height:22px;color:var(--check);}
+.slot .card.placed .c-title{font-size:11px;}
+@keyframes settle{from{transform:scale(1.08);opacity:.6;}to{transform:scale(1);opacity:1;}}
+
+/* reward bloom overlay (lives over the play stage) */
+.reward{
+  position:absolute;inset:0;z-index:30;display:none;
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(60% 45% at 50% 48%,rgba(246,240,230,.86),rgba(238,229,213,.72) 70%,transparent);
+}
+.reward.on{display:flex;animation:fadeIn .5s ease both;}
+.reward .bloom-ring{
+  position:absolute;width:60px;height:60px;border-radius:50%;border:2px solid var(--sage);
+  opacity:.6;animation:bloomOut 1.4s ease-out forwards;
+}
+.reward .bloom-ring:nth-child(2){animation-delay:.18s;border-color:var(--rose);}
+@keyframes bloomOut{0%{transform:scale(.4);opacity:.7;}100%{transform:scale(7);opacity:0;}}
+.reward .seal{width:78px;height:78px;margin-bottom:18px;color:var(--check);animation:pop .55s cubic-bezier(.2,1.5,.4,1) both;}
+.reward h2{font-family:var(--serif);font-weight:500;font-size:clamp(24px,7vw,32px);line-height:1.15;color:var(--ink);margin:0;max-width:8em;animation:rise .7s ease .15s both;}
+
+/* --------------------------------------------------------------- ENDCARD */
+#endcard{justify-content:center;gap:18px;text-align:center;cursor:pointer;}
+#endcard.on{animation:fadeIn .55s ease both;}
+.app-icon{
+  width:96px;height:96px;border-radius:24px;
+  background:linear-gradient(155deg,#F3ECDD,#E5D9C3);
+  box-shadow:0 12px 30px rgba(60,58,49,.22),inset 0 1px 0 rgba(255,255,255,.6);
+  display:flex;align-items:center;justify-content:center;
+  animation:rise .7s ease both;
+}
+.app-icon svg{width:62px;height:42px;filter:drop-shadow(0 3px 6px rgba(126,144,105,.4));}
+.app-name{font-family:var(--serif);font-size:30px;font-weight:500;margin:0;letter-spacing:.01em;}
+.app-sub{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin:-10px 0 0;}
+.stars{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);}
+.stars .s{display:flex;gap:2px;}
+.stars .s svg{width:15px;height:15px;color:var(--gold);}
+.end-head{font-family:var(--serif);font-weight:500;font-size:clamp(20px,6vw,26px);line-height:1.18;color:var(--ink);margin:2px 0 0;max-width:9em;}
+.end-head em{font-style:italic;color:var(--rose);}
+.cta{
+  margin-top:8px;border:none;cursor:pointer;
+  font-family:var(--sans);font-size:18px;font-weight:700;letter-spacing:.01em;color:#fff;
+  padding:17px 54px;border-radius:40px;
+  background:linear-gradient(180deg,var(--sage),var(--olive));
+  box-shadow:0 10px 24px rgba(97,112,63,.42),inset 0 1px 0 rgba(255,255,255,.3);
+  animation:pulseCta 2.4s ease-in-out infinite;
+}
+.cta:active{transform:translateY(1px) scale(.99);}
+@keyframes pulseCta{0%,100%{box-shadow:0 10px 24px rgba(97,112,63,.42),inset 0 1px 0 rgba(255,255,255,.3);}50%{box-shadow:0 10px 30px rgba(97,112,63,.6),0 0 0 8px rgba(157,174,137,.12),inset 0 1px 0 rgba(255,255,255,.3);}}
+.replay{
+  margin-top:6px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-size:13px;color:var(--ink-soft);padding:8px 14px;border-radius:20px;
+  background:rgba(255,255,255,.35);
+}
+.replay svg{width:15px;height:15px;color:var(--ink-soft);}
+
+/* shared motion */
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes fadeOut{from{opacity:1;}to{opacity:0;}}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<div id="ad">
+  <div class="bg"></div>
+  <div class="grain"></div>
+
+  <!-- ============================ STEP 1: INTRO ============================ -->
+  <section id="intro" class="stage">
+    <svg class="logo-hero" viewBox="0 0 100 60" fill="none">
+      <defs>
+        <linearGradient id="lemGrad" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#9DAE89"/><stop offset=".55" stop-color="#7E9069"/><stop offset="1" stop-color="#D2A6A1"/>
+        </linearGradient>
+      </defs>
+      <path d="M50,30 C50,8 88,8 88,30 C88,52 50,52 50,30 C50,8 12,8 12,30 C12,52 50,52 50,30 Z"
+            stroke="url(#lemGrad)" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+    <h1 class="headline">Turn your cycle into a <em>superpower</em></h1>
+  </section>
+
+  <!-- ============================= STEP 2: PLAY ============================ -->
+  <section id="play" class="stage">
+    <div class="ring-wrap">
+      <div class="ring">
+        <svg width="118" height="118" viewBox="0 0 118 118">
+          <defs>
+            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#9DAE89"/><stop offset="1" stop-color="#D2A6A1"/>
+            </linearGradient>
+          </defs>
+          <circle cx="59" cy="59" r="50" fill="none" stroke="rgba(60,58,49,.12)" stroke-width="8"/>
+          <circle id="ringArc" cx="59" cy="59" r="50" fill="none" stroke="url(#ringGrad)"
+                  stroke-width="8" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314"/>
+        </svg>
+        <div class="ring-center">
+          <span class="ring-day" id="ringDayNum">24<small>Day</small></span>
+        </div>
+      </div>
+      <div class="ring-phase"><b id="phaseName">Luteal</b> phase</div>
+    </div>
+
+    <div class="slots" id="slots"></div>
+    <p class="hint" id="hint">Drag each card to match your phase</p>
+    <div class="tray" id="tray"></div>
+
+    <!-- reward bloom is part of the play stage so the synced guide stays visible -->
+    <div class="reward" id="reward">
+      <span class="bloom-ring"></span><span class="bloom-ring"></span>
+      <svg class="seal" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.6" opacity=".4"/><path d="M7 12.4l3.2 3.2L17 8.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2>Your day, synced to your body.</h2>
+    </div>
+  </section>
+
+  <!-- ============================ STEP 4: ENDCARD =========================== -->
+  <section id="endcard" class="stage">
+    <div class="app-icon">
+      <svg viewBox="0 0 100 60" fill="none">
+        <path d="M50,30 C50,8 88,8 88,30 C88,52 50,52 50,30 C50,8 12,8 12,30 C12,52 50,52 50,30 Z"
+              stroke="url(#lemGrad)" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h2 class="app-name">Atta</h2>
+    <p class="app-sub">Women's Health Assistant</p>
+    <div class="stars">
+      <span class="s" id="starRow"></span><span>4.9</span>
+    </div>
+    <p class="end-head">Turn your cycle into a <em>superpower</em></p>
+    <button class="cta" id="ctaBtn">Get it free</button>
+    <span class="replay" id="replayBtn">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1M3.5 4v4.4H8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Replay
+    </span>
+  </section>
+</div>
+
+<script>
+/* =========================================================================
+   CONFIG  —  swap these to point the ad at any store listing / cycle phase
+   ========================================================================= */
+const STORE_URL  = "https://apps.apple.com/us/app/atta-womens-health-assistant/id6758871646"; // live App Store link
+const PHASE      = "Luteal";
+const CYCLE_DAY  = 24;
+const CYCLE_LEN  = 28; // used only to draw the ring progress arc
+/* ========================================================================= */
+
+/* ----- card content for this phase (re-skin: edit titles/correct flags) --- */
+const CARDS = [
+  { cat:"eat",  ok:true,  title:"Magnesium-rich comfort", ico:"leaf" },
+  { cat:"eat",  ok:false, title:"Cold raw juice cleanse",  ico:"leaf" },   // better for follicular
+  { cat:"work", ok:true,  title:"Wrap up & organize",      ico:"work" },
+  { cat:"work", ok:false, title:"Launch a big new project",ico:"work" },   // better for follicular
+  { cat:"rest", ok:true,  title:"Gentle restorative yoga", ico:"rest" },
+  { cat:"rest", ok:false, title:"Hard HIIT session",       ico:"rest" }    // better for ovulatory
+];
+const SLOT_DEFS = [
+  { cat:"eat",  label:"Eat",  ico:"leaf" },
+  { cat:"work", label:"Work", ico:"work" },
+  { cat:"rest", label:"Rest", ico:"rest" }
+];
+
+/* inline icon set (no network) */
+const ICON = {
+  leaf:'<path d="M5 19c0-7 7-13 14-14 0 8-6 14-14 14Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19c2.5-3 5.5-5.5 9-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+  work:'<rect x="5" y="6" width="14" height="14" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M9 4.5h6v3H9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.5 13l2.2 2.2L16 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+  rest:'<path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>'
+};
+const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const STAR_SVG  = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.9 6.1 20.3l1.3-6.5L2.5 9.3l6.6-.8z"/></svg>';
+
+/* ---------- lightweight analytics: console + postMessage hooks ----------- */
+function fire(name, data){
+  var payload = data || {};
+  try { console.log("[playable]", name, payload); } catch(e){}
+  try { window.postMessage({ source:"atta_playable", event:name, data:payload }, "*"); } catch(e){}
+}
+
+/* =========================================================================
+   MRAID PLUMBING  —  install handling + view-gated start
+   handleInstall(): mraid.open() when available, else window.open().
+   Intro begins only when the ad is actually viewable; if no MRAID, start now.
+   ========================================================================= */
+function handleInstall(){
+  fire("cta_click", { url: STORE_URL });
+  try {
+    if (window.mraid && typeof window.mraid.open === "function") {
+      window.mraid.open(STORE_URL);          // standard MRAID store-open
+    } else {
+      window.open(STORE_URL, "_blank");      // plain webview fallback
+    }
+  } catch(e){
+    try { window.open(STORE_URL, "_blank"); } catch(_){}
+  }
+}
+
+var started = false;
+function startPlayable(){
+  if (started) return;
+  started = true;
+  fire("play_start");
+  runIntro();
+}
+function initMraid(){
+  var m = window.mraid;
+  if (!m) { startPlayable(); return; }        // no MRAID -> just start
+
+  function onViewable(viewable){
+    if (viewable) {
+      try { m.removeEventListener("viewableChange", onViewable); } catch(e){}
+      startPlayable();
+    }
+  }
+  function whenReady(){
+    if (m.isViewable && m.isViewable()) startPlayable();
+    else m.addEventListener("viewableChange", onViewable);
+  }
+  if (m.getState && m.getState() === "loading") {
+    m.addEventListener("ready", whenReady);
+  } else {
+    whenReady();
+  }
+}
+/* ===================== end MRAID section ================================= */
+
+/* ------------------------------- flow ----------------------------------- */
+var firstTouch = false;
+function show(id){
+  document.querySelectorAll(".stage").forEach(function(s){ s.classList.remove("on"); });
+  document.getElementById(id).classList.add("on");
+}
+
+function runIntro(){
+  var intro = document.getElementById("intro");
+  show("intro");
+  setTimeout(function(){ intro.classList.add("leaving"); }, 2100);
+  setTimeout(function(){ intro.classList.remove("leaving"); buildPlay(); }, 2650);
+}
+
+/* draw the cycle ring to CYCLE_DAY / CYCLE_LEN */
+function drawRing(){
+  var arc = document.getElementById("ringArc");
+  var C = 2 * Math.PI * 50;                 // r = 50
+  var frac = Math.max(.04, Math.min(1, CYCLE_DAY / CYCLE_LEN));
+  arc.setAttribute("stroke-dasharray", C);
+  arc.style.transition = "none";
+  arc.setAttribute("stroke-dashoffset", C);
+  // animate the fill in
+  requestAnimationFrame(function(){
+    arc.style.transition = "stroke-dashoffset 1s ease";
+    arc.setAttribute("stroke-dashoffset", C * (1 - frac));
+  });
+  document.getElementById("ringDayNum").innerHTML = CYCLE_DAY + "<small>Day</small>";
+  document.getElementById("phaseName").textContent = PHASE;
+}
+
+function buildPlay(){
+  drawRing();
+  document.getElementById("reward").classList.remove("on");
+  var hint = document.getElementById("hint");
+  hint.textContent = "Drag each card to match your phase";
+  hint.style.color = "";
+
+  // slots
+  var slots = document.getElementById("slots");
+  slots.innerHTML = "";
+  SLOT_DEFS.forEach(function(d){
+    var el = document.createElement("div");
+    el.className = "slot";
+    el.dataset.cat = d.cat;
+    el.innerHTML =
+      '<svg class="slot-ico" viewBox="0 0 24 24" fill="none">'+ICON[d.ico]+'</svg>'+
+      '<span class="slot-label">'+d.label+'</span>';
+    slots.appendChild(el);
+  });
+
+  // tray (shuffled)
+  var tray = document.getElementById("tray");
+  tray.innerHTML = "";
+  shuffle(CARDS.slice()).forEach(function(c){
+    var el = document.createElement("div");
+    el.className = "card";
+    el.dataset.cat = c.cat;
+    el.dataset.ok = c.ok ? "1" : "0";
+    el.innerHTML =
+      '<svg class="c-ico" viewBox="0 0 24 24" fill="none">'+ICON[c.ico]+'</svg>'+
+      '<span class="c-tag">'+c.cat+'</span>'+
+      '<span class="c-title">'+c.title+'</span>';
+    attachDrag(el);
+    tray.appendChild(el);
+  });
+
+  filled = 0;
+  show("play");
+}
+
+function shuffle(a){ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+/* --------------------------- drag mechanic ------------------------------ */
+/* pointer events (work on touch + mouse). Card stays in flow & uses
+   transform so the tray never reflows; drop is resolved by rect overlap.  */
+var filled = 0;
+function attachDrag(card){
+  var sx=0, sy=0, dragging=false;
+
+  card.addEventListener("pointerdown", function(e){
+    if (card.classList.contains("placed")) return;
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    card.setPointerCapture(e.pointerId);
+    card.classList.add("dragging");
+    if (!firstTouch){ firstTouch = true; fire("first_interaction"); }
+  });
+
+  card.addEventListener("pointermove", function(e){
+    if (!dragging) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy;
+    card.style.transform = "translate("+dx+"px,"+dy+"px) scale(1.06) rotate("+(dx*0.02)+"deg)";
+    highlightSlot(card);
+  });
+
+  function end(e){
+    if (!dragging) return;
+    dragging = false;
+    card.classList.remove("dragging");
+    clearHot();
+    resolveDrop(card);
+  }
+  card.addEventListener("pointerup", end);
+  card.addEventListener("pointercancel", end);
+}
+
+function cardCenter(card){
+  var r = card.getBoundingClientRect();
+  return { x:r.left + r.width/2, y:r.top + r.height/2 };
+}
+function slotUnder(card){
+  var c = cardCenter(card), pad = 26;
+  var slots = document.querySelectorAll(".slot");
+  for (var i=0;i<slots.length;i++){
+    var s = slots[i], r = s.getBoundingClientRect();
+    if (c.x > r.left-pad && c.x < r.right+pad && c.y > r.top-pad && c.y < r.bottom+pad) return s;
+  }
+  return null;
+}
+function clearHot(){ document.querySelectorAll(".slot.hot").forEach(function(s){ s.classList.remove("hot"); }); }
+function highlightSlot(card){
+  clearHot();
+  var s = slotUnder(card);
+  if (s && !s.classList.contains("filled")) s.classList.add("hot");
+}
+
+function resolveDrop(card){
+  var slot = slotUnder(card);
+  var good = slot && !slot.classList.contains("filled")
+          && slot.dataset.cat === card.dataset.cat && card.dataset.ok === "1";
+
+  if (good){
+    acceptCard(card, slot);
+  } else {
+    // gentle return; only nudge if it was dropped on a slot
+    card.style.transform = "";
+    card.classList.add("wobble");
+    setTimeout(function(){ card.classList.remove("wobble"); }, 520);
+    if (slot && !slot.classList.contains("filled")){
+      nudge(card.dataset.ok === "1" ? "That fits a different slot" : "Not for this phase");
+    }
+  }
+}
+
+function nudge(msg){
+  var hint = document.getElementById("hint");
+  hint.textContent = msg;
+  hint.style.color = "var(--rose)";
+  clearTimeout(nudge._t);
+  nudge._t = setTimeout(function(){
+    hint.textContent = "Drag each card to match your phase";
+    hint.style.color = "";
+  }, 1400);
+}
+
+function acceptCard(card, slot){
+  card.style.transform = "";
+  card.classList.add("placed");
+  slot.classList.add("filled");
+  slot.appendChild(card);
+  var badge = document.createElement("span");
+  badge.className = "check-badge";
+  badge.innerHTML = CHECK_SVG;
+  slot.appendChild(badge);
+
+  filled++;
+  if (filled === SLOT_DEFS.length){
+    fire("level_complete");
+    setTimeout(showReward, 480);
+  }
+}
+
+/* --------------------------- reward + endcard --------------------------- */
+function showReward(){
+  document.getElementById("hint").style.visibility = "hidden";
+  document.getElementById("tray").style.visibility = "hidden";
+  document.getElementById("reward").classList.add("on");
+  setTimeout(function(){
+    document.getElementById("hint").style.visibility = "";
+    document.getElementById("tray").style.visibility = "";
+    document.getElementById("reward").classList.remove("on");
+    show("endcard");
+  }, 2200);
+}
+
+function buildStars(){
+  var row = document.getElementById("starRow");
+  row.innerHTML = "";
+  for (var i=0;i<5;i++) row.innerHTML += STAR_SVG;
+}
+
+/* replay resets back to the intro */
+function replay(){
+  fire("replay");
+  started = true;       // already past the view-gate
+  firstTouch = false;
+  document.getElementById("reward").classList.remove("on");
+  runIntro();
+}
+
+/* ------------------------------ wire up --------------------------------- */
+document.addEventListener("DOMContentLoaded", function(){
+  buildStars();
+
+  // whole endcard is a CTA
+  document.getElementById("endcard").addEventListener("click", handleInstall);
+  document.getElementById("ctaBtn").addEventListener("click", function(e){
+    e.stopPropagation(); handleInstall();
+  });
+  // replay must not trigger the endcard CTA
+  document.getElementById("replayBtn").addEventListener("click", function(e){
+    e.stopPropagation(); replay();
+  });
+
+  initMraid();
+});
+</script>
+</body>
+</html>

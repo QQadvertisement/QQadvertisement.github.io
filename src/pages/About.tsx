@@ -7,7 +7,7 @@ export default function About() {
     <>
       <Seo
         title="About QQ Advertisement — Playable Ads Agency for AI & Consumer Apps"
-        description="QQ Advertisement is a builder-first playable ads agency in Flushing, Queens. CS and AI/ML background, custom HTML5 builds — not templates — for consumer app and AI startup user acquisition."
+        description="QQ Advertisement is a builder-first playable ads studio in Flushing, Queens — a game developer, an engineer, and a growth marketer. Custom HTML5 builds, not templates, for consumer app and AI startup user acquisition."
         path="/about"
         jsonLd={breadcrumbsJsonLd([
           { name: "Home", path: "/" },
@@ -25,8 +25,8 @@ export default function About() {
               <div className="eyebrow">About</div>
               <h1 className="h-xl">Why QQ Advertisement</h1>
               <p className="body-lg muted">
-                A playable ads studio where the designer, the illustrator, and the engineer are
-                the same person — building custom interactive ads for user acquisition.
+                A playable ads studio built by three specialists — a game developer, an engineer,
+                and a growth marketer — making custom interactive ads for user acquisition.
               </p>
             </div>
           </div>
@@ -37,11 +37,18 @@ export default function About() {
             <article className="prose">
               <h2>Builders first</h2>
               <p>
-                QQ Advertisement is run by a computer science grad with an AI/ML background —
-                work spanning Meta and Snorkel AI — who would rather ship a testable build than a
-                storyboard deck. Every playable here is concepted, illustrated, animated, and
-                coded by the same pair of hands, so nothing gets lost in handoff and revisions
-                happen in hours, not sprint cycles.
+                QQ Advertisement is three people, and each one does a different third of a
+                playable for a living. Kevin is a game developer working in Unreal and UEFN.
+                Timo is a software engineer with an AI/ML background — work spanning Meta AI,
+                Mercor, and Snorkel AI. Ploy does growth marketing at a high-growth startup.
+              </p>
+              <p>
+                That split is the whole point. A playable ad is a game, a piece of production
+                software, and a performance ad all at once — three different crafts wearing one
+                file extension. Most shops are genuinely good at one of them and quietly outsource
+                the other two, and you can usually tell which one by playing the ad. We'd rather
+                ship a testable build than a storyboard deck, and because it's three people who
+                already work together, revisions happen in hours instead of sprint cycles.
               </p>
               <h2>Why playable ads</h2>
               <p>
@@ -61,8 +68,9 @@ export default function About() {
               <h2>What makes QQ different</h2>
               <ul>
                 <li>Custom builds, not templates — every playable starts from your app's one selling mechanic.</li>
-                <li>Direct and technical: you talk to the person who writes the code, every time.</li>
-                <li>Days, not the multi-week agency cycle — no account managers in the invoice.</li>
+                <li>A specialist on each third of the job: game feel, shipping code, and the numbers the ad is judged on.</li>
+                <li>Direct and technical: you talk to the people who write the code, every time.</li>
+                <li>Days, not the multi-week agency cycle — small enough to move fast, staffed enough not to cut the corner you'd notice.</li>
                 <li>A warm network in AI and tech, and a builder's honesty about whether a playable fits your funnel at all.</li>
               </ul>
               <p>
@@ -73,8 +81,17 @@ export default function About() {
               </p>
             </article>
             <figure className="why-card">
-              <img src="/assets/qq/qq-sawasdee.png" alt="QQ the quokka mascot waving hello" />
-              <figcaption>QQ — studio quokka, QA department, and morale officer. Based in Flushing, Queens, NY.</figcaption>
+              <img
+                src="/assets/about/Timo-Ploy-Kevin.jpeg"
+                alt="The QQ Advertisement team — Timo, Ploy, and Kevin — on a rooftop with a city skyline behind them"
+              />
+              <figcaption>
+                The people behind QQ:{" "}
+                <a href="https://www.linkedin.com/in/thitipun-s/" target="_blank" rel="noreferrer">Timo</a>,{" "}
+                <a href="https://www.linkedin.com/in/ploywongtaladkwon/" target="_blank" rel="noreferrer">Ploy</a>, and{" "}
+                <a href="https://www.linkedin.com/in/jenkaiwang/" target="_blank" rel="noreferrer">Kevin</a>.
+                Human talent, supercharged with AI tech.
+              </figcaption>
             </figure>
           </div>
         </section>

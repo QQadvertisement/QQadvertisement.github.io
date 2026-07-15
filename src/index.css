@@ -275,6 +275,30 @@ a { color: inherit; }
   position: relative;
   background: #f5a727;
 }
+/* ---------- case-study flow gallery ---------- */
+.flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 22px;
+  margin-top: 10px;
+}
+.flow-shot { margin: 0; }
+.flow-shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 22px;
+  border: 2px solid var(--ink);
+  background: var(--paper-soft);
+  box-shadow: 0 14px 30px -16px rgba(15, 31, 60, 0.35);
+}
+.flow-shot figcaption {
+  margin-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
+}
+
 .phone-notch {
   position: absolute;
   top: 22px;
@@ -358,15 +382,13 @@ section { padding: clamp(56px, 8vw, 110px) 0; }
   grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   gap: 22px;
 }
-.customer-grid {
-  grid-template-columns: minmax(min(290px, 100%), 1fr);
-  max-width: calc((1120px - 44px) / 3);
-}
+.customer-grid,
 .sample-game-grid {
   grid-template-columns: repeat(2, minmax(min(290px, 100%), 1fr));
   max-width: calc(((1120px - 44px) / 3 * 2) + 22px);
 }
 @media (max-width: 680px) {
+  .customer-grid,
   .sample-game-grid {
     grid-template-columns: minmax(min(290px, 100%), 1fr);
   }
@@ -475,9 +497,16 @@ section { padding: clamp(56px, 8vw, 110px) 0; }
 .why-card figcaption {
   font-family: var(--mono);
   font-size: 12px;
+  line-height: 1.6;
   padding: 12px 16px;
   border-top: 2px solid var(--ink);
   background: #fff;
+}
+.why-card figcaption a {
+  font-weight: 700;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
 }
 
 /* ---------- pricing ---------- */

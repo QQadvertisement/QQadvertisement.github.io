@@ -18,7 +18,7 @@ function QQHero() {
             Playable ads that pre-qualify the install before the CPI hits.
           </h1>
           <p className="body-lg hero-sub muted">
-            I design and code custom HTML5 playables for consumer apps and games — players run your core loop on Meta and TikTok before they ever tap Download, so the installs you're buying already know what they're getting.
+            We design and code custom HTML5 playables for consumer apps and games — players run your core loop on Meta and TikTok before they ever tap Download, so the installs you're buying already know what they're getting.
           </p>
           <div className="cta-row">
             <a className="btn btn-primary" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call</a>
@@ -66,7 +66,7 @@ function QQPitch() {
 }
 
 /* ── Work ──────────────────────────────────────────────────── */
-function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
+function QQWork({ onPlay }: { onPlay: (game: GameId) => void }) {
   return (
     <section id="work">
       <div className="wrap">
@@ -74,7 +74,7 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
           <div className="eyebrow">02 — Sample game & Our Clients</div>
           <h2 className="h-lg">Sample games</h2>
           <p className="body-lg muted">
-            These are craft samples — playables I designed and coded end-to-end. Open one, finish the loop, hit the fake Download. Then picture your app in the frame.
+            These are craft samples — playables we designed and coded end-to-end. Open one, finish the loop, hit the fake Download. Then picture your app in the frame.
           </p>
         </div>
         <div className="work-grid sample-game-grid">
@@ -147,7 +147,7 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
             <div className="work-meta">
               <div className="work-tags">
                 <span className="tag">Friends Ramen</span>
-                <span className="tag">tap loop · 10s</span>
+                <span className="tag">gamified survey · 10s</span>
               </div>
               <h3>Ramen Slurping Challenge</h3>
               <p className="muted" style={{ fontSize: 15 }}>
@@ -155,6 +155,31 @@ function QQWork({ onPlay }: { onPlay: (game: "knead" | "atta") => void }) {
                 <Link to="/case-studies/friends-ramen">Read the case study →</Link>
               </p>
               <a href="https://qqadvertisement.com/PL01FR1N3DR4M3NCH/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
+            </div>
+          </article>
+
+          <article className="work-card reveal">
+            <button
+              type="button"
+              onClick={() => onPlay("atta")}
+              className="work-thumb"
+              style={{ background: "#ECE3D2", border: "none", textDecoration: "none", padding: 0, cursor: "pointer" }}
+              aria-label="Play Sync Your Day for Atta"
+            >
+              <img src="/assets/casestudies/atta-sync-your-day.jpg" alt="Sync Your Day playable ad for Atta — 'Turn your cycle into a superpower' intro screen" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <span className="play-hint"><span>▶ PLAY IT</span></span>
+            </button>
+            <div className="work-meta">
+              <div className="work-tags">
+                <span className="tag">Atta</span>
+                <span className="tag">personalized quiz</span>
+              </div>
+              <h3>Sync Your Day</h3>
+              <p className="muted" style={{ fontSize: 15 }}>
+                A personalized quiz playable for Atta's women's health assistant — match your day to your cycle phase, then land on the App Store.{" "}
+                <Link to="/case-studies/atta">Read the case study →</Link>
+              </p>
+              <button type="button" onClick={() => onPlay("atta")} className="btn btn-ghost">▶&nbsp;Play it</button>
             </div>
           </article>
         </div>
@@ -179,12 +204,12 @@ function QQProcess() {
           <div className="step reveal">
             <div className="num"><b>01</b>THE CALL</div>
             <h3>30 minutes on your app</h3>
-            <p>Core loop, UA goals, what your current creative mix is doing on Meta and TikTok. You bring the store listing; I bring questions.</p>
+            <p>Core loop, UA goals, what your current creative mix is doing on Meta and TikTok. You bring the store listing; we bring questions.</p>
           </div>
           <div className="step reveal">
             <div className="num"><b>02</b>THE BUILD</div>
             <h3>A custom playable, in days</h3>
-            <p>I design and code the playable around the one mechanic that sells your app. You get a testable build, not a storyboard deck — and revisions happen in hours because the designer and the engineer are the same person.</p>
+            <p>We design and code the playable around the one mechanic that sells your app. You get a testable build, not a storyboard deck — and revisions happen in hours because the team is three people in one room, not three vendors on a thread.</p>
           </div>
           <div className="step reveal">
             <div className="num"><b>03</b>THE TEST</div>
@@ -205,13 +230,13 @@ function QQWhy() {
         <div className="reveal">
           <div className="eyebrow">04 — Why QQ</div>
           <h2 className="h-lg" style={{ marginTop: 12 }}>
-            One person.<br />Both halves of the job.
+            A playable is three jobs.<br />We have a specialist for each.
           </h2>
           <ul className="why-points">
-            <li>Illustration, game feel, and code in the same head — no handoff loss, no agency overhead baked into your invoice.</li>
-            <li>Days, not the multi-week agency cycle. Creative testing only works if the creative shows up while the hypothesis is still warm.</li>
-            <li>Not a template factory: every playable is built around <i>your</i> core loop, in your art direction.</li>
-            <li>Founder-to-founder — you talk to the person who builds it, every time.</li>
+            <li><span><b>Game development.</b> Kevin builds in Unreal and UEFN. A playable has to feel like a game within ten seconds — that's a craft, not a checkbox on a creative brief.</span></li>
+            <li><span><b>Engineering.</b> Timo ships production code — Meta AI, Mercor, Snorkel AI. Single-file HTML5, inside Meta and TikTok specs, CTA wired right the first time.</span></li>
+            <li><span><b>Growth marketing.</b> Ploy does growth at a high-growth startup. Your playable gets judged on IPM and CPI, so it gets built by someone who reads those numbers for a living.</span></li>
+            <li><span><b>Still three people.</b> Days, not the multi-week agency cycle — and no account managers in the invoice. You talk to the people who build it, every time.</span></li>
           </ul>
           <p style={{ marginTop: 24 }}>
             <Link className="link-arrow" to="/about">Learn more about QQ →</Link>
@@ -252,9 +277,9 @@ function QQPricing() {
           </div>
           <div className="price-cta">
             <a className="btn btn-accent" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call →</a>
-            <span className="mono-note">Free 30-minute call. Not sure a playable fits your funnel? I'll tell you honestly.</span>
+            <span className="mono-note">Free 30-minute call. Not sure a playable fits your funnel? We'll tell you honestly.</span>
             <a className="btn btn-ghost" href="mailto:hello@qqadvertisement.com?subject=Playable%20build%20inquiry">Email the studio</a>
-            <span className="mono-note">Prefer writing it out? Send your app link and I'll reply with a concept sketch.</span>
+            <span className="mono-note">Prefer writing it out? Send your app link and we'll reply with a concept sketch.</span>
           </div>
         </div>
       </div>

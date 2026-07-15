@@ -26,11 +26,11 @@ export default function CaseStudyPage() {
     {
       "@context": "https://schema.org",
       "@type": "CreativeWork",
-      name: `${cs.name} — playable ad for ${cs.client}`,
+      name: `${cs.name} — for ${cs.client}`,
       url: `${SITE_URL}/case-studies/${cs.slug}`,
       image: `${SITE_URL}${cs.image}`,
       creator: { "@type": "Organization", name: "QQ Advertisement", url: SITE_URL },
-      genre: "Playable ad",
+      genre: cs.format,
       description: cs.summary,
     },
   ];
@@ -67,21 +67,54 @@ export default function CaseStudyPage() {
           </div>
         </header>
 
-        <section aria-label="Live playable demo">
-          <div className="wrap">
-            <div className="sec-head">
-              <div className="eyebrow">Play it</div>
-              <h2 className="h-lg">This is the actual build.</h2>
-              <p className="body-lg muted">
-                Not a video capture — the playable itself, running in the page. Finish the loop
-                and hit the fake Download button.
-              </p>
+        {cs.game && (
+          <section aria-label="Live playable demo">
+            <div className="wrap">
+              <div className="sec-head">
+                <div className="eyebrow">Play it</div>
+                <h2 className="h-lg">This is the actual build.</h2>
+                <p className="body-lg muted">
+                  Not a video capture — the playable itself, running in the page. Finish the loop
+                  and land on the end card, exactly like a player would.
+                </p>
+              </div>
+              <div className="cs-hero-stage">
+                <PlayablePhone game={cs.game} />
+              </div>
             </div>
-            <div className="cs-hero-stage">
-              <PlayablePhone game={cs.game} />
+          </section>
+        )}
+
+        {!cs.game && cs.flow && (
+          <section aria-label="Production build walkthrough">
+            <div className="wrap">
+              <div className="sec-head">
+                <div className="eyebrow">The real flow</div>
+                <h2 className="h-lg">Straight from the production build.</h2>
+                <p className="body-lg muted">
+                  Every screen below is captured from the live build — not mockups.
+                  {cs.liveUrl && (
+                    <>
+                      {" "}It's built for phones:{" "}
+                      <a href={cs.liveUrl} target="_blank" rel="noreferrer">
+                        open it on your phone
+                      </a>{" "}
+                      to play the real thing.
+                    </>
+                  )}
+                </p>
+              </div>
+              <div className="flow-grid">
+                {cs.flow.map((f) => (
+                  <figure className="flow-shot" key={f.src}>
+                    <img src={f.src} alt={f.alt} loading="lazy" />
+                    <figcaption>{f.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section aria-label="Challenge and solution">
           <div className="wrap prose">
