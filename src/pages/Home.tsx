@@ -246,7 +246,7 @@ function QQPricing() {
             <div className="eyebrow">The Playable Build</div>
             <div style={{ marginTop: 14 }}>
               <span className="ph-tag">placeholder — final number TBD</span>
-              <div className="price-num ph" style={{ display: "inline-block" }}>$X,XXX</div>
+              <div className="price-num ph" style={{ display: "inline-block" }}>$2,500</div>
               <span className="mono-note" style={{ marginLeft: 10 }}>flat, per playable</span>
             </div>
             <ul className="price-list" style={{ marginTop: 26 }}>
