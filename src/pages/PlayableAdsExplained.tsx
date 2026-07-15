@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Seo, { breadcrumbsJsonLd, SITE_URL } from "../components/Seo";
-
-const BOOKING_URL = "https://calendly.com/thitipun-snw/30min";
+import { BOOKING_URL } from "../lib/site";
 
 export default function PlayableAdsExplained() {
   const jsonLd = [

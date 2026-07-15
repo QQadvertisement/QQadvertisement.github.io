@@ -4,8 +4,7 @@ import Seo, { breadcrumbsJsonLd, SITE_URL } from "../components/Seo";
 import PlayablePhone from "../components/PlayablePhone";
 import { caseStudies, getCaseStudy } from "../data/caseStudies";
 import NotFoundPage from "./404";
-
-const BOOKING_URL = "https://calendly.com/thitipun-snw/30min";
+import { BOOKING_URL } from "../lib/site";
 
 export default function CaseStudyPage() {
   const { slug } = useParams();

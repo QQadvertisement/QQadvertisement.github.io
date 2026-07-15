@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import PlayablePhone, { type GameId } from "../components/PlayablePhone";
-
-const BOOKING_URL = "https://calendly.com/thitipun-snw/30min";
+import { BOOKING_URL } from "../lib/site";
 
 /* ── Hero ──────────────────────────────────────────────────── */
 function QQHero() {
@@ -22,8 +21,8 @@ function QQHero() {
             I design and code custom HTML5 playables for consumer apps and games — players run your core loop on Meta and TikTok before they ever tap Download, so the installs you're buying already know what they're getting.
           </p>
           <div className="cta-row">
-            <a className="btn btn-primary" href="#pricing">Start a build</a>
-            <a className="btn btn-ghost" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call</a>
+            <a className="btn btn-primary" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call</a>
+            <a className="btn btn-ghost" href="#pricing">See the package</a>
           </div>
           <p className="hero-micro">Custom HTML5 playables for Meta &amp; TikTok · built in days, not weeks</p>
         </div>
@@ -229,11 +228,6 @@ function QQWhy() {
 
 /* ── Pricing ───────────────────────────────────────────────── */
 function QQPricing() {
-  function handlePlaceholder(e: React.MouseEvent) {
-    e.preventDefault();
-    alert("Placeholder — wire this to your Stripe payment link / calendar.");
-  }
-
   return (
     <section id="pricing">
       <div className="wrap">
@@ -245,8 +239,7 @@ function QQPricing() {
           <div>
             <div className="eyebrow">The Playable Build</div>
             <div style={{ marginTop: 14 }}>
-              <span className="ph-tag">placeholder — final number TBD</span>
-              <div className="price-num ph" style={{ display: "inline-block" }}>$2,500</div>
+              <div className="price-num" style={{ display: "inline-block" }}>$2,500</div>
               <span className="mono-note" style={{ marginLeft: 10 }}>flat, per playable</span>
             </div>
             <ul className="price-list" style={{ marginTop: 26 }}>
@@ -258,10 +251,10 @@ function QQPricing() {
             </ul>
           </div>
           <div className="price-cta">
-            <a className="btn btn-accent" href="#" onClick={handlePlaceholder}>Start a build →</a>
-            <span className="mono-note">→ secure checkout via Stripe<br />(payment link placeholder)</span>
-            <a className="btn btn-ghost" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call first</a>
-            <span className="mono-note">Not sure a playable fits your funnel? The call is free and I'll tell you honestly.</span>
+            <a className="btn btn-accent" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call →</a>
+            <span className="mono-note">Free 30-minute call. Not sure a playable fits your funnel? I'll tell you honestly.</span>
+            <a className="btn btn-ghost" href="mailto:hello@qqadvertisement.com?subject=Playable%20build%20inquiry">Email the studio</a>
+            <span className="mono-note">Prefer writing it out? Send your app link and I'll reply with a concept sketch.</span>
           </div>
         </div>
       </div>
@@ -283,8 +276,8 @@ function QQFinal() {
             One call, one build, one test cell in your next creative round. If it doesn't beat your control, you'll know in a week — not a quarter.
           </p>
           <div className="cta-row" style={{ marginTop: 28 }}>
-            <a className="btn btn-accent" href="#pricing">Start a build</a>
-            <a className="btn btn-ghost" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call</a>
+            <a className="btn btn-accent" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call</a>
+            <a className="btn btn-ghost" href="#pricing">See the package</a>
           </div>
         </div>
         <img
