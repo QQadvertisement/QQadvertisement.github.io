@@ -1,0 +1,639 @@
+/* ============================================================
+   PAGE LAYOUT — the compositions the three screens are built from.
+   Section rhythm is set per section in the JSX, drawn from
+   --rhythm-sm/md/lg/xl, and is deliberately uneven.
+   ============================================================ */
+
+/* Split — prose beside a panel, form or table. `--side` is the fixed
+   column's width above 1024. Below it, everything stacks. */
+.split {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-08);
+}
+.split__main { flex: 1; min-inline-size: 0; }
+.split__side { flex: none; min-inline-size: 0; }
+@media (min-width: 1024px) {
+  .split { flex-direction: row; gap: var(--space-20); align-items: flex-start; }
+  .split--end { align-items: flex-end; }
+  .split--wide-gap { gap: 90px; }
+  .split__side { inline-size: var(--side, 460px); }
+}
+
+/* Offset — a mono label column beside a prose column. */
+.offset { display: flex; flex-direction: column; gap: var(--space-04); }
+.offset__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.16em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+/* --color-text-muted is 2.77:1 on navy. The offset block appears on a
+   dark ground on /about, so the label needs the on-ground grey there
+   (found by the contrast sweep, 2026-08-04). */
+.ground-dark .offset__label { color: var(--color-text-muted-on-ground); }
+@media (min-width: 1024px) {
+  .offset { flex-direction: row; gap: 0; align-items: flex-start; }
+  .offset__label { inline-size: 340px; flex: none; padding-block-start: 8px; font-size: var(--text-mono-xs); letter-spacing: 0.17em; }
+  .offset__body { flex: 1; min-inline-size: 0; }
+  .offset--prose .offset__body { max-inline-size: 680px; }
+}
+
+/* ------------------------------------------------------------
+   HOMEPAGE HERO
+   Desktop: 600px text column plus a fluid column holding an
+   absolutely-positioned phone that overhangs the right gutter,
+   with a floating navy spec card overlapping the text column.
+   Both the overhang and the float are DROPPED below 1240 — the
+   comp only exists at 1440, and preserving an overhang through
+   an un-comped range produces visible breakage (tokens audit A3).
+
+   Mobile inverts the order: the playable goes ABOVE the headline.
+   That puts the tap target inside thumb reach with no scroll, on
+   a page whose entire proposition is "play it".
+   ------------------------------------------------------------ */
+/* THE STAGE (added 2026-08-04).
+   The hero moved from paper to navy. The reason is the phone: on
+   white, a device whose screen is --color-surface-sunken has almost
+   no separation from the page, so the largest object on the page read
+   as an empty outline. On navy it becomes the lit object it is, and
+   the teal play button — the one thing the page wants pressed —
+   finally has a ground to burn against.
+
+   The page still holds to two grounds: this navy and paper. The
+   sunken surface below is unchanged.
+
+   The bar overlaps the stage rather than sitting above it, so the
+   navy runs to the top of the viewport. The nav is sticky and holds
+   its own space, hence the negative start margin and the matching
+   padding. */
+.hero-stage {
+  margin-block-start: calc(var(--nav-height-default) * -1);
+  /* Clips the phone's overhang past the right gutter, so the overhang
+     never becomes a horizontal scrollbar. */
+  overflow: hidden;
+}
+
+/* The nav clearance lives on .hero, NOT on .hero-stage. Section writes
+   padBlock as an inline style on the section element, and an inline
+   shorthand beats any class — putting the clearance there would let
+   the bar sit on top of the kicker. .hero carries no inline padding. */
+.hero {
+  display: flex;
+  flex-direction: column;
+  padding-block-start: calc(var(--nav-height-default) + var(--space-08));
+}
+.hero__playable { order: -1; padding-block-end: var(--space-04); }
+
+/* CAREFUL. `.hero__kicker`, `.hero__title` and `.hero__lede` are NOT
+   homepage-only: the kicker alone is reused on /demos, /about,
+   /for-studios, /for-agencies, /playable-ads-explained, /case-studies,
+   the teardown and 404 — every one of them on a LIGHT ground. Their
+   base declarations must therefore stay light-ground, and everything
+   the navy stage needs is scoped under .section--atmos below.
+   (--color-text-muted-on-ground is 2.7:1 on paper and the tokens mark
+   it forbidden there, so this is a contrast rule, not a preference.) */
+.hero__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.16em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-block-end: var(--space-04);
+  order: -2;
+}
+.hero__title { margin-block-end: 18px; text-wrap: balance; }
+.hero__lede { color: var(--color-text-body); margin-block-end: var(--space-06); }
+
+/* --- the stage's own ink ---------------------------------------- */
+.section--atmos .hero__kicker {
+  color: var(--color-text-muted-on-ground);
+  display: flex;
+  align-items: center;
+  gap: var(--space-03);
+}
+/* A short rule reading out of the kicker — it gives the eyebrow a
+   baseline to sit on and stops it floating at the top of the stage. */
+.section--atmos .hero__kicker::after {
+  content: "";
+  flex: 1;
+  max-inline-size: 120px;
+  block-size: 1px;
+  /* Warm at the root, fading out — the same light the stage's second
+     bloom casts, so the eyebrow reads as lit rather than ruled. */
+  background: linear-gradient(90deg, var(--color-accent-emphasis), transparent);
+}
+.section--atmos .hero__title { color: var(--color-text-primary-on-ground); }
+.section--atmos .hero__lede { color: var(--color-text-body-on-ground); }
+.hero__actions { margin-block-end: var(--space-08); }
+/* The spec list needs no on-ground restatement here: the stage is a
+   .ground-dark section, so spec-group__head, the row rules, labels
+   and values all resolve through the existing `.ground-dark X`
+   rules in components.css. */
+.hero__specs { max-inline-size: 470px; }
+
+/* The three measurements, under the phone at every width, tied to the
+   frame they describe rather than floating over the text column. */
+/* On the stage this stopped being a caption and became an instrument
+   readout: a raised panel with a lit top edge, sitting on the navy
+   directly under the frame it describes. */
+.hero__measured {
+  inline-size: 100%;
+  max-inline-size: 350px;
+  margin-inline: auto;
+  margin-block-start: var(--space-05);
+  background: rgb(14 27 49 / 0.44);
+  border: var(--border-hairline) solid var(--color-border-on-ground);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--edge-lit-on-ground), var(--elev-on-ground-2);
+  padding: var(--space-04) var(--space-05) var(--space-02);
+}
+.hero__measured-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: var(--text-mono-3xs-ls);
+  color: var(--color-text-muted-on-ground);
+  text-transform: uppercase;
+  margin-block-end: var(--space-02);
+}
+.hero__phone-stats {
+  display: flex;
+  margin-block-start: 0;
+  border-block-start: var(--border-hairline) solid var(--color-border-on-ground-strong);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.hero__phone-stat { flex: 1; padding-block: 10px; }
+.hero__phone-stat + .hero__phone-stat {
+  padding-inline-start: 14px;
+  border-inline-start: var(--border-hairline) dotted var(--color-border-on-ground);
+}
+.hero__phone-stat dt {
+  color: var(--color-text-muted-on-ground);
+  letter-spacing: 0.1em;
+  font-size: var(--text-mono-4xs);
+  margin-block-end: var(--space-01);
+  text-transform: uppercase;
+}
+.hero__phone-stat dd {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-mono-md);
+  /* TEAL GATE — measured values on a navy ground, the documented
+     teal-as-text exception. Same claim class as the loader readout. */
+  color: var(--color-action-playable-measure);
+}
+
+/* AUDIT A3, RISK 3 — the hero phone.
+   The comp exists at 1440 and at 390, and nowhere between. A 600px
+   text column plus a 344px phone plus the gutters needs 1240 of
+   content before it fits, so the two-column hero switches there and
+   the range below it keeps the mobile stack. Guessing a tablet
+   composition in an un-comped range is what produces visible
+   breakage; stacking is the honest fallback. Revisit when the tablet
+   comp requested in improvement-spec §8 arrives. */
+@media (min-width: 1240px) {
+  /* Grid rather than flex, so the kicker can sit above the headline in
+     the text column while the phone spans both rows of the fluid one —
+     without duplicating the kicker in the markup for each breakpoint. */
+  .hero {
+    display: grid;
+    grid-template-columns: 640px 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-12);
+    align-items: start;
+  }
+  .hero__kicker { grid-column: 1; grid-row: 1; margin-block-end: 26px; }
+  .hero__text { grid-column: 1; grid-row: 2; padding-block: var(--space-03) 0; }
+  .hero__title { margin-block-end: 26px; }
+  .hero__lede { margin-block-end: 34px; }
+  .hero__actions { margin-block-end: 44px; }
+
+  .hero__playable {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: relative;
+    display: block;
+    padding-block-end: 0;
+    /* Room for the taller hero device plus the panel beneath it. */
+    min-block-size: 880px;
+    /* .hero-stage clips this column, which is what keeps any overhang
+       from adding a horizontal scrollbar. */
+    overflow: visible;
+  }
+
+  /* The phone CENTRES in its column rather than starting at a fixed
+     offset inside it.
+
+     The fixed offset was the source of the left-heavy hero: the column
+     is fluid and the phone is not, so at 1440 the phone sat hard against
+     the column's inner edge and left a 156px void at the right gutter —
+     640px of dense text on one side, a 344px device and a slab of empty
+     navy on the other. Centring spends that space evenly on both sides
+     of the device at every width, so the column reads as a column
+     instead of as text with something parked next to it. */
+  .hero__phone-abs {
+    position: absolute;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    inset-block-start: -28px;
+    /* The hero device runs larger than the 344px system default.
+       Centring alone did not settle the composition: 640px of dense
+       text cannot be balanced by a device barely half its width, and
+       the column kept reading as empty navy with something small in
+       it. The extra 52px is weight, and it is spent here only — the
+       teardown and demo cards keep the system size.
+
+       min() rather than a flat value so the device can never exceed
+       its own column: below ~1330 the column is narrower than 396,
+       and a fixed width would be clipped by .hero-stage. */
+    inline-size: min(396px, 100%);
+  }
+  /* The device and its readout both fill that wrapper, so the panel
+     stays aligned to the frame it describes at every width. */
+  .hero__phone-abs .phone {
+    inline-size: 100%;
+    max-inline-size: none;
+  }
+  .hero__measured { max-inline-size: none; }
+}
+
+/* ------------------------------------------------------------
+   TEARDOWN
+   The 600px playable rail plus the fluid spec sheet collapses to
+   stacked at 1024 — before the spec sheet can drop under ~440px.
+   ------------------------------------------------------------ */
+/* Mobile order is nav → phone → title block → spec sheet: the
+   playable comes before the words, for the same reason it does on the
+   homepage hero. Desktop restores title-over-two-columns. */
+.teardown {
+  display: flex;
+  flex-direction: column;
+}
+.teardown > .teardown__rail { order: 1; }
+.teardown > .teardown__title-block { order: 2; }
+.teardown > .teardown__sheet { order: 3; }
+
+.teardown__title-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-06);
+  padding: var(--space-08) var(--gutter);
+  border-block-end: var(--border-hairline) solid var(--color-border-subtle);
+}
+.teardown__stats {
+  display: flex;
+  border-block-start: var(--border-emphasis) solid var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-mono-xs);
+  align-self: flex-start;
+}
+.teardown__stat { padding: var(--space-04) var(--space-06) 0 0; }
+.teardown__stat + .teardown__stat {
+  padding-inline: var(--space-06);
+  border-inline-start: var(--border-hairline) solid var(--color-border-strong);
+}
+.teardown__stat:last-child { padding-inline-end: 0; }
+.teardown__stat dd { color: var(--color-text-muted); letter-spacing: 0.12em; margin-block-start: 8px; text-transform: uppercase; }
+
+.teardown__rail {
+  background: var(--color-surface-sunken);
+  border-block-end: var(--border-hairline) solid var(--color-border-default);
+  padding: var(--space-05) var(--gutter) var(--space-06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.teardown__rail-head {
+  inline-size: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-04);
+  margin-block-end: var(--space-05);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+.teardown__conditions {
+  inline-size: 100%;
+  margin-block-start: var(--space-06);
+  display: flex;
+  gap: 10px;
+}
+.teardown__condition {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 46px;
+  border: var(--border-hairline) solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  background: transparent;
+  transition: border-color var(--duration-quick) var(--ease-out),
+              color var(--duration-quick) var(--ease-out);
+}
+.teardown__condition[aria-pressed="true"] {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+}
+.teardown__sheet {
+  padding: var(--space-08) var(--gutter) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+/* AUDIT A3, RISK 1 — the teardown split.
+   The spec sets this switch at 1024, but its own arithmetic does not
+   survive there: a 600px rail inside 1024 leaves the spec sheet about
+   64px, far under the ~440px floor the same paragraph names. 1240 is
+   the width at which the sheet clears 480, so that is where it
+   switches. The constraint is honoured; the number is corrected. */
+@media (min-width: 1240px) {
+  /* The 600px rail plus the fluid spec sheet, with the title spanning
+     both. Stretch-aligned so the rail's sunken ground runs the full
+     height of the sheet beside it. */
+  .teardown {
+    display: grid;
+    grid-template-columns: 600px minmax(0, 1fr);
+    grid-template-areas:
+      "title title"
+      "rail  sheet";
+    max-inline-size: calc(var(--content-max) + var(--gutter) * 2);
+    margin-inline: auto;
+    align-items: stretch;
+  }
+  .teardown > .teardown__title-block {
+    grid-area: title;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 50px;
+    padding: var(--space-14) var(--gutter) 34px;
+  }
+  .teardown > .teardown__rail {
+    grid-area: rail;
+    border-block-end: 0;
+    border-inline-end: var(--border-hairline) solid var(--color-border-default);
+    padding: var(--space-12) 60px var(--space-14);
+  }
+  .teardown > .teardown__sheet {
+    grid-area: sheet;
+    padding: var(--space-12) var(--gutter) var(--space-14) 60px;
+    gap: 44px;
+  }
+  .teardown__rail-head { margin-block-end: var(--space-06); }
+  .teardown__stats { font-size: var(--text-mono-xs); }
+}
+
+/* The beat timeline — the shipped file's own instrumentation, listed
+   in order. It does not light up per visitor: the beats fire inside
+   the file running in the frame, which this page cannot read. */
+.beats { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--text-mono-sm); }
+.beat {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-03);
+  padding-block: 11px;
+  border-block-end: var(--border-hairline) dotted var(--color-border-strong);
+}
+.beat:last-child { border-block-end: 0; }
+/* An ordinal, not a timing. The beats fire inside the shipped file and
+   this page cannot see them, so the column counts them rather than
+   pretending to time the visitor's run through them. */
+.beat__index {
+  inline-size: 56px;
+  flex: none;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+.beat__name {
+  font-family: var(--font-body);
+  font-size: var(--text-body-xs);
+  letter-spacing: 0;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+.beat__note {
+  color: var(--color-text-muted);
+  letter-spacing: 0.07em;
+  font-size: var(--text-mono-xs);
+  text-align: end;
+}
+.beat__leader { flex: 1; }
+@media (max-width: 1023px) { .beat__note { display: none; } }
+@media (min-width: 1024px) {
+  .beats { font-size: var(--text-mono-md); }
+  .beat { gap: 18px; padding-block: var(--space-03); }
+  .beat__index { inline-size: 60px; }
+  .beat__name { font-size: var(--text-body-sm); }
+}
+
+.related-grid { display: flex; flex-direction: column; gap: var(--space-03); }
+@media (min-width: 768px) {
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+}
+.related-card__thumb {
+  block-size: 150px;
+  background: var(--color-ground-raised);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-block-end: var(--space-04);
+  position: relative;
+  overflow: hidden;
+}
+.related-card__thumb img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; opacity: 0.5; }
+.related-card__body { padding: 18px; }
+
+/* ------------------------------------------------------------
+   /for-agencies THROUGHPUT
+   Six fixed columns total ~920px plus fluid, so the table becomes
+   the card stack at 900px — a component substitution, not a
+   reflow. Six columns cannot survive 350px.
+   ------------------------------------------------------------ */
+.throughput-table { display: none; }
+.throughput-cards { display: flex; flex-direction: column; gap: var(--space-03); }
+/* AUDIT A3, RISK 2 — the throughput table.
+   Six fixed columns total about 920px. The spec says "at or above
+   900px", but 900px of VIEWPORT is only 860 of content, so the table
+   would overflow at exactly the width it was meant to survive. 1240
+   is the first breakpoint that gives it 1040 of content. */
+@media (min-width: 1240px) {
+  .throughput-table { display: block; border-block-start: var(--border-emphasis) solid var(--color-text-primary); }
+  .throughput-cards { display: none; }
+}
+.tier-card {
+  border: var(--border-hairline) solid var(--color-border-default);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+.tier-card[data-emphasis="true"] {
+  border: var(--border-emphasis) solid var(--color-text-primary);
+  background: var(--color-surface-sunken);
+}
+.tier-card__head {
+  padding: var(--space-04) 18px 14px;
+  border-block-end: var(--border-hairline) solid var(--color-border-default);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-03);
+}
+.tier-card[data-emphasis="true"] .tier-card__head { border-block-end-color: var(--color-border-strong); }
+.tier-card__note {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-block-start: var(--space-01);
+}
+.tier-card__tag {
+  background: var(--color-action-neutral);
+  color: var(--color-action-neutral-ink);
+  border-radius: var(--radius-sm);
+  padding: 5px 9px;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-4xs);
+  letter-spacing: 0.08em;
+  flex: none;
+}
+.tier-card__rows { padding: 6px 18px var(--space-03); }
+
+.throughput-row {
+  display: flex;
+  align-items: baseline;
+  padding-block: var(--space-06);
+  border-block-end: var(--border-hairline) dotted var(--color-border-strong);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-lg);
+  font-variant-numeric: tabular-nums;
+}
+.throughput-row:last-child { border-block-end-style: solid; }
+/* The emphasised row's fill bleeds 20px past the content edge. */
+.throughput-row[data-emphasis="true"] {
+  background: var(--color-surface-sunken);
+  margin-inline: -20px;
+  padding-inline: 20px;
+}
+.throughput-head {
+  display: flex;
+  align-items: baseline;
+  padding-block: 14px;
+  border-block-end: var(--border-hairline) solid var(--color-border-strong);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: var(--text-mono-3xs-ls);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+.throughput-col-name { inline-size: 280px; flex: none; display: flex; flex-direction: column; gap: 6px; }
+.throughput-col { inline-size: 150px; flex: none; text-align: end; font-weight: var(--font-weight-medium); }
+.throughput-col--wide { inline-size: 170px; }
+.throughput-col--flex { flex: 1; text-align: end; font-weight: var(--font-weight-medium); }
+
+.tier-defs {
+  margin-block-start: var(--space-05);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.nda-grid { display: flex; flex-direction: column; gap: var(--space-03); }
+@media (min-width: 768px) { .nda-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; } }
+.nda-grid .nda-block { min-block-size: 120px; border-radius: var(--radius-xl); }
+@media (min-width: 768px) { .nda-grid .nda-block { min-block-size: 250px; } }
+
+.sla-card {
+  background: var(--color-surface-sunken);
+  border: var(--border-hairline) solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-08) var(--space-06);
+}
+@media (min-width: 1024px) { .sla-card { padding: var(--space-12) var(--space-14) var(--space-12); } }
+
+.hairline-row {
+  border-block-start: var(--border-hairline) solid var(--color-border-on-ground);
+  padding-block-start: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-06);
+}
+@media (min-width: 1024px) {
+  .hairline-row { flex-direction: row; gap: 60px; align-items: center; }
+  .hairline-row__prose { flex: 1; }
+  .hairline-row__cta { flex: none; inline-size: 340px; }
+}
+
+/* ------------------------------------------------------------
+   PROSE PAGES — /about, /playable-ads-explained, /for-studios
+   ------------------------------------------------------------ */
+.prose { max-inline-size: var(--measure-prose); display: flex; flex-direction: column; gap: var(--space-05); }
+.prose h2 { margin-block-start: var(--space-08); }
+.prose p { color: var(--color-text-body); }
+.prose ul { display: flex; flex-direction: column; gap: var(--space-03); }
+.prose li {
+  color: var(--color-text-body);
+  padding-inline-start: var(--space-05);
+  position: relative;
+}
+.prose li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.7em;
+  inline-size: 8px;
+  block-size: 1px;
+  background: var(--color-border-strong);
+}
+
+/* 404 — the bear's largest permitted appearance, at 132px. */
+.notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-05);
+  padding-block: var(--rhythm-md) var(--rhythm-lg);
+}
+.notfound img { inline-size: 132px; block-size: auto; }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-04);
+  border: var(--border-hairline) dashed var(--color-border-strong);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-08);
+  background: var(--color-surface-sunken);
+}
+.empty-state img { inline-size: 54px; block-size: auto; }
+
+/* Case-study screen flow — captures from the production build. */
+.flow-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-06);
+}
+@media (min-width: 640px) { .flow-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); } }
+.flow-shot { margin: 0; display: flex; flex-direction: column; gap: var(--space-03); }
+.flow-shot img {
+  inline-size: 100%;
+  border: var(--border-hairline) solid var(--color-border-default);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-raised);
+}

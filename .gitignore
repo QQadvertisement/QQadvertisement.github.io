@@ -3,6 +3,8 @@ node_modules
 dist
 dist-ssr
 .vite
+*.tsbuildinfo
+coverage
 
 # Logs
 logs
@@ -15,6 +17,8 @@ lerna-debug.log*
 
 # Env & local files
 .env
+.env.local
+.env.*.local
 *.local
 
 # Editor directories and files
@@ -28,5 +32,25 @@ lerna-debug.log*
 *.sln
 *.sw?
 
+# OS cruft
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Agent / tooling local config
+.claude/settings.local.json
+
 # Design scratch / source mockups (kept locally, not part of the site)
 QQstudio1.com/
+QQ Advertisement Redesign Plan/
+
+# Hand-off bundle for replicating the hero game elsewhere.
+# The kit's source is the hero demo's source of truth — scripts/build-playables.mjs
+# assembles public/playables/qq-knead-rush.html from it — so the code is tracked.
+# Its sprite copies are not: they are byte-identical to public/assets/qq/, and the
+# generated build points at those instead of shipping them twice.
+replication-kit/assets/
+
+# Local dev + measurement scratch
+public/__frame.html
+src/_legacy/

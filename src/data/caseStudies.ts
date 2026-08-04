@@ -1,5 +1,3 @@
-import type { GameId } from "../components/PlayablePhone";
-
 export interface CaseStudy {
   slug: string;
   client: string;
@@ -11,8 +9,6 @@ export interface CaseStudy {
   format: string;
   loopLength: string;
   platforms: string;
-  /** in-page phone demo (omit when the build can't be embedded safely) */
-  game?: GameId;
   /** production URL when the build is live but shown via screenshots */
   liveUrl?: string;
   /** screenshot walkthrough of the production build */
@@ -111,7 +107,6 @@ export const caseStudies: CaseStudy[] = [
     format: "Personalized quiz — drag & match",
     loopLength: "~15 seconds",
     platforms: "MRAID networks, webview fallback",
-    game: "atta",
     image: "/assets/casestudies/atta-sync-your-day.jpg",
     imageAlt: "Sync Your Day playable ad for Atta — intro screen with the headline 'Turn your cycle into a superpower'",
     summary:

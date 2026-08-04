@@ -1,0 +1,1816 @@
+/* ============================================================
+   COMPONENTS — the thirteen in design/components.md, plus the
+   button and table primitives they share.
+
+   THE TEAL GATE governs every colour decision below:
+     Does tapping this element start a playable, in place, now?
+       YES -> --color-action-playable as a FILL
+       NO  -> --color-action-neutral / -on-ground
+   Teal appears on exactly eight element types. They are marked
+   with a "TEAL GATE" comment. Any ninth requires sign-off.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   BUTTONS
+   Neutral by default. A teal button is a separate modifier that
+   may only be used on a playable surface.
+   ------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-02);
+  min-block-size: 44px;              /* tap floor, every viewport */
+  padding: var(--space-03) var(--space-05);
+  border-radius: var(--radius-md);
+  border: var(--border-hairline) solid transparent;
+  font-size: var(--text-body-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-quick) var(--ease-out),
+    border-color var(--duration-quick) var(--ease-out),
+    color var(--duration-quick) var(--ease-out),
+    box-shadow var(--duration-drop) var(--ease-glide),
+    transform var(--duration-drop) var(--ease-glide);
+}
+/* Press is the one place latency is unforgivable: it commits on
+   pointer-DOWN at --duration-instant, and releases on the slower
+   glide, so the button feels sprung rather than switched. */
+.btn:active {
+  transform: scale(0.97);
+  transition-duration: var(--duration-instant);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:active { transform: none; }
+}
+
+.btn--neutral {
+  background: var(--color-action-neutral);
+  color: var(--color-action-neutral-ink);
+  box-shadow: var(--elev-1);
+}
+.btn--neutral:hover {
+  background: var(--color-ground-deep);
+  box-shadow: var(--elev-3);
+  transition-duration: var(--duration-lift);
+}
+
+.btn--outline {
+  border-color: var(--color-action-neutral);
+  color: var(--color-action-neutral);
+  background: transparent;
+}
+.btn--outline:hover {
+  background: var(--color-action-neutral);
+  color: var(--color-action-neutral-ink);
+}
+
+/* Quieter outline for secondary pairs on paper — the comp draws
+   these against --color-border-strong, not against navy. */
+.btn--muted {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+}
+.btn--muted:hover { border-color: var(--color-text-muted); }
+
+.btn--on-ground {
+  background: var(--color-action-neutral-on-ground);
+  color: var(--color-action-neutral-on-ground-ink);
+  box-shadow: var(--elev-on-ground-2);
+}
+.btn--on-ground:hover {
+  background: #FFFFFF;
+  box-shadow: var(--elev-on-ground-4);
+  transition-duration: var(--duration-lift);
+}
+
+.btn--outline-on-ground {
+  border-color: var(--color-border-on-ground-strong);
+  color: var(--color-text-primary-on-ground);
+}
+.btn--outline-on-ground:hover { border-color: var(--color-text-primary-on-ground); }
+
+/* TEAL GATE 1/2/5/6 — the only filled-teal button in the system.
+   Legal on: phone-frame play, demo-card play, teardown restart,
+   teardown play-again. Nowhere else. */
+.btn--playable {
+  background: var(--color-action-playable);
+  color: var(--color-action-playable-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-lg);
+  letter-spacing: var(--text-mono-lg-ls);
+  border-radius: var(--radius-md);
+  /* The halo token existed and was never spent. This is the one
+     control the whole page wants pressed, and on a lit navy stage a
+     flat teal rectangle sits behind the glass instead of on it. The
+     glow is the button's own light, so it belongs to the teal region
+     already counted in the census — it adds no new one. */
+  box-shadow: 0 6px 22px var(--color-action-playable-halo);
+}
+.btn--playable:hover {
+  background: var(--color-action-playable-hover);
+  box-shadow: 0 8px 30px var(--color-action-playable-halo);
+  transition-duration: var(--duration-lift);
+}
+.btn--playable:active {
+  background: var(--color-action-playable-active);
+  box-shadow: 0 3px 12px var(--color-action-playable-halo);
+}
+.btn--playable:focus-visible { box-shadow: var(--focus-ring-playable); }
+
+.btn--sm  { min-block-size: 44px; padding: 9px var(--space-04); font-size: var(--text-body-2xs); border-radius: var(--radius-sm); }
+.btn--lg  { min-block-size: 50px; padding: 0 var(--space-06); }
+.btn--xl  { min-block-size: 54px; padding: 0 var(--space-06); font-size: var(--text-body-md); }
+.btn--block { display: flex; inline-size: 100%; }
+.btn--between { justify-content: space-between; }
+
+.btn__arrow { font-family: var(--font-mono); font-size: 15px; line-height: 1; }
+
+.btn-pair {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+}
+@media (min-width: 1024px) {
+  .btn-pair { flex-direction: row; align-items: center; gap: var(--space-03); }
+}
+
+/* ------------------------------------------------------------
+   4. SPEC ROW  — a label, a dotted leader, a value.
+   The most-used component and the motif that carries the brand.
+   The leader is the row's dotted border-block-end plus a flex
+   spacer, never repeated dot characters: the border survives
+   text reflow and zoom.
+   ------------------------------------------------------------ */
+.spec-group { display: block; }
+
+.spec-group__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-04);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: var(--text-mono-3xs-ls);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding-block-end: var(--space-03);
+  border-block-end: var(--border-emphasis) solid var(--color-text-primary);
+}
+.ground-dark .spec-group__head {
+  color: var(--color-text-muted-on-ground);
+  border-block-end-color: var(--color-text-primary-on-ground);
+}
+
+.spec-list {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.spec-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-02);
+  margin: 0;
+}
+.spec-row:not(:last-child) {
+  border-block-end: var(--border-hairline) dotted var(--color-border-strong);
+}
+.ground-dark .spec-row:not(:last-child) {
+  border-block-end-color: var(--color-border-on-ground);
+}
+
+/* Density variants. Not interchangeable — vertical padding here is
+   the legitimate use of the 2px sub-grid (tokens audit A8): a
+   six-row card footer will not fit on a 4px step. */
+.spec-list--comfortable .spec-row { padding-block: 12px; }
+.spec-list--compact     .spec-row { padding-block: 8px; }
+.spec-list--dense       .spec-row { padding-block: 6px; }
+
+.spec-list--comfortable { font-size: var(--text-mono-md); }
+.spec-list--compact     { font-size: var(--text-mono-sm); }
+.spec-list--dense       { font-size: var(--text-mono-sm); }
+
+.spec-row__label {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-size: var(--text-mono-xs);
+  letter-spacing: var(--text-mono-xs-ls);
+}
+.spec-list--dense .spec-row__label {
+  font-size: var(--text-mono-4xs);
+  letter-spacing: var(--text-mono-4xs-ls);
+}
+.ground-dark .spec-row__label { color: var(--color-text-muted-on-ground); }
+
+.spec-row__leader { flex: 1; }
+
+.spec-row__value {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+.ground-dark .spec-row__value { color: var(--color-text-primary-on-ground); }
+
+.spec-row__qualifier {
+  color: var(--color-text-muted);
+  margin-inline-start: var(--space-03);
+}
+.ground-dark .spec-row__qualifier { color: var(--color-text-muted-on-ground); }
+
+/* Live / measured. Requires a navy ground — never live-teal on light.
+   TEAL GATE 8: runtime readouts as text. */
+.spec-row--live .spec-row__value { color: var(--color-action-playable-measure); }
+
+/* Closed groups (real tables) take a solid bottom rule; open groups
+   end on nothing. */
+.spec-list--closed { border-block-end: var(--border-hairline) solid var(--color-border-strong); }
+.spec-list--ruled  { border-block-start: var(--border-hairline) solid var(--color-border-strong); }
+.spec-list--ruled .spec-row:not(:last-child) { border-block-end-style: dotted; }
+
+/* A group whose first row carries the rule instead of a heading. */
+.spec-list--top-ruled .spec-row:first-child {
+  border-block-start: var(--border-hairline) solid var(--color-border-strong);
+}
+
+/* ------------------------------------------------------------
+   1. NAV — three variants: default, condensed, mobile sheet
+   ------------------------------------------------------------ */
+.nav {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 60;
+  block-size: var(--nav-height-default);
+  display: flex;
+  align-items: center;
+  background: var(--material-paper-bg);
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+  /* A 1px rule under floating chrome is a seam. The mask fades the
+     material out where it meets content instead, so the bar reads as
+     a layer above the page rather than as a strip cut out of it. */
+  border-block-end: var(--border-hairline) solid var(--material-edge-paper);
+  transition:
+    background-color var(--duration-enter) var(--ease-out),
+    border-color var(--duration-enter) var(--ease-out),
+    block-size var(--duration-enter) var(--ease-out);
+}
+
+/* 1d. Over-stage — the bar's at-rest state on a page whose first
+   section is a navy stage (the homepage). Fully transparent, because
+   the stage behind it already has depth and a second translucent
+   layer on top of it would be material stacked on material. It swaps
+   to the condensed deep bar as soon as the page moves. */
+.nav--over-stage:not(.nav--condensed) {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-block-end-color: transparent;
+}
+.nav--over-stage:not(.nav--condensed) .wordmark { color: var(--color-text-primary-on-ground); }
+.nav--over-stage:not(.nav--condensed) .nav__link { color: var(--color-text-body-on-ground); }
+.nav--over-stage:not(.nav--condensed) .nav__link:hover { color: var(--color-text-primary-on-ground); }
+.nav--over-stage:not(.nav--condensed) .nav__link[aria-current="page"] {
+  color: var(--color-text-primary-on-ground);
+  box-shadow: inset 0 -2px 0 var(--color-text-primary-on-ground);
+}
+.nav--over-stage:not(.nav--condensed) .nav__contact { color: var(--color-text-muted-on-ground); }
+.nav--over-stage:not(.nav--condensed) .nav__burger span {
+  background: var(--color-text-primary-on-ground);
+}
+.nav__inner {
+  inline-size: 100%;
+  max-inline-size: none;
+  padding-inline: var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: var(--space-04);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-black);
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+/* The wordmark is a component with a fixed size per bar height, not
+   a type step (tokens audit A4). */
+.wordmark--nav      { font-size: 19px; }
+.wordmark--footer   { font-size: 22px; }
+.wordmark--teardown { font-size: 18px; }
+@media (min-width: 1024px) {
+  .wordmark--nav    { font-size: 20px; }
+  .wordmark--footer { font-size: 23px; }
+}
+.ground-dark .wordmark,
+.ground-deep .wordmark { color: var(--color-text-primary-on-ground); }
+
+.nav__list {
+  display: none;
+  align-items: center;
+  gap: var(--space-07);
+  margin-inline-start: var(--space-04);
+}
+.nav__link {
+  font-size: var(--text-body-xs);
+  white-space: nowrap;
+  color: var(--color-text-body);
+  padding-block-end: 3px;
+  transition: color var(--duration-quick) var(--ease-out);
+}
+.nav__link:hover { color: var(--color-text-primary); }
+/* Underline is reserved for the current item — never a hover state. */
+.nav__link[aria-current="page"] {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--underline-active);
+}
+
+.nav__end {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-04);
+}
+.nav__contact {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+/* Hamburger. The glyph stays 22px; the hit area is padded to 44×44
+   with a pseudo-element rather than by growing the bars. */
+.nav__burger {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  inline-size: 22px;
+  flex: none;
+}
+.nav__burger::before {
+  content: "";
+  position: absolute;
+  inset: 50% 50%;
+  inline-size: 44px;
+  block-size: 44px;
+  transform: translate(-50%, -50%);
+}
+.nav__burger span {
+  display: block;
+  block-size: 2px;
+  background: var(--color-text-primary);
+}
+.ground-deep .nav__burger span { background: var(--color-text-primary-on-ground); }
+
+@media (min-width: 1024px) {
+  .nav__list { display: flex; gap: var(--space-06); }
+  .nav__burger { display: none; }
+}
+/* The contact address is the first thing to go: at 1024 the six nav
+   items, the address and the CTA together overrun the bar and the
+   list wraps to two lines. */
+@media (min-width: 1240px) {
+  .nav__contact { display: block; }
+  .nav__list { gap: var(--space-07); }
+  .nav__end { gap: var(--space-05); }
+}
+
+/* 1b. Condensed — teardown, and any page scrolled past 240px */
+.nav--condensed {
+  block-size: var(--nav-height-condensed);
+  /* Translucent deep rather than the flat fill it used to be, so
+     content genuinely passes under the bar instead of hitting an
+     opaque strip. The bright top edge is light catching the
+     material's near face. */
+  background: var(--material-deep-bg);
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+  border-block-end: 0;
+  box-shadow:
+    inset 0 1px 0 var(--material-edge-deep),
+    var(--elev-on-ground-2);
+}
+.nav--condensed .nav__link { color: var(--color-text-body-on-ground); }
+.nav--condensed .nav__link:hover { color: var(--color-text-primary-on-ground); }
+.nav--condensed .nav__link[aria-current="page"] {
+  color: var(--color-text-primary-on-ground);
+  box-shadow: inset 0 -2px 0 var(--color-text-primary-on-ground);
+}
+.nav--condensed .nav__contact { color: var(--color-text-muted-on-ground); }
+
+.nav__crumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-03);
+  min-inline-size: 0;
+}
+.nav__divider {
+  inline-size: 1px;
+  block-size: 20px;
+  background: var(--color-border-on-ground);
+  flex: none;
+}
+.nav__crumb {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted-on-ground);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nav__crumb--current { color: var(--color-text-primary-on-ground); }
+.nav__crumb-sep {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  color: var(--color-border-on-ground-strong);
+  flex: none;
+}
+.nav__counter {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted-on-ground);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+/* At 390 the condensed bar carries the current build, the position
+   counter and the menu — nothing else fits, and the comp's mobile
+   teardown bar drops the rest too. */
+@media (max-width: 767px) {
+  .nav--condensed .nav__divider,
+  .nav--condensed .nav__crumb:not(.nav__crumb--current),
+  .nav--condensed .nav__crumb-sep,
+  .nav--condensed .nav__end > .btn { display: none; }
+  .nav--condensed .nav__inner { gap: var(--space-03); }
+}
+
+.nav__next {
+  display: none;
+  align-items: center;
+  min-block-size: 44px;
+  padding: 0 15px;
+  border: var(--border-hairline) solid var(--color-border-on-ground-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary-on-ground);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: 0.06em;
+  transition: border-color var(--duration-quick) var(--ease-out);
+}
+.nav__next:hover { border-color: var(--color-text-primary-on-ground); }
+@media (min-width: 768px) { .nav__next { display: inline-flex; } }
+
+/* 1c. Mobile sheet */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--color-ground-primary);
+  padding: var(--gutter-mobile);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: sheetIn var(--duration-enter) var(--ease-settle) both;
+}
+@keyframes sheetIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sheet__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: var(--nav-height-default);
+  margin-block-end: var(--space-06);
+}
+.sheet__close {
+  position: relative;
+  inline-size: 44px;
+  block-size: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--color-text-primary-on-ground);
+}
+.sheet__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-06);
+  padding-block: var(--space-06);
+}
+.sheet__group + .sheet__group {
+  border-block-start: var(--border-hairline) solid var(--color-border-on-ground);
+}
+.sheet__item {
+  display: flex;
+  align-items: center;
+  min-block-size: 56px;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-black);
+  font-size: var(--text-display-4xs);
+  letter-spacing: var(--text-display-4xs-ls);
+  color: var(--color-text-primary-on-ground);
+  animation: sheetItem var(--duration-enter) var(--ease-settle) both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+@keyframes sheetItem {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sheet__foot {
+  margin-block-start: auto;
+  padding-block-start: var(--space-08);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-04);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .sheet__item { animation: none; }
+}
+
+/* ------------------------------------------------------------
+   2. PHONE FRAME — chrome only, holds no content logic.
+   The viewport is the focus target and the hit target for the
+   whole playable; never a small inner button.
+   ------------------------------------------------------------ */
+.phone {
+  inline-size: 100%;
+  max-inline-size: 350px;
+  margin-inline: auto;
+  /* A machined edge rather than a flat navy slab: a soft vertical
+     ramp for the body, plus a hairline top highlight and a darker
+     bottom, so the bezel has a near face and a far one. */
+  background:
+    linear-gradient(168deg, #2B4573 0%, #1B3054 46%, #101F39 100%);
+  border-radius: var(--radius-device-mobile);
+  padding: 10px;
+  box-shadow: var(--shadow-device);
+  flex: none;
+  position: relative;
+}
+/* The rim light. Separate from box-shadow so the device's drop
+   shadow can be swapped per ground without losing the edge. */
+.phone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    inset 0 0 0 1px rgb(255 255 255 / 0.05),
+    inset 0 -1px 0 rgb(0 0 0 / 0.30);
+}
+
+/* On the navy stage the device gets a deeper drop plus the screen's
+   own light spilling back onto the ground behind it. */
+.section--atmos .phone { box-shadow: var(--elev-device-stage); }
+.playable-stage {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 330 / 440;
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-screen-mobile);
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--shadow-inset-viewport);
+  outline: none;
+}
+/* TEAL GATE 4 — the one legal teal focus ring, on a playable surface. */
+.playable-stage:focus-visible { box-shadow: var(--focus-ring-playable); }
+
+.phone__notch {
+  position: absolute;
+  inset-block-start: 13px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  inline-size: 76px;
+  block-size: 6px;
+  background: var(--color-border-strong);
+  border-radius: var(--radius-md);
+  z-index: 5;
+}
+.phone__chrome {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  padding: 13px 18px;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-4xs);
+  letter-spacing: var(--text-mono-4xs-ls);
+  /* The screen is a LIGHT surface, so this needs the light-ground
+     grey. It carried the on-ground one and sat at 2.57:1 (contrast
+     sweep, 2026-08-04) — a long-standing bug the warmer screen made
+     no worse, but no reason to keep. */
+  color: var(--color-text-muted);
+  z-index: 4;
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  .phone {
+    inline-size: 344px;
+    max-inline-size: none;
+    padding: 12px;
+    border-radius: var(--radius-device-desktop);
+  }
+  .playable-stage {
+    aspect-ratio: 320 / 640;
+    border-radius: var(--radius-screen-desktop);
+  }
+}
+
+/* ------------------------------------------------------------
+   13. BEAR LOADER — the signature state.
+   The bear waits for the user, not for the network: loading
+   completes underneath it, then the frame holds until a tap.
+   ------------------------------------------------------------ */
+.loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 22px;
+  pointer-events: none;          /* the frame owns the hit area */
+  transition: opacity var(--duration-exit) var(--ease-in);
+}
+.loader[data-hidden="true"] { opacity: 0; }
+
+.loader__poke {
+  position: absolute;
+  inset-block-start: 38px;
+  inset-inline: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transition: opacity var(--duration-quick) var(--ease-out);
+}
+.loader__poke[data-visible="true"] { opacity: 1; }
+
+.loader__bear {
+  display: flex;
+  justify-content: center;
+  transform-origin: 50% 90%;     /* the feet, so the bob pivots right */
+  animation: bearBob var(--duration-loop) var(--ease-in-out) infinite;
+}
+.loader__bear[data-settled="true"] {
+  animation: none;
+  transform: translateY(-16px) scale(0.9);
+  transition: transform var(--duration-settle) var(--ease-settle);
+}
+.loader__bear img {
+  inline-size: 112px;
+  block-size: auto;
+  pointer-events: none;
+  transform-origin: 50% 90%;
+}
+.loader__bear img[data-hop] {
+  animation: bearHop var(--duration-spring) var(--ease-spring);
+}
+@keyframes bearBob {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-9px) rotate(1.5deg); }
+}
+/* The rotation is what stops it reading as a bouncing logo — the
+   bear is running the file in. */
+@keyframes bearHop {
+  0%   { transform: translateY(0) scale(1); }
+  40%  { transform: translateY(-22px) scale(1.05); }
+  100% { transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader__bear { animation: none; transform: none; }
+  .loader__bear img[data-hop] { animation: none; }
+}
+
+.loader__spacer { block-size: 20px; }
+
+.loader__track {
+  inline-size: 100%;
+  block-size: var(--loader-bar-height);
+  background: var(--color-border-strong);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+/* TEAL GATE 3 — the loader progress rule. */
+.loader__fill {
+  block-size: 100%;
+  background: var(--color-action-playable);
+  border-radius: var(--radius-xs);
+  transition: inline-size var(--duration-instant) var(--ease-linear);
+}
+
+.loader__readout {
+  display: flex;
+  justify-content: space-between;
+  inline-size: 100%;
+  margin-block-start: 11px;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: var(--text-mono-xs-ls);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+.loader__readout strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.loader__play {
+  position: absolute;
+  inset-inline: 22px;
+  /* Clears the chrome footer, which sits above the playable ground. */
+  inset-block-end: 40px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--duration-enter) var(--ease-out) 60ms,
+    transform var(--duration-enter) var(--ease-settle) 60ms;
+  pointer-events: none;
+}
+.loader__play[data-visible="true"] { opacity: 1; transform: translateY(0); }
+.loader__play .btn { block-size: 56px; inline-size: 100%; }
+
+@media (min-width: 1024px) {
+  .loader { padding-inline: 28px; }
+  .loader__bear img { inline-size: 136px; }
+  .loader__spacer { block-size: 26px; }
+  .loader__readout { margin-block-start: var(--space-03); }
+  .loader__play { inset-inline: 28px; inset-block-end: 74px; }
+  .loader__play .btn { block-size: 54px; }
+}
+
+/* ------------------------------------------------------------
+   THE PLAYABLE ITSELF — the layer the real build runs in
+   ------------------------------------------------------------ */
+.play-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-enter) var(--ease-out);
+}
+.play-layer[data-visible="true"] { opacity: 1; pointer-events: auto; }
+
+/* ------------------------------------------------------------
+   THE REAL BUILD, MOUNTED IN THE FRAME
+
+   Each build runs in its own document, so there is nothing to style
+   here beyond the hole it sits in. That is deliberate: a build ships
+   with its own CSS, and anything this stylesheet could reach into it
+   to change would make the demo stop being the file.
+   ------------------------------------------------------------ */
+.playable-game {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.playable-game iframe { display: block; inline-size: 100%; block-size: 100%; border: 0; }
+
+/* A build we will not embed still shows its own still frame. */
+.playable-poster {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------
+   3. DEMO CARD + horizontal scroller
+   ------------------------------------------------------------ */
+.scroller {
+  display: flex;
+  gap: 14px;
+  padding-inline-start: max(var(--gutter), calc((100% - var(--content-max)) / 2));
+  /* No padding-inline-end: the last card runs off the edge. That
+     run-off is the affordance that says "there are more". */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.scroller::-webkit-scrollbar { display: none; }
+.scroller > * { scroll-snap-align: start; }
+@media (min-width: 1024px) { .scroller { gap: 22px; } }
+
+.scroll-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-03);
+  padding: var(--space-05) max(var(--gutter), calc((100% - var(--content-max)) / 2)) 0;
+}
+.scroll-progress__track {
+  flex: 1;
+  block-size: 2px;
+  background: var(--color-border-default);
+  border-radius: 1px;
+  position: relative;
+}
+/* Not teal: scrolling is not a playable action. */
+.scroll-progress__thumb {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: var(--color-action-neutral);
+  border-radius: 1px;
+  transition: inline-size var(--duration-quick) var(--ease-out),
+              transform var(--duration-quick) var(--ease-out);
+}
+@media (min-width: 1024px) { .scroll-progress { display: none; } }
+
+/* The card is paper lifted off the page, not a panel sunk into it.
+   White-on-white separated by a real shadow reads as an object; the
+   old sunken fill with a hairline read as a table cell. */
+.demo-card {
+  inline-size: 266px;
+  flex: none;
+  background: var(--color-surface-raised);
+  border: var(--border-hairline) solid var(--color-border-subtle);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--elev-2);
+  /* Fast in, slower out — the lift feels weighted rather than twitchy
+     (Apple: response ~0.4, no overshoot; the card was not thrown). */
+  transition:
+    box-shadow var(--duration-drop) var(--ease-glide),
+    transform var(--duration-drop) var(--ease-glide),
+    border-color var(--duration-drop) var(--ease-glide);
+}
+.demo-card:hover {
+  border-color: var(--color-border-default);
+  box-shadow: var(--elev-4);
+  transform: translate3d(0, -4px, 0);
+  transition-duration: var(--duration-lift);
+}
+/* Press responds on pointer-down, not on release. */
+.demo-card:active {
+  transform: translate3d(0, -1px, 0);
+  transition-duration: var(--duration-instant);
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-card:hover,
+  .demo-card:active { transform: none; }
+}
+
+.demo-card__thumb {
+  position: relative;
+  block-size: 190px;
+  background: var(--color-ground-board);
+  border-block-end: var(--border-hairline) solid var(--color-border-default);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-block-end: 16px;
+  overflow: hidden;
+}
+.demo-card__thumb img {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+/* The comps use neutral placeholder blocks; real thumbnails need a
+   scrim, or the outlined TEARDOWN → button loses its edge against the
+   artwork. Paper-tinted rather than black — no near-black in this
+   system, even in a gradient. */
+.demo-card__thumb img + .demo-card__orientation,
+.demo-card__thumb img ~ .demo-card__action { z-index: 3; }
+.demo-card__thumb:has(img)::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 96px;
+  /* Warmed to match the cream surfaces. Opacity stays at 0.94 — this
+     scrim exists to keep the outlined TEARDOWN button's edge legible
+     against the artwork, and going opaque would cut the image off in
+     a hard band. */
+  background: linear-gradient(to top, rgb(250 247 241 / 0.94), rgb(250 247 241 / 0));
+  z-index: 2;
+  pointer-events: none;
+}
+/* This label floats at the TOP of the thumbnail, above the bottom
+   scrim, so it sits directly on whatever the client's artwork happens
+   to be — it measured 3.59:1 over the Atta art. Bare text can never be
+   guaranteed legible over an arbitrary image, so it carries its own
+   backing chip rather than a colour that happens to work on today's
+   thumbnails. */
+.demo-card__orientation {
+  position: absolute;
+  inset-block-start: 15px;
+  inset-inline-start: 16px;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-4xs);
+  letter-spacing: 0.12em;
+  color: var(--color-text-primary);
+  background: rgb(250 247 241 / 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 4px 7px;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+}
+.demo-card__action { position: relative; z-index: 2; }
+.demo-card:hover .demo-card__action {
+  transform: translateY(-2px);
+  transition: transform var(--duration-quick) var(--ease-out);
+}
+/* position: relative is the containing block for the stretched title
+   link — see .demo-card__title a::after at the end of this file. */
+.demo-card__body { padding: 16px; display: flex; flex-direction: column; flex: 1; position: relative; }
+.demo-card__title { letter-spacing: -0.01em; margin-block-end: var(--space-01); }
+.demo-card__subtitle { color: var(--color-text-body); margin-block-end: 13px; }
+.demo-card__specs {
+  margin-block-start: auto;
+  border-block-start: var(--border-hairline) solid var(--color-border-default);
+  padding-block-start: 3px;
+}
+/* Scroller run-off affordance. */
+.demo-card--unavailable {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Post-tap: the bear loader mounts inside the thumbnail region, then
+   the mechanic runs there. The card never navigates for `play`. */
+.card-play {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--color-surface-sunken);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-03);
+  padding: var(--space-05);
+  text-align: center;
+  cursor: pointer;
+}
+.card-play--loader .loader__track { inline-size: 100%; }
+.card-play__bear {
+  inline-size: 92px;
+  block-size: auto;
+  transform-origin: 50% 90%;
+  animation: bearBob var(--duration-loop) var(--ease-in-out) infinite;
+}
+.card-play__bear[data-settled="true"] {
+  animation: none;
+  transform: translateY(-6px) scale(0.92);
+  transition: transform var(--duration-settle) var(--ease-settle);
+}
+.card-play__readout { color: var(--color-text-muted); }
+
+/* The real build, running in the thumbnail. No padding and no gap:
+   the file gets the whole region, and CLOSE floats over it. */
+.card-play--live {
+  padding: 0;
+  gap: 0;
+  cursor: default;
+}
+.card-play--live .card-play__reset {
+  position: absolute;
+  inset-block-start: var(--space-02);
+  inset-inline-end: var(--space-02);
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-ground-primary);
+  color: var(--color-text-primary-on-ground);
+}
+.card-play__reset { color: var(--color-text-muted); letter-spacing: 0.1em; }
+.demo-card__thumb--nda {
+  align-items: center;
+  padding-block-end: 0;
+  background: var(--color-surface-sunken);
+  border-block-end-style: dashed;
+}
+.demo-card--nda { background: var(--color-surface-raised); }
+@media (prefers-reduced-motion: reduce) { .card-play__bear { animation: none; } }
+@media (min-width: 1024px) {
+  .demo-card { inline-size: 326px; }
+  .demo-card__thumb { block-size: 228px; padding-block-end: 18px; }
+  .demo-card__body { padding: 18px 18px 19px; }
+  .demo-card__subtitle { margin-block-end: 15px; }
+  .demo-card__specs { padding-block-start: var(--space-01); }
+}
+
+/* ------------------------------------------------------------
+   5. FORK CARD — the only navy-filled card on a light ground.
+   Nothing else on a light page is navy-filled, which is what
+   makes the audience split legible.
+   ------------------------------------------------------------ */
+.fork {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.fork-card {
+  position: relative;
+  isolation: isolate;
+  /* A lit navy solid, not a flat fill: the ramp gives the card a top
+     face catching light and a base sitting in its own shadow. */
+  background: linear-gradient(163deg, #223C64 0%, #172A4A 52%, #12233E 100%);
+  border-radius: var(--radius-2xl);
+  padding: 26px 24px 24px;
+  min-block-size: 290px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--edge-lit-on-ground), var(--elev-3);
+  transition:
+    box-shadow var(--duration-drop) var(--ease-glide),
+    transform var(--duration-drop) var(--ease-glide);
+}
+/* The teal wash is a HOVER LIGHT on a navigation card, held far below
+   the amplitude of a coloured region — the same rule the hero stage's
+   bloom follows. It is never visible at rest, so it cannot read as a
+   teal element in the page's census. */
+.fork-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(120% 100% at 50% 0%, rgb(8 199 220 / 0.14), transparent 62%);
+  opacity: 0;
+  transition: opacity var(--duration-drop) var(--ease-glide);
+}
+.fork-card:hover {
+  box-shadow: var(--edge-lit-on-ground), var(--elev-5);
+  transform: translate3d(0, -5px, 0);
+  transition-duration: var(--duration-lift);
+}
+.fork-card:hover::before { opacity: 1; transition-duration: var(--duration-lift); }
+.fork-card:active {
+  transform: translate3d(0, -1px, 0);
+  transition-duration: var(--duration-instant);
+}
+.fork-card:focus-visible { box-shadow: var(--focus-ring-neutral); border-radius: var(--radius-2xl); }
+@media (prefers-reduced-motion: reduce) {
+  .fork-card:hover,
+  .fork-card:active { transform: none; }
+}
+
+.fork-card__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.16em;
+  color: var(--color-text-muted-on-ground);
+  padding-block-end: var(--space-04);
+  border-block-end: var(--border-hairline) solid var(--color-border-on-ground);
+  margin-block-end: 18px;
+}
+.fork-card__title { color: var(--color-text-primary-on-ground); margin-block-end: 13px; }
+.fork-card__body { color: var(--color-text-body-on-ground); max-inline-size: 37ch; }
+.fork-card__action { margin-block-start: auto; padding-block-start: 22px; }
+/* Desktop: the whole card is the target, so a button would be
+   redundant chrome. Mobile: on touch that target is invisible, and
+   a 52px row is the affordance. */
+.fork-card__link {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-body-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary-on-ground);
+}
+.fork-card:hover .fork-card__link .btn__arrow { transform: translateX(4px); }
+.fork-card__link .btn__arrow { transition: transform var(--duration-quick) var(--ease-out); }
+
+@media (min-width: 1024px) {
+  .fork { flex-direction: row; gap: 22px; }
+  .fork-card { flex: 1; padding: 38px 36px 34px; min-block-size: 308px; }
+  .fork-card__kicker {
+    font-size: var(--text-mono-xs);
+    padding-block-end: var(--space-05);
+    margin-block-end: 22px;
+  }
+  .fork-card__title { margin-block-end: var(--space-04); }
+  .fork-card__action { padding-block-start: 26px; }
+  .fork-card__link { display: flex; }
+  .fork-card__btn { display: none; }
+}
+
+/* ------------------------------------------------------------
+   6. PROCESS STEP — presence comes from the rule's weight, not
+   from a number badge or an icon. Step 1's rule is the emphasis;
+   there is no active or complete state, because the component
+   describes a process, not a user's position in one.
+   ------------------------------------------------------------ */
+.process { display: flex; flex-direction: column; }
+.process__step {
+  border-inline-start: var(--border-emphasis) solid var(--color-border-strong);
+  padding: 0 0 26px 18px;
+}
+.process__step:last-child { padding-block-end: 0; }
+.process__step:first-child { border-inline-start-color: var(--color-accent-emphasis-fill); }
+.ground-dark .process__step { border-inline-start-color: var(--color-border-on-ground); }
+.ground-dark .process__step:first-child { border-inline-start-color: var(--color-accent-emphasis-fill); }
+
+.process__duration {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-02);
+}
+/* Documented exception to teal-as-text: durations on the navy
+   process band are contractual measured commitments, the same claim
+   class as runtime readouts. */
+.ground-dark .process__duration { color: var(--color-action-playable-measure); }
+
+.process__title { margin-block-end: 6px; }
+.process__body { color: var(--color-text-body); }
+.ground-dark .process__body { color: var(--color-text-body-on-ground); }
+
+@media (min-width: 1024px) {
+  .process {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;   /* zero, so the top rules butt into a continuous line */
+  }
+  .process__step {
+    border-inline-start: 0;
+    border-block-start: var(--border-accent) solid var(--color-border-strong);
+    padding: var(--space-06) 30px 0;
+  }
+  .process__step:first-child {
+    border-block-start-color: var(--color-accent-emphasis-fill);
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+  .process__step:last-child { padding-inline-end: 0; }
+  .ground-dark .process__step { border-block-start-color: var(--color-border-on-ground); }
+  .ground-dark .process__step:first-child { border-block-start-color: var(--color-accent-emphasis-fill); }
+  .process__duration { margin-block-end: var(--space-03); }
+  .process__title { margin-block-end: 9px; }
+}
+
+/* Numbered top-rule grid — "What we build" / "What lands in your drive" */
+.rule-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+/* Presence still comes from the rule's weight rather than from a badge
+   or an icon — but the rule was a hairline's worth of emphasis
+   carrying a whole section. It is now the accent width, and the
+   number is set large enough to be a mark rather than a footnote. */
+.rule-grid__item {
+  position: relative;
+  border-block-start: var(--border-accent) solid var(--color-border-strong);
+  padding-block-start: var(--space-05);
+  transition: border-block-start-color var(--duration-drop) var(--ease-glide);
+}
+/* The leading rule is the warm accent — a mark, not a control, which
+   is the only job orange has. It reads as the entry point to the row
+   without adding a badge or an icon. */
+.rule-grid__item:first-child { border-block-start-color: var(--color-accent-emphasis-fill); }
+/* The rule darkens under the pointer: the only state this component
+   has, and enough to show the grid is alive without adding chrome. */
+.rule-grid__item:hover {
+  border-block-start-color: var(--color-text-primary);
+  transition-duration: var(--duration-lift);
+}
+.rule-grid__num {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-md);
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-block-end: 11px;
+}
+.rule-grid__title { letter-spacing: -0.012em; margin-block-end: 7px; }
+.rule-grid__body { color: var(--color-text-body); }
+@media (min-width: 1024px) {
+  .rule-grid { grid-template-columns: repeat(4, 1fr); gap: var(--space-08); }
+  .rule-grid__item { padding-block-start: var(--space-06); }
+  .rule-grid__num { margin-block-end: var(--space-04); }
+  .rule-grid__title { margin-block-end: 9px; }
+}
+
+/* Numbered prose list — "How we stay invisible" */
+.numbered {
+  border-block-start: var(--border-emphasis) solid var(--color-text-primary);
+}
+.numbered__item {
+  display: flex;
+  gap: var(--space-04);
+  padding-block: var(--space-06);
+  border-block-end: var(--border-hairline) dotted var(--color-border-strong);
+}
+.numbered__item:last-child { border-block-end-style: solid; }
+.numbered__num {
+  inline-size: 44px;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  padding-block-start: 3px;
+}
+.numbered__title { letter-spacing: -0.014em; margin-block-end: var(--space-02); }
+.numbered__body { color: var(--color-text-body); max-inline-size: 64ch; }
+@media (min-width: 1024px) { .numbered__item { gap: 30px; } }
+
+/* ------------------------------------------------------------
+   7. FAQ ACCORDION — single-open. The open row's top border
+   darkening is the primary signal; the +/− is the redundant
+   non-colour signal.
+   ------------------------------------------------------------ */
+.faq { display: flex; flex-direction: column; }
+.faq__row {
+  border-block-start: var(--border-hairline) solid var(--color-border-default);
+  transition: border-color var(--duration-quick) var(--ease-out);
+}
+.faq__row:last-child { border-block-end: var(--border-hairline) solid var(--color-border-default); }
+.faq__row[data-open="true"] { border-block-start-color: var(--color-text-primary); }
+.faq__row:hover { border-block-start-color: var(--color-border-strong); }
+.faq__row[data-open="true"]:hover { border-block-start-color: var(--color-text-primary); }
+
+.faq__head {
+  inline-size: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding-block: var(--space-05);   /* ≥56px touch row */
+  cursor: pointer;
+}
+.faq__q { font-weight: var(--font-weight-semibold); letter-spacing: -0.012em; text-align: start; }
+/* A glyph, not a type step (tokens audit A6). */
+.faq__sign {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--color-text-muted);
+  flex: none;
+}
+.faq__row:hover .faq__sign { color: var(--color-text-primary); }
+
+/* grid-template-rows 0fr→1fr is compositor-safe; height is not. */
+.faq__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-quick) var(--ease-out);
+}
+.faq__panel[data-open="true"] { grid-template-rows: 1fr; }
+.faq__panel > div { overflow: hidden; }
+.faq__a {
+  color: var(--color-text-body);
+  max-inline-size: var(--measure-prose);
+  padding-block: var(--space-03) var(--space-05);
+}
+@media (prefers-reduced-motion: reduce) { .faq__panel { transition: none; } }
+
+/* ------------------------------------------------------------
+   8/9. FORM FIELD, SELECT, NETWORK CHIPS
+   Label above, always. Never placeholder-as-label.
+   ------------------------------------------------------------ */
+.form { display: flex; flex-direction: column; gap: var(--space-04); }
+.form__row { display: flex; flex-direction: column; gap: var(--space-04); }
+@media (min-width: 1024px) { .form__row { flex-direction: row; gap: 14px; } .form__row > * { flex: 1; } }
+
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: var(--text-mono-3xs-ls);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+.field__control {
+  block-size: 52px;                 /* touch floor */
+  inline-size: 100%;
+  background: var(--color-surface-raised);
+  border: var(--border-hairline) solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  padding-inline: 14px;
+  font-size: var(--text-body-md);   /* 16px minimum — under it iOS auto-zooms */
+  color: var(--color-text-primary);
+  transition: border-color var(--duration-quick) var(--ease-out);
+}
+textarea.field__control { block-size: 104px; padding-block: 14px; resize: vertical; line-height: 1.5; }
+select.field__control {
+  appearance: none;
+  background-image: none;
+  cursor: pointer;
+}
+.field__select { position: relative; display: flex; flex-direction: column; }
+.field__chevron {
+  position: absolute;
+  inset-inline-end: 14px;
+  inset-block-end: 18px;
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  line-height: 1;
+}
+.field__control::placeholder { color: var(--color-text-muted); }
+.field__control:hover { border-color: var(--color-text-muted); }
+/* Never the teal ring — a form is not a playable. */
+.field__control:focus {
+  outline: none;
+  border-color: var(--color-action-neutral);
+  border-width: var(--border-emphasis);
+  box-shadow: var(--focus-ring-neutral);
+}
+.field[data-invalid="true"] .field__control {
+  border-color: var(--color-status-error);
+  border-width: var(--border-emphasis);
+  background: var(--color-status-error-surface);
+}
+.field__msg { font-size: var(--text-body-2xs); color: var(--color-text-muted); }
+.field__msg--error { color: var(--color-status-error); }
+.field__msg--error::before { content: "! "; font-weight: var(--font-weight-semibold); }
+
+@media (min-width: 1024px) {
+  .field__control { block-size: 48px; font-size: var(--text-body-xs); }
+  textarea.field__control { block-size: 104px; }
+  .field__chevron { inset-block-end: 16px; }
+}
+
+/* Chips — a fieldset of checkboxes. Never teal: selecting a network
+   is not running a playable. */
+.chips { display: flex; gap: var(--space-02); flex-wrap: wrap; border: 0; padding: 0; margin: 0; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding: 10px 15px;
+  background: var(--color-surface-raised);
+  border: var(--border-hairline) solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-body);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background-color var(--duration-quick) var(--ease-out),
+              color var(--duration-quick) var(--ease-out);
+}
+/* Selected chips drop the border and gain 1px of padding, so the chip
+   does not shift by the lost border width. */
+.chip[data-selected="true"] {
+  background: var(--color-action-neutral);
+  color: var(--color-action-neutral-ink);
+  border-color: var(--color-action-neutral);
+  padding: 11px 16px;
+  border-width: 0;
+}
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip:has(input:focus-visible) { box-shadow: var(--focus-ring-neutral); }
+
+.form__submit-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  margin-block-start: var(--space-01);
+}
+@media (min-width: 1024px) {
+  .form__submit-row { flex-direction: row; align-items: center; gap: var(--space-05); }
+}
+.form__error-summary {
+  border: var(--border-hairline) solid var(--color-status-error);
+  background: var(--color-status-error-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-04);
+  color: var(--color-status-error);
+  font-size: var(--text-body-xs);
+}
+.form__error-summary a { box-shadow: inset 0 -1px 0 currentColor; }
+
+.form-success {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-04);
+  border: var(--border-hairline) solid var(--color-border-default);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-08);
+}
+.form-success img { inline-size: 72px; block-size: auto; }
+
+/* ------------------------------------------------------------
+   10. GUARANTEE BLOCK — a paper panel inset into a navy band,
+   overlapping its upper edge. The overlap is the component's
+   whole visual argument: the promise breaks out of the section
+   that contains it.
+   ------------------------------------------------------------ */
+.guarantee-band {
+  /* The band takes the stage's gradient — the panel has to be lit
+     from somewhere for its shadow to be believable. */
+  background: var(--atmos-stage);
+  padding-block: 0 var(--rhythm-sm);   /* no top padding — the panel's
+                                          negative offset supplies it */
+  padding-inline: max(var(--gutter), calc((100% - var(--content-max)) / 2));
+}
+.guarantee {
+  inline-size: 100%;
+  max-inline-size: var(--content-inset);
+  margin-inline: auto;
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-2xl);
+  padding: 32px 26px 30px;
+  transform: translateY(-24px);
+  /* The overlap is the argument, so the panel has to read as being in
+     front of the band rather than cut into it. Deepest elevation on
+     the page, plus a bright top edge where it catches the light. */
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    var(--elev-5);
+  /* The warm accent marks the page's one unconditional promise. A
+     fill, not a word — orange is 2.1:1 on paper and can never carry
+     text here. */
+  border-block-start: var(--border-accent) solid var(--color-accent-emphasis-fill);
+}
+.guarantee__kicker {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.17em;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-04);
+}
+.guarantee__title { margin-block-end: var(--space-04); max-inline-size: 24ch; }
+.guarantee__body { color: var(--color-text-body); max-inline-size: 60ch; margin-block-end: 26px; }
+
+/* Mobile is a component substitution, not a reflow: three stats at
+   350px would each get 110px and "<2 MB" would wrap. */
+.guarantee__stats {
+  border-block-start: var(--border-hairline) solid var(--color-border-strong);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.guarantee__stat {
+  display: flex;
+  align-items: baseline;
+  padding-block: 13px;
+}
+.guarantee__stat:not(:last-child) {
+  border-block-end: var(--border-hairline) dotted var(--color-border-strong);
+}
+.guarantee__value {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-black);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--text-display-3xs-ls);
+  line-height: 1;
+}
+.guarantee__caption {
+  color: var(--color-text-muted);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.11em;
+}
+
+@media (min-width: 1024px) {
+  .guarantee-band { padding-block-end: var(--rhythm-lg); }
+  .guarantee {
+    padding: 60px 60px 56px;
+    transform: translateY(-40px);
+  }
+  .guarantee__kicker { font-size: var(--text-mono-xs); margin-block-end: 22px; }
+  .guarantee__title { margin-block-end: var(--space-05); }
+  .guarantee__body { margin-block-end: 38px; }
+  .guarantee__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .guarantee__stat {
+    display: block;
+    padding: var(--space-06) 30px 0;
+    border-block-end: 0 !important;
+    border-inline-end: var(--border-hairline) solid var(--color-border-strong);
+  }
+  .guarantee__stat:first-child { padding-inline-start: 0; }
+  .guarantee__stat:last-child { padding-inline-end: 0; border-inline-end: 0; }
+  .guarantee__caption { display: block; margin-block-start: 10px; font-size: var(--text-mono-xs); letter-spacing: 0.13em; }
+  .guarantee__stat .spec-row__leader { display: none; }
+  .guarantee__title.t-display-lg-at-desktop {
+    font-size: var(--text-display-lg);
+    line-height: var(--text-display-lg-lh);
+    letter-spacing: var(--text-display-lg-ls);
+  }
+  .guarantee__value.t-numeral-at-desktop {
+    font-size: var(--text-display-numeral);
+    letter-spacing: var(--text-display-numeral-ls);
+  }
+}
+
+/* ------------------------------------------------------------
+   11. NETWORK WALL — the proof band under the hero.
+   Outlined, not filled: filled chips on navy read as buttons,
+   and these are not interactive.
+   ------------------------------------------------------------ */
+.network-wall {
+  background: var(--color-ground-primary);
+  padding-block: var(--space-05);
+  padding-inline: max(var(--gutter), calc((100% - var(--content-max)) / 2));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+/* The claim the chips substantiate, in the warm accent. Orange AS
+   TEXT is legal here and only here on this band — navy ground, 6.7:1
+   — and this is a statement, not a control, which is the whole
+   distinction between the two accents. Muted grey buried a line that
+   is doing real work. */
+.network-wall__claim {
+  display: none;   /* dropped below 1024 — at 350px it costs two lines */
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-xs);
+  letter-spacing: 0.14em;
+  color: var(--color-accent-emphasis);
+  text-transform: uppercase;
+}
+.network-wall__list { display: flex; gap: 9px; flex-wrap: wrap; }
+.network-chip {
+  border: var(--border-hairline) solid var(--color-border-on-ground);
+  border-radius: var(--radius-sm);
+  padding: 7px 13px;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.08em;
+  color: var(--color-text-link-on-ground);
+}
+@media (min-width: 1024px) {
+  .network-wall {
+    padding-block: var(--space-06);
+    justify-content: space-between;
+    gap: 30px;
+    flex-wrap: nowrap;
+  }
+  .network-wall__claim { display: block; }
+  .network-wall__list { gap: var(--space-03); flex-wrap: nowrap; }
+  .network-chip { padding: 8px 17px; font-size: var(--text-mono-xs); }
+}
+
+/* ------------------------------------------------------------
+   12. FOOTER — deeper than any section band, so it reads as the
+   page's floor.
+   ------------------------------------------------------------ */
+.footer {
+  background: var(--color-ground-deep);
+  color: var(--color-text-link-on-ground);
+  padding-block: 44px 26px;
+  padding-inline: max(var(--gutter), calc((100% - var(--content-max)) / 2));
+}
+.footer__brand { display: flex; flex-direction: column; gap: var(--space-04); }
+.footer__mark { display: flex; align-items: center; gap: 10px; }
+/* One of the bear's five permitted placements. Never above the
+   wordmark, never larger than its cap height plus descender. */
+.footer__mark img { inline-size: 24px; block-size: auto; }
+.footer__descriptor { color: var(--color-text-body-on-ground); max-inline-size: 29ch; }
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px 24px;
+  margin-block-start: var(--space-07);
+}
+.footer__col { display: flex; flex-direction: column; gap: 11px; }
+.footer__col-head {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: var(--text-mono-3xs-ls);
+  color: var(--color-text-muted-on-ground);
+  text-transform: uppercase;
+  margin-block-end: 2px;
+}
+.footer__link {
+  font-size: var(--text-body-xs);
+  color: var(--color-text-link-on-ground);
+  padding-block: 4px;              /* ≥44px tap row with the 11px gap */
+  transition: color var(--duration-quick) var(--ease-out);
+}
+.footer__link:hover { color: var(--color-text-primary-on-ground); }
+
+.footer__divider {
+  block-size: 1px;
+  background: var(--color-border-on-ground);
+  margin-block: var(--space-08) 14px;
+}
+.footer__legal {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.05em;
+  line-height: 1.9;
+  color: var(--color-text-muted-on-ground);
+}
+.footer__legal-links { display: flex; flex-wrap: wrap; gap: var(--space-05); }
+
+@media (min-width: 1024px) {
+  .footer { padding-block: var(--space-14) var(--space-07); }
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+    gap: 34px;
+  }
+  .footer__grid { display: contents; }
+  .footer__divider { margin-block: var(--space-10) var(--space-04); }
+  .footer__legal {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-06);
+    line-height: 1.6;
+    font-size: var(--text-mono-xs);
+    letter-spacing: 0.06em;
+  }
+}
+
+/* Condensed footer — teardown */
+.footer--condensed { padding-block: var(--space-08) 26px; border-block-start: var(--border-hairline) solid var(--color-border-on-ground); }
+.footer--condensed .footer__row {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+@media (min-width: 1024px) {
+  .footer--condensed { padding-block: 44px 26px; }
+  .footer--condensed .footer__row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+  }
+}
+
+/* ------------------------------------------------------------
+   TABLES — compliance and throughput.
+   Three or more columns is a real <table>, not spec rows.
+   ------------------------------------------------------------ */
+.data-table {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-mono-sm);
+  inline-size: 100%;
+}
+.data-table th {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: var(--text-mono-3xs-ls);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  text-align: end;
+  padding-block: 9px;
+  border-block-end: var(--border-hairline) solid var(--color-border-strong);
+}
+.data-table th:first-child, .data-table td:first-child { text-align: start; }
+.data-table td {
+  padding-block: 11px;
+  text-align: end;
+  border-block-end: var(--border-hairline) dotted var(--color-border-strong);
+}
+.data-table tr:last-child td { border-block-end: 0; }
+.data-table td:first-child { letter-spacing: 0.05em; }
+.data-table .is-secondary { color: var(--color-text-muted); }
+/* PASS is typographic only. No green, no icon-only — there is no
+   success colour in this system, deliberately. */
+.data-table .is-result { font-weight: var(--font-weight-medium); }
+@media (min-width: 1024px) { .data-table { font-size: var(--text-mono-md); } }
+
+/* ------------------------------------------------------------
+   PANELS
+   ------------------------------------------------------------ */
+.panel {
+  background: var(--color-surface-sunken);
+  border: var(--border-hairline) solid var(--color-border-default);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+}
+@media (min-width: 1024px) { .panel { padding: 28px 30px; } }
+
+/* The only navy panel inside a light column. Its ground exists so
+   the live teal readouts are legal. */
+.session-panel {
+  background: var(--color-ground-primary);
+  border-radius: var(--radius-2xl);
+  padding: 20px 22px 12px;
+}
+.session-panel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding-block-end: 14px;
+  border-block-end: var(--border-hairline) solid var(--color-border-on-ground);
+}
+.session-panel__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: var(--text-mono-3xs-ls);
+  color: var(--color-text-muted-on-ground);
+  text-transform: uppercase;
+}
+.session-panel__status {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-3xs);
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted-on-ground);
+}
+.session-panel__status[data-live="true"] { color: var(--color-action-playable-measure); }
+@media (min-width: 1024px) {
+  .session-panel { padding: 26px 30px 18px; }
+  .session-panel__head { padding-block-end: var(--space-04); gap: var(--space-05); }
+  .session-panel__label { font-size: var(--text-mono-2xs); letter-spacing: 0.17em; }
+}
+
+/* NDA placeholder block — never a fake client logo.
+   The comp sets this label in --color-text-muted, which lands at
+   about 2.4:1 on --color-ground-raised. Corrected to the on-ground
+   grey (4.6:1) — the same class of fix the redesign already made when
+   it split the single grey into two ground-specific ones. */
+.nda-block {
+  background: var(--color-ground-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-2xs);
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted-on-ground);
+  text-align: center;
+  padding: var(--space-05);
+}
+
+.card-on-ground {
+  background: var(--color-ground-deep);
+  border: var(--border-hairline) solid var(--color-border-on-ground);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------
+   TAP TARGETS
+   "Every tappable target ≥44×44" (pre-merge checklist). Small
+   text links get their hit area from a padded pseudo-element,
+   never by growing the glyph — the same technique the hamburger
+   uses. Inline links inside a paragraph are exempt, per WCAG
+   2.5.8; enlarging them would break the line box.
+   ------------------------------------------------------------ */
+.wordmark,
+.nav__link,
+.nav__contact,
+.nav__crumb,
+.footer__link,
+.card-play__reset {
+  position: relative;
+}
+.wordmark::before,
+.nav__link::before,
+.nav__contact::before,
+.nav__crumb::before,
+.footer__link::before,
+.card-play__reset::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  inline-size: max(100%, 44px);
+  block-size: max(100%, 44px);
+}
+
+/* The demo card's title link stretches over the whole body, so the
+   card reads as one target — while the thumbnail's PLAY button, which
+   does something else entirely, stays its own. The containing block
+   for this is set on .demo-card__body where it is declared. */
+.demo-card__title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}

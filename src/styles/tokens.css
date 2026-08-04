@@ -1,0 +1,447 @@
+/* ============================================================
+   QQ ADVERTISEMENT — design tokens
+   Ported from "QQ Advertisement Redesign Plan/design/tokens.css" v1.0.0
+
+   Naming is by ROLE, not appearance. Two roles never share a token
+   even when the hex matches (--color-ground-primary vs
+   --color-text-primary are both #172A4A, different jobs).
+
+   Deviations from the source file, all deliberate:
+     · Type folds A4–A6 applied — the half-steps (16.5 / 15.5 / 14.5 /
+       13.5 / 11.5 / 12.5 / 8.5) are gone. Nothing may reintroduce them.
+     · --text-display-numeral-sm added for the teardown header stats,
+       which the comp draws at 30px. It is the folded 32→30 step
+       (--text-display-2xs) under a numeral-specific name so the
+       tabular-nums requirement travels with it.
+   ============================================================ */
+
+:root {
+  /* --- 1. COLOUR — GROUNDS. Max two per page. ------------- */
+  --color-ground-primary:            #172A4A;
+  --color-ground-deep:               #0E1B31;
+  --color-ground-raised:             #223A61;
+  --color-ground-board:              #E7EAEE;
+
+  /* --- 2. COLOUR — SURFACES -------------------------------
+     Paper is a warm cream, not #FFFFFF (changed 2026-08-04).
+     Pure white against this navy read cold and clinical — the
+     "sad" note. The warmth also gives raised surfaces something
+     to lift OFF, which pure-white-on-pure-white never did.
+
+     THE SPLIT: -page is the ground the body paints. -raised is
+     for anything sitting ON it (cards, fields, chips, panels).
+     Before the split both were the same token, so warming the
+     page would have flattened every card into it. */
+  --color-surface-page:              #FAF7F1;
+  --color-surface-raised:            #FFFFFF;
+  --color-surface-sunken:            #F2EFE8;
+
+  /* --- 3. COLOUR — BORDERS. Ground-specific, never swapped. */
+  --color-border-subtle:             #E1E5EA;
+  --color-border-default:            #DDE1E7;
+  --color-border-strong:             #C3C9D3;
+  --color-border-on-ground:          #33486D;
+  --color-border-on-ground-strong:   #4A5B78;
+
+  /* --- 4. COLOUR — TEXT ----------------------------------- */
+  --color-text-primary:              #172A4A;  /* 13.0:1 on paper */
+  --color-text-body:                 #3B4557;  /*  8.9:1 on paper */
+  --color-text-muted:                #5F6E86;  /*  4.69:1 on sunken */
+  --color-text-primary-on-ground:    #F2F4F7;
+  --color-text-body-on-ground:       #B9C1CD;
+  --color-text-muted-on-ground:      #8A97AC;  /* FORBIDDEN on light (2.7:1) */
+  --color-text-link-on-ground:       #DDE1E7;  /* footer + network chip text */
+
+  /* --- 5. COLOUR — ACTION: PLAYABLE (RESERVED) ------------
+     A fill, never a word — except -measure, on navy only.
+     Legal on exactly 8 element types. See THE TEAL GATE. */
+  --color-action-playable:           #08C7DC;
+  --color-action-playable-hover:     #26D2E4;
+  --color-action-playable-active:    #06B0C3;
+  --color-action-playable-ink:       #0E1B31;  /* 8.37:1 — the only legal ink on teal */
+  --color-action-playable-measure:   #4BD7E8;  /* teal AS TEXT, navy grounds only. 8.31:1 */
+  --color-action-playable-halo:      rgb(8 199 220 / 0.26);
+
+  /* --- 6. COLOUR — ACTION: NEUTRAL ------------------------ */
+  --color-action-neutral:               #172A4A;
+  --color-action-neutral-ink:           #F2F4F7;
+  --color-action-neutral-on-ground:     #F2F4F7;
+  --color-action-neutral-on-ground-ink: #172A4A;
+
+  /* --- 7b. COLOUR — ACCENT: EMPHASIS (added 2026-08-04) ----
+     The warm accent carried over from the earlier build.
+
+     THE SPLIT WITH TEAL, which is the whole point of adding a
+     third colour rather than the usual result of it:
+
+         TEAL   says PLAY THIS.  It is a fill on things that run.
+         ORANGE says LOOK HERE.  It marks, rules and emphasises,
+                and it is never attached to a control.
+
+     So orange is FORBIDDEN on: any button, any link, the nav,
+     form submits, the phone's play affordance, and anything a
+     pointer can press. If it ever lands on a control the two
+     colours start competing to mean "act", and the Teal Gate
+     stops working — teal only reads as "press me" while nothing
+     else is claiming that job.
+
+     CONTRAST. -emphasis is 6.7:1 on --color-ground-primary and
+     8.1:1 on --color-ground-deep, so it is legal AS TEXT on navy
+     — the mirror of --color-action-playable-measure. On paper it
+     is 2.1:1 and therefore a FILL ONLY: rules, marks and washes,
+     never a word. Use -ink for the rare orange word on paper. */
+  --color-accent-emphasis:           #E8A33C;  /* navy grounds only, as text */
+  --color-accent-emphasis-ink:       #8A5A0E;  /* 5.7:1 on paper — words on light */
+  --color-accent-emphasis-fill:      #F0A93B;  /* rules and marks on any ground */
+  --color-accent-emphasis-wash:      rgb(232 163 60 / 0.13);
+
+  /* --- 7. COLOUR — STATUS --------------------------------- */
+  --color-status-error:              #B4243F;
+  --color-status-error-surface:      #FDF2F4;
+  --color-status-warning:            #E0A93B;
+  --color-status-warning-ink:        #8A6A12;
+  /* No success colour exists, deliberately. Every PASS state is
+     typographic: the word PASS at weight 500 in --color-text-primary. */
+
+  /* --- 9. TYPE — FAMILIES AND WEIGHTS --------------------- */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body:    'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-black:    800;
+
+  /* --- 10. TYPE — DISPLAY SCALE (display, 800). Tracking tightens
+     as size grows. Never one letter-spacing across the scale. --- */
+  --text-display-3xl: 68px;  --text-display-3xl-lh: 0.95; --text-display-3xl-ls: -0.038em;
+  --text-display-2xl: 62px;  --text-display-2xl-lh: 0.96; --text-display-2xl-ls: -0.038em;
+  --text-display-xl:  56px;  --text-display-xl-lh:  0.98; --text-display-xl-ls:  -0.036em;
+  --text-display-lg:  42px;  --text-display-lg-lh:  1.04; --text-display-lg-ls:  -0.032em;
+  --text-display-md:  40px;  --text-display-md-lh:  1.02; --text-display-md-ls:  -0.028em;
+  --text-display-sm:  38px;  --text-display-sm-lh:  1.02; --text-display-sm-ls:  -0.032em;
+  --text-display-xs:  34px;  --text-display-xs-lh:  1.02; --text-display-xs-ls:  -0.030em;
+  --text-display-2xs: 30px;  --text-display-2xs-lh: 1.04; --text-display-2xs-ls: -0.032em;
+  --text-display-3xs: 26px;  --text-display-3xs-lh: 1.06; --text-display-3xs-ls: -0.030em;
+  --text-display-4xs: 22px;  --text-display-4xs-lh: 1.15; --text-display-4xs-ls: -0.020em;
+
+  --text-display-numeral:    38px;  --text-display-numeral-lh: 1;
+  --text-display-numeral-ls: -0.030em;
+  --text-display-numeral-sm: 30px;  /* teardown header stats */
+
+  /* --- 11. TYPE — BODY SCALE. letter-spacing 0 at every step. --- */
+  --text-body-xl:  18px;  --text-body-xl-lh:  1.35;
+  --text-body-lg:  17px;  --text-body-lg-lh:  1.55;
+  --text-body-md:  16px;  --text-body-md-lh:  1.60;
+  --text-body-sm:  15px;  --text-body-sm-lh:  1.55;
+  --text-body-xs:  14px;  --text-body-xs-lh:  1.55;
+  --text-body-2xs: 13px;  --text-body-2xs-lh: 1.50;
+
+  --text-body-quote:    25px;
+  --text-body-quote-lh: 1.35;
+  --text-body-quote-ls: -0.018em;
+
+  /* --- 12. TYPE — MONO SCALE. Tracking widens as size shrinks:
+     the inverse of display. Every numeric use sets tabular-nums. --- */
+  --text-mono-lg:  13px;    --text-mono-lg-ls:  0.05em;
+  --text-mono-md:  12px;    --text-mono-md-ls:  0.07em;
+  --text-mono-sm:  11px;    --text-mono-sm-ls:  0.07em;
+  --text-mono-xs:  10.5px;  --text-mono-xs-ls:  0.10em;
+  --text-mono-2xs: 10px;    --text-mono-2xs-ls: 0.14em;
+  --text-mono-3xs: 9.5px;   --text-mono-3xs-ls: 0.16em;
+  --text-mono-4xs: 9px;     --text-mono-4xs-ls: 0.11em;  /* legibility floor */
+
+  /* --- 13. SPACING — 4px base ----------------------------- */
+  --space-01:   4px;
+  --space-02:   8px;
+  --space-03:  12px;
+  --space-04:  16px;
+  --space-05:  20px;
+  --space-06:  24px;
+  --space-07:  28px;
+  --space-08:  32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-14:  56px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-22:  88px;
+  --space-24:  96px;
+  --space-26: 104px;
+  --space-28: 112px;
+  --space-30: 120px;
+
+  /* Named layout values — the only page-level measurements */
+  --gutter-desktop:      100px;
+  --gutter-mobile:        20px;
+  --gutter:  var(--gutter-mobile);   /* resolved per breakpoint below */
+  --content-max:        1240px;
+  --content-inset:      1060px;
+  --measure-prose:        62ch;
+  --measure-prose-tight:  44ch;
+
+  /* Section rhythm — deliberately UNEVEN. Pick from this set only.
+     Uniform section padding across a page is a regression. */
+  --rhythm-sm:   64px;
+  --rhythm-md:   88px;
+  --rhythm-lg:  104px;
+  --rhythm-xl:  120px;
+
+  /* --- 14. RADII ------------------------------------------ */
+  --radius-xs:   2px;
+  --radius-sm:   3px;
+  --radius-md:   4px;
+  --radius-lg:   5px;
+  --radius-xl:   6px;
+  --radius-2xl:  8px;
+
+  --radius-device-desktop: 40px;
+  --radius-screen-desktop: 30px;
+  --radius-device-mobile:  30px;
+  --radius-screen-mobile:  22px;
+
+  --radius-full: 50%;
+
+  /* --- 15. BORDER WIDTHS ---------------------------------- */
+  --border-hairline: 1px;
+  --border-emphasis: 2px;
+  --border-accent:   3px;
+
+  /* --- 16. ELEVATION. Two levels, navy-tinted, never black. */
+  --shadow-card:
+    0 2px 6px rgb(23 42 74 / 0.10),
+    0 24px 60px rgb(23 42 74 / 0.10);
+  --shadow-device:
+    0 3px 6px rgb(23 42 74 / 0.16),
+    0 26px 60px rgb(23 42 74 / 0.20);
+  --shadow-inset-viewport: inset 0 0 0 1px #DDE1E7;
+
+  /* Focus — 2px paper offset, then 2px teal.
+     The teal ring is legal ONLY on a playable surface. */
+  --focus-ring-playable:
+    inset 0 0 0 1px #DDE1E7,
+    0 0 0 2px #F2F4F7,
+    0 0 0 4px #08C7DC;
+  --focus-ring-neutral:
+    0 0 0 2px #FFFFFF,
+    0 0 0 4px #172A4A;
+  --focus-ring-on-ground:
+    0 0 0 2px #172A4A,
+    0 0 0 4px #F2F4F7;
+
+  /* Underlines drawn as shadows, so descenders stay clear */
+  --underline-inline: inset 0 -1px 0 #8A97AC;
+  --underline-active: inset 0 -2px 0 #172A4A;
+
+  /* --- 18. MOTION — DURATIONS ----------------------------- */
+  --duration-instant:  90ms;
+  --duration-fast:    160ms;
+  --duration-quick:   200ms;
+  --duration-exit:    220ms;   /* 65% of --duration-enter */
+  --duration-enter:   260ms;
+  --duration-overlay: 300ms;
+  --duration-settle:  340ms;
+  --duration-spring:  420ms;
+  --duration-loop:    900ms;
+
+  /* --- 19. MOTION — EASING -------------------------------- */
+  --ease-linear: linear;
+  --ease-in:     ease-in;
+  --ease-out:    ease-out;
+  --ease-in-out: ease-in-out;
+  --ease-settle: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.32, 0.64, 1);
+
+  /* --- 20. COMPONENT CONSTANTS ---------------------------- */
+  --loader-bar-height: 3px;  /* off-scale on purpose: a shape, not a border */
+  --nav-height-default: 60px;
+  --nav-height-condensed: 56px;
+
+  /* ==========================================================
+     21. ATMOSPHERE  (added 2026-08-04)
+     The flat #FFFFFF-against-flat-#172A4A pairing was the single
+     largest reason the page read as a documentation site rather
+     than as studio work. Grounds now carry depth. The navy ramp
+     below matches the one compiled into Atmosphere.tsx's shader —
+     changing a colour here means changing it there too, or the
+     WebGL stage and its CSS fallback will disagree.
+     ========================================================== */
+
+  /* The fallback the shader canvas paints over, and the ground for
+     any navy stage that does not carry a canvas at all. */
+  --atmos-stage:
+    radial-gradient(120% 90% at 72% 45%, #24406B 0%, rgb(36 64 107 / 0) 55%),
+    /* The warm counterweight, matching the shader's second bloom.
+       Two lights of opposing temperature read as a room; one cool
+       light alone reads as a screen. */
+    radial-gradient(80% 65% at 12% 12%, rgb(232 163 60 / 0.14) 0%, rgb(232 163 60 / 0) 62%),
+    radial-gradient(90% 70% at 12% 8%, #1D3355 0%, rgb(29 51 85 / 0) 60%),
+    linear-gradient(176deg, #16294700 0%, #0E1B31 100%),
+    #172A4A;
+
+  /* Warm paper, with a faint amber lift where a section opens — the
+     light in the room comes from the same place as the stage's. */
+  --atmos-paper:
+    radial-gradient(100% 60% at 50% 0%, #FDFBF6 0%, rgb(253 251 246 / 0) 70%),
+    var(--color-surface-page);
+
+  /* Grain. ~380 bytes inline, applied at very low alpha. Kills the
+     plastic look of large flat fills and, with the shader's dither,
+     the banding that large navy gradients quantise into. */
+  --atmos-grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+  --atmos-grain-opacity-dark:  0.055;
+  --atmos-grain-opacity-light: 0.030;
+
+  /* ==========================================================
+     22. ELEVATION — five steps, navy-tinted, never black.
+     Each step is umbra + penumbra + ambient. A single-shadow card
+     is the other reliable cheap tell; real objects cast a tight
+     contact shadow AND a wide soft one.
+     ========================================================== */
+  --elev-1:
+    0 1px 2px rgb(23 42 74 / 0.06),
+    0 2px 6px rgb(23 42 74 / 0.05);
+  --elev-2:
+    0 1px 2px rgb(23 42 74 / 0.07),
+    0 4px 10px rgb(23 42 74 / 0.06),
+    0 12px 28px rgb(23 42 74 / 0.06);
+  --elev-3:
+    0 1px 2px rgb(23 42 74 / 0.08),
+    0 6px 16px rgb(23 42 74 / 0.07),
+    0 22px 48px rgb(23 42 74 / 0.08);
+  --elev-4:
+    0 2px 4px rgb(23 42 74 / 0.09),
+    0 10px 26px rgb(23 42 74 / 0.09),
+    0 34px 72px rgb(23 42 74 / 0.10);
+  --elev-5:
+    0 2px 6px rgb(23 42 74 / 0.12),
+    0 16px 40px rgb(23 42 74 / 0.12),
+    0 48px 96px rgb(23 42 74 / 0.14);
+
+  /* Shadows cast ON navy have to be darker than the ground, not a
+     tint of it, or they vanish. */
+  --elev-on-ground-2:
+    0 2px 6px rgb(4 10 20 / 0.30),
+    0 14px 34px rgb(4 10 20 / 0.28);
+  --elev-on-ground-4:
+    0 4px 10px rgb(4 10 20 / 0.34),
+    0 26px 60px rgb(4 10 20 / 0.36);
+
+  /* The phone on the navy stage: a real drop plus the screen's own
+     light spilling back onto the ground. */
+  --elev-device-stage:
+    0 4px 12px rgb(4 10 20 / 0.40),
+    0 32px 70px rgb(4 10 20 / 0.42),
+    0 0 90px rgb(8 199 220 / 0.10);
+
+  /* Inner top highlight — the edge where light catches a raised
+     surface. Applied to cards on navy, never on paper. */
+  --edge-lit-on-ground: inset 0 1px 0 rgb(255 255 255 / 0.07);
+
+  /* ==========================================================
+     23. MATERIAL — translucent chrome (backdrop-filter).
+     ========================================================== */
+  --material-blur: saturate(180%) blur(20px);
+  --material-paper-bg:  rgb(255 255 255 / 0.72);
+  --material-deep-bg:   rgb(14 27 49 / 0.72);
+  --material-edge-paper: rgb(23 42 74 / 0.07);
+  --material-edge-deep:  rgb(255 255 255 / 0.09);
+
+  /* ==========================================================
+     24. MOTION — springs, from Apple's damping/response pairs.
+     `settle` and `spring` already existed and keep their meaning;
+     these add the two curves the redesign leans on.
+     ========================================================== */
+  /* damping 1.0 / response 0.4 — the default. No overshoot. */
+  --ease-glide: cubic-bezier(0.22, 0.61, 0.20, 1);
+  /* damping ~0.8 — only after a gesture that carried momentum. */
+  --ease-overshoot: cubic-bezier(0.34, 1.26, 0.52, 1);
+  /* Hover lifts: fast in, slower out, so the surface feels weighted. */
+  --duration-lift: 240ms;
+  --duration-drop: 420ms;
+
+  /* Reveal choreography. --reveal-step is the stagger between
+     siblings; anything past ~6 children reads as a queue, so groups
+     larger than that set their own shorter step. */
+  --reveal-rise: 18px;
+  --reveal-duration: 620ms;
+  --reveal-step: 70ms;
+
+  /* --- 25. TYPE — display step above the existing 3xl -------
+     Section heads at 40px against a 68px hero gave the page one
+     note. Whole pixels only: the folded scale forbids half-steps. */
+  --text-display-4xl: 82px;  --text-display-4xl-lh: 0.94; --text-display-4xl-ls: -0.040em;
+}
+
+/* The desktop gutter switches with the layout, not with the canvas —
+   1024 is where the two-column teardown and the six-column throughput
+   table have already collapsed. */
+@media (min-width: 1024px) {
+  :root {
+    --gutter: var(--gutter-desktop);
+    --nav-height-default: 78px;
+    --nav-height-condensed: 62px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   Not "no feedback" — a gentler, non-vestibular equivalent.
+   State-bearing values (progress fills, counters, phase labels)
+   MUST still update. See base.css for the author-side half of
+   this: transforms drop, opacity cross-fades stay.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant:  0ms;
+    --duration-fast:     0ms;
+    --duration-quick:  200ms;
+    --duration-exit:   200ms;
+    --duration-enter:  200ms;
+    --duration-overlay: 200ms;
+    --duration-settle:   0ms;
+    --duration-spring:   0ms;
+    --duration-loop:     0ms;
+    --duration-lift:   120ms;
+    --duration-drop:   120ms;
+    --ease-settle: linear;
+    --ease-spring: linear;
+    --ease-glide:  linear;
+    /* Overshoot is vestibular. It never survives this query. */
+    --ease-overshoot: linear;
+    /* The reveal keeps its cross-fade and loses its travel. */
+    --reveal-rise: 0px;
+    --reveal-duration: 260ms;
+    --reveal-step: 0ms;
+  }
+}
+
+/* ============================================================
+   REDUCED TRANSPARENCY
+   Translucent chrome goes frosty-to-solid rather than
+   disappearing — the layer still has to read as a layer.
+   ============================================================ */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --material-blur: none;
+    --material-paper-bg: #FFFFFF;
+    --material-deep-bg:  #0E1B31;
+  }
+}
+
+/* ============================================================
+   HIGH CONTRAST
+   Near-solid grounds and a defined border, and the atmosphere
+   flattens so text never sits on a moving field.
+   ============================================================ */
+@media (prefers-contrast: more) {
+  :root {
+    --material-paper-bg: #FFFFFF;
+    --material-deep-bg:  #0E1B31;
+    --atmos-grain-opacity-dark:  0;
+    --atmos-grain-opacity-light: 0;
+    --material-edge-paper: rgb(23 42 74 / 0.30);
+    --material-edge-deep:  rgb(255 255 255 / 0.30);
+  }
+}

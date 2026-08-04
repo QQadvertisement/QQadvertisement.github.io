@@ -1,0 +1,403 @@
+/* ============================================================
+   BASE — reset, type primitives, grounds, layout scaffolding
+   ============================================================ */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* The condensed bar is sticky; anchor targets must clear it. */
+  scroll-padding-block-start: calc(var(--nav-height-condensed) + var(--space-04));
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-body-md);
+  line-height: var(--text-body-md-lh);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.is-locked { overflow: hidden; }
+
+h1, h2, h3, h4, h5, h6, p, figure, dl, dd, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+ul, ol { list-style: none; }
+
+img, svg { display: block; max-inline-size: 100%; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  inline-size: 100%;
+}
+
+/* Focus is never suppressed. The teal ring is a separate token and
+   appears only on playable surfaces — see .playable-stage. */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-neutral);
+  border-radius: var(--radius-sm);
+}
+.ground-dark :focus-visible { box-shadow: var(--focus-ring-on-ground); }
+
+::selection {
+  background: var(--color-ground-primary);
+  color: var(--color-text-primary-on-ground);
+}
+
+/* ------------------------------------------------------------
+   TYPE PRIMITIVES
+   One class per scale step. Nothing outside these steps ships.
+   ------------------------------------------------------------ */
+
+.t-display {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-black);
+  margin: 0;
+}
+.t-display-4xl { font-size: var(--text-display-4xl); line-height: var(--text-display-4xl-lh); letter-spacing: var(--text-display-4xl-ls); }
+.t-display-3xl { font-size: var(--text-display-3xl); line-height: var(--text-display-3xl-lh); letter-spacing: var(--text-display-3xl-ls); }
+.t-display-2xl { font-size: var(--text-display-2xl); line-height: var(--text-display-2xl-lh); letter-spacing: var(--text-display-2xl-ls); }
+.t-display-xl  { font-size: var(--text-display-xl);  line-height: var(--text-display-xl-lh);  letter-spacing: var(--text-display-xl-ls); }
+.t-display-lg  { font-size: var(--text-display-lg);  line-height: var(--text-display-lg-lh);  letter-spacing: var(--text-display-lg-ls); }
+.t-display-md  { font-size: var(--text-display-md);  line-height: var(--text-display-md-lh);  letter-spacing: var(--text-display-md-ls); }
+.t-display-sm  { font-size: var(--text-display-sm);  line-height: var(--text-display-sm-lh);  letter-spacing: var(--text-display-sm-ls); }
+.t-display-xs  { font-size: var(--text-display-xs);  line-height: var(--text-display-xs-lh);  letter-spacing: var(--text-display-xs-ls); }
+.t-display-2xs { font-size: var(--text-display-2xs); line-height: var(--text-display-2xs-lh); letter-spacing: var(--text-display-2xs-ls); }
+.t-display-3xs { font-size: var(--text-display-3xs); line-height: var(--text-display-3xs-lh); letter-spacing: var(--text-display-3xs-ls); }
+.t-display-4xs { font-size: var(--text-display-4xs); line-height: var(--text-display-4xs-lh); letter-spacing: var(--text-display-4xs-ls); }
+
+/* Display steps up at 1024. The base class carries the 390 size and
+   the `-at-desktop` modifier carries the 1440 one, so every heading
+   states both comped sizes in one place. */
+@media (min-width: 1024px) {
+  .t-display-4xl-at-desktop { font-size: var(--text-display-4xl); line-height: var(--text-display-4xl-lh); letter-spacing: var(--text-display-4xl-ls); }
+  .t-display-3xl-at-desktop { font-size: var(--text-display-3xl); line-height: var(--text-display-3xl-lh); letter-spacing: var(--text-display-3xl-ls); }
+  .t-display-2xl-at-desktop { font-size: var(--text-display-2xl); line-height: var(--text-display-2xl-lh); letter-spacing: var(--text-display-2xl-ls); }
+  .t-display-xl-at-desktop  { font-size: var(--text-display-xl);  line-height: var(--text-display-xl-lh);  letter-spacing: var(--text-display-xl-ls); }
+  .t-display-lg-at-desktop  { font-size: var(--text-display-lg);  line-height: var(--text-display-lg-lh);  letter-spacing: var(--text-display-lg-ls); }
+  .t-display-md-at-desktop  { font-size: var(--text-display-md);  line-height: var(--text-display-md-lh);  letter-spacing: var(--text-display-md-ls); }
+  .t-display-sm-at-desktop  { font-size: var(--text-display-sm);  line-height: var(--text-display-sm-lh);  letter-spacing: var(--text-display-sm-ls); }
+  .t-display-xs-at-desktop  { font-size: var(--text-display-xs);  line-height: var(--text-display-xs-lh);  letter-spacing: var(--text-display-xs-ls); }
+  .t-quote-at-desktop { font-size: var(--text-body-quote); line-height: var(--text-body-quote-lh); }
+}
+
+/* A section that opens on a hairline rather than on whitespace. */
+.section--rule { border-block-start: var(--border-hairline) solid var(--color-border-subtle); }
+
+/* Numerals set in display are always tabular — they are compared. */
+.t-numeral {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-black);
+  font-size: var(--text-display-numeral);
+  line-height: var(--text-display-numeral-lh);
+  letter-spacing: var(--text-display-numeral-ls);
+  font-variant-numeric: tabular-nums;
+}
+.t-numeral-sm { font-size: var(--text-display-numeral-sm); }
+
+/* Body. Never tracked. */
+.t-body-xl  { font-size: var(--text-body-xl);  line-height: var(--text-body-xl-lh); }
+.t-body-lg  { font-size: var(--text-body-lg);  line-height: var(--text-body-lg-lh); }
+.t-body-md  { font-size: var(--text-body-md);  line-height: var(--text-body-md-lh); }
+.t-body-sm  { font-size: var(--text-body-sm);  line-height: var(--text-body-sm-lh); }
+.t-body-xs  { font-size: var(--text-body-xs);  line-height: var(--text-body-xs-lh); }
+.t-body-2xs { font-size: var(--text-body-2xs); line-height: var(--text-body-2xs-lh); }
+
+.t-quote {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-body-quote);
+  line-height: var(--text-body-quote-lh);
+  letter-spacing: var(--text-body-quote-ls);
+}
+
+/* Mono. MEASURED VALUES ONLY — see "Mono as Claim". A number set in
+   mono asserts that someone recorded it. */
+.t-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.t-mono-lg  { font-size: var(--text-mono-lg);  letter-spacing: var(--text-mono-lg-ls); }
+.t-mono-md  { font-size: var(--text-mono-md);  letter-spacing: var(--text-mono-md-ls); }
+.t-mono-sm  { font-size: var(--text-mono-sm);  letter-spacing: var(--text-mono-sm-ls); }
+.t-mono-xs  { font-size: var(--text-mono-xs);  letter-spacing: var(--text-mono-xs-ls); }
+.t-mono-2xs { font-size: var(--text-mono-2xs); letter-spacing: var(--text-mono-2xs-ls); }
+.t-mono-3xs { font-size: var(--text-mono-3xs); letter-spacing: var(--text-mono-3xs-ls); }
+.t-mono-4xs { font-size: var(--text-mono-4xs); letter-spacing: var(--text-mono-4xs-ls); }
+
+.t-medium   { font-weight: var(--font-weight-medium); }
+.t-semibold { font-weight: var(--font-weight-semibold); }
+
+/* Ground-specific greys. Never swapped — the pre-redesign single grey
+   failed WCAG on navy, and correcting it was one of the fixes. */
+.c-primary   { color: var(--color-text-primary); }
+.c-body      { color: var(--color-text-body); }
+.c-muted     { color: var(--color-text-muted); }
+.ground-dark .c-primary { color: var(--color-text-primary-on-ground); }
+.ground-dark .c-body    { color: var(--color-text-body-on-ground); }
+.ground-dark .c-muted   { color: var(--color-text-muted-on-ground); }
+
+.u-upper { text-transform: uppercase; }
+.u-measure { max-inline-size: var(--measure-prose); }
+.u-measure-tight { max-inline-size: var(--measure-prose-tight); }
+
+.u-visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------------------------------------
+   LINKS
+   Teal is never a link colour — that is one of the two generic
+   uses of a brand cyan the design forbids.
+   ------------------------------------------------------------ */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.link-inline {
+  box-shadow: var(--underline-inline);
+  transition: box-shadow var(--duration-quick) var(--ease-out);
+}
+.link-inline:hover { box-shadow: inset 0 -1px 0 var(--color-text-primary); }
+.ground-dark .link-inline { box-shadow: inset 0 -1px 0 var(--color-text-muted-on-ground); }
+.ground-dark .link-inline:hover { box-shadow: inset 0 -1px 0 var(--color-text-primary-on-ground); }
+
+/* ------------------------------------------------------------
+   GROUNDS AND LAYOUT
+   Two grounds max per page: navy and one light surface.
+   ------------------------------------------------------------ */
+.ground-dark {
+  background: var(--color-ground-primary);
+  color: var(--color-text-primary-on-ground);
+}
+.ground-deep {
+  background: var(--color-ground-deep);
+  color: var(--color-text-link-on-ground);
+}
+.ground-sunken { background: var(--color-surface-sunken); }
+
+/* ------------------------------------------------------------
+   ATMOSPHERE  (added 2026-08-04)
+
+   `.ground-stage` is the navy ground with depth: a gradient ramp,
+   a grain overlay, and — where one is mounted — the WebGL canvas
+   from Atmosphere.tsx painting over the gradient.
+
+   The gradient is NOT decoration behind the canvas, it is the
+   fallback. If WebGL is unavailable, the context is lost, or the
+   bundle never runs, the section still reads as a lit navy stage
+   rather than as a black hole. Nothing is layered on the canvas
+   that the gradient cannot stand in for.
+   ------------------------------------------------------------ */
+/* `.section--atmos` is a MODIFIER on .ground-dark, never a ground of
+   its own. That distinction matters: a parallel ground class would
+   have had to restate every `.ground-dark X` rule in the codebase —
+   spec rows, process steps, links, focus rings — and each one missed
+   is dark text on a dark field. This way the stage is a .ground-dark
+   section that swapped its flat fill for a lit one, and inherits the
+   rest untouched. */
+.ground-dark.section--atmos,
+.section--atmos {
+  position: relative;
+  isolation: isolate;
+  background: var(--atmos-stage);
+}
+
+.atmos {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.atmos__canvas {
+  inline-size: 100%;
+  block-size: 100%;
+  display: block;
+}
+.atmos__grain {
+  position: absolute;
+  inset: 0;
+  background-image: var(--atmos-grain-url);
+  opacity: var(--atmos-grain-opacity-dark);
+  mix-blend-mode: overlay;
+}
+
+/* Paper gets the same treatment at a quarter of the strength — just
+   enough that white surfaces have something to sit on. */
+.ground-paper {
+  position: relative;
+  isolation: isolate;
+  background: var(--atmos-paper);
+}
+.ground-paper > .atmos .atmos__grain { opacity: var(--atmos-grain-opacity-light); }
+
+/* ------------------------------------------------------------
+   MATERIAL — translucent chrome. Content scrolls UNDER it.
+   Never stack one translucent surface on another; the second one
+   has nothing left to sample and legibility collapses.
+   ------------------------------------------------------------ */
+.material-paper {
+  background: var(--material-paper-bg);
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+.material-deep {
+  background: var(--material-deep-bg);
+  backdrop-filter: var(--material-blur);
+  -webkit-backdrop-filter: var(--material-blur);
+}
+
+/* ------------------------------------------------------------
+   REVEAL — scroll choreography. See hooks/useReveal.ts.
+
+   The hidden state is armed by a class on <html> that only the
+   hook adds, so no-JS and reduced-motion both paint the final
+   state. Only opacity and transform move; nothing here can shift
+   layout or hide content from a crawler.
+   ------------------------------------------------------------ */
+.reveal-armed [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-rise), 0);
+  transition:
+    opacity var(--reveal-duration) var(--ease-glide),
+    transform var(--reveal-duration) var(--ease-glide);
+  transition-delay: calc(var(--reveal-i, 0) * var(--reveal-step));
+  will-change: opacity, transform;
+}
+.reveal-armed [data-reveal][data-revealed] {
+  opacity: 1;
+  transform: none;
+  /* Once it has arrived, stop advertising it to the compositor. */
+  will-change: auto;
+}
+
+/* --content-max is the CONTENT width; the gutters sit outside it, the
+   way the 1440 canvas is drawn (100px gutters, 1240 content). Past
+   1440 the gutters grow and the content stays put. */
+.wrap {
+  inline-size: 100%;
+  max-inline-size: calc(var(--content-max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+/* Bleed sections take their ground from the section element, which is
+   full width; only the content inside them is capped. */
+.wrap--bleed { max-inline-size: calc(var(--content-max) + var(--gutter) * 2); }
+
+/* Elements that carry both their own ground and their own gutter —
+   they cannot use .wrap, so they reproduce its centring here. */
+.gutter-inline {
+  padding-inline: max(var(--gutter), calc((100% - var(--content-max)) / 2));
+}
+
+/* Section rhythm is drawn from --rhythm-* and is deliberately uneven.
+   A uniform section padding across a page is a regression, so there is
+   no single .section padding class — each section states its own. */
+.section { position: relative; }
+
+.main { display: block; }
+
+/* Sibling groups use flex/grid with gap. No margin-based spacing
+   between siblings anywhere in this codebase. */
+.stack { display: flex; flex-direction: column; }
+.row   { display: flex; align-items: center; }
+
+/* ------------------------------------------------------------
+   SECTION HEAD — kicker + display heading, with an optional
+   trailing note that drops below the heading on mobile.
+   ------------------------------------------------------------ */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+}
+.section-head__kicker {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: var(--space-03);
+}
+/* A short warm bar opening the kicker. Orange as a MARK — the one
+   thing it is allowed to be on paper, where it is 2.1:1 and so can
+   never carry a word. */
+.section-head__kicker::before {
+  content: "";
+  inline-size: 18px;
+  block-size: var(--border-accent);
+  background: var(--color-accent-emphasis-fill);
+  border-radius: 1px;
+  flex: none;
+}
+.ground-dark .section-head__kicker { color: var(--color-text-muted-on-ground); }
+
+.section-head-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-04);
+}
+.section-head-row__note {
+  color: var(--color-text-body);
+  max-inline-size: 38ch;
+}
+.ground-dark .section-head-row__note { color: var(--color-text-body-on-ground); }
+
+@media (min-width: 1024px) {
+  .section-head-row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-10);
+  }
+  .section-head-row__note { padding-block-end: 6px; }
+}
+
+/* ------------------------------------------------------------
+   REDUCED MOTION — author-side half of the token contract.
+   Movement goes; opacity cross-fades and every state-bearing
+   value (progress fills, counters, phase words) stay.
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: var(--duration-quick) !important;
+    scroll-behavior: auto !important;
+  }
+  /* Progress bars report data — they keep their transition. */
+  .loader__fill { transition-duration: var(--duration-instant) !important; }
+}

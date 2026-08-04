@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ready, Set, Knead — QQ house demo</title>
+    <style>
+:root {
+  color-scheme: light;
+  --ink: #161616;
+  --ink-deep: #1d1d1d;
+  --ink-soft: #6f6558;
+  --paper: #fffdf7;
+  --amber: #f5a727;
+  /* End-card palette: a store surface, not a play surface. */
+  --cream: #fdf8ef;
+  --cream-deep: #f4ead8;
+  --amber-ink: #b4740a;
+  --teal-deep: #14606a;
+  --gold: #e2a32b;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f6f1e6;
+  color: var(--ink);
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.phone {
+  width: min(360px, 100%);
+  aspect-ratio: 9 / 16;
+  border-radius: 36px;
+  background: #111;
+  padding: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 26px;
+  overflow: hidden;
+  position: relative;
+  background: var(--amber);
+}
+
+.game {
+  position: absolute;
+  inset: 0;
+  font-family: "Arial Black", Arial, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  overflow: hidden;
+}
+
+.g-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+}
+
+.g-cover-title {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--ink-deep);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.g-cover-sub {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-deep);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.g-sprite {
+  width: 72%;
+  max-width: 250px;
+  pointer-events: none;
+}
+
+.g-btn {
+  font-weight: 800;
+  font-size: 18px;
+  padding: 14px 34px;
+  border-radius: 999px;
+  border: 3px solid var(--ink-deep);
+  background: #fff;
+  color: var(--ink-deep);
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--ink-deep);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  min-height: 52px;
+}
+
+.g-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--ink-deep);
+}
+
+.g-btn-dl {
+  background: var(--ink-deep);
+  color: #fff;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
+}
+
+.g-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 56px 18px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.g-hud .g-count {
+  font-weight: 800;
+  font-size: 30px;
+  color: var(--ink-deep);
+  line-height: 1;
+}
+
+.g-hud .g-time {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink-deep);
+}
+
+.g-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 7px;
+  background: var(--ink-deep);
+  width: 100%;
+  transform-origin: left;
+  z-index: 6;
+}
+
+.g-pop {
+  position: absolute;
+  font-weight: 800;
+  font-size: 26px;
+  color: #fff;
+  -webkit-text-stroke: 1.5px var(--ink-deep);
+  pointer-events: none;
+  animation: gpop 0.6s ease-out forwards;
+  z-index: 8;
+}
+
+.g-toast {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink-deep);
+  color: #fff;
+  font-size: 11.5px;
+  padding: 9px 16px;
+  border-radius: 999px;
+}
+
+/* ---------------------------------------------------------------
+   END CARD — the install screen.
+
+   A calmer surface than the amber play field on purpose: the loop is
+   over, and the card has to read as a store listing rather than as
+   more game. Same reason real end cards drop the HUD.
+   --------------------------------------------------------------- */
+.g-endcard {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 26px 24px;
+  text-align: center;
+  background: linear-gradient(178deg, var(--cream) 0%, var(--cream-deep) 100%);
+  animation: gFade 0.45s ease both;
+}
+
+@keyframes gFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes gRise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.g-app-icon {
+  inline-size: clamp(78px, 24vw, 104px);
+  block-size: clamp(78px, 24vw, 104px);
+  border-radius: clamp(19px, 6vw, 25px);
+  background: linear-gradient(155deg, #ffc768 0%, var(--amber) 100%);
+  box-shadow:
+    0 12px 28px rgba(120, 80, 12, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  animation: gRise 0.55s ease both;
+}
+.g-app-icon img {
+  inline-size: 82%;
+  block-size: 82%;
+  object-fit: contain;
+  /* Inset rather than full-bleed: the sprite is a whole illustration,
+     and letting it run to the tile's edges reads as a cropped photo
+     instead of an app mark. */
+}
+
+.g-app-name {
+  margin: 4px 0 0;
+  font-size: clamp(22px, 7vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--ink-deep);
+  animation: gRise 0.55s ease 0.05s both;
+}
+.g-app-sub {
+  margin: 0;
+  font-size: clamp(10px, 3vw, 12px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  animation: gRise 0.55s ease 0.09s both;
+}
+
+.g-stars {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  animation: gRise 0.55s ease 0.13s both;
+}
+.g-star-row { display: flex; gap: 2px; }
+.g-star { display: flex; color: var(--gold); }
+.g-star svg { inline-size: 14px; block-size: 14px; display: block; }
+
+.g-end-head {
+  margin: 6px 0 0;
+  font-size: clamp(17px, 5.4vw, 23px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ink-deep);
+  animation: gRise 0.55s ease 0.17s both;
+}
+.g-end-head em { font-style: normal; color: var(--amber-ink); }
+.g-end-rank {
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  animation: gRise 0.55s ease 0.21s both;
+}
+
+/* The one CTA. It pulses because an end card's whole job is to be
+   tapped — this is the only animated thing on the card. */
+.g-cta {
+  margin-block-start: 12px;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: clamp(16px, 4.8vw, 20px);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #fff;
+  padding: clamp(15px, 4.4vw, 19px) clamp(44px, 13vw, 58px);
+  border-radius: 40px;
+  background: linear-gradient(180deg, #2f7d86 0%, var(--teal-deep) 100%);
+  box-shadow:
+    0 10px 22px rgba(16, 74, 82, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  animation: gRise 0.55s ease 0.25s both, gPulseCta 2.4s ease-in-out 0.9s infinite;
+}
+.g-cta:active { transform: translateY(1px) scale(0.99); }
+
+@keyframes gPulseCta {
+  0%, 100% {
+    box-shadow:
+      0 10px 22px rgba(16, 74, 82, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+  50% {
+    box-shadow:
+      0 10px 28px rgba(16, 74, 82, 0.5),
+      0 0 0 8px rgba(47, 125, 134, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+}
+
+.g-replay {
+  margin-block-start: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 0;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 20px;
+  animation: gRise 0.55s ease 0.29s both;
+}
+.g-replay svg { inline-size: 14px; block-size: 14px; display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .g-endcard,
+  .g-endcard * { animation: none !important; }
+}
+
+@keyframes gpop {
+  from { transform: translate(-50%, 0) scale(0.6); opacity: 1; }
+  to { transform: translate(-50%, -70px) scale(1.25); opacity: 0; }
+}
+
+    </style>
+    <style>
+      /* Embedded context: this file is mounted inside the site's phone
+         frame, so it fills its viewport and draws no device of its own. */
+      html, body { block-size: 100%; }
+      body { background: #f5a727; }
+      .page { min-block-size: 0; display: block; padding: 0; block-size: 100%; }
+      .phone {
+        inline-size: 100%;
+        block-size: 100%;
+        aspect-ratio: auto;
+        border-radius: 0;
+        background: none;
+        padding: 0;
+        box-shadow: none;
+      }
+      .phone-screen { border-radius: 0; }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="phone">
+        <div id="hero-demo" class="phone-screen"></div>
+      </div>
+    </main>
+    <script>
+(function () {
+  "use strict";
+
+  const ASSETS = {
+    idle: "/assets/qq/qq-idle.png",
+    knead: "/assets/qq/qq-knead.png",
+    finish: "/assets/qq/qq-finish.png"
+  };
+
+  function el(tag, cls, html) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+
+  function showToast(root, msg) {
+    const t = el("div", "g-toast", msg);
+    root.appendChild(t);
+    setTimeout(function () {
+      t.remove();
+    }, 2500);
+  }
+
+  function initHeroTapGame(container) {
+    if (!container) return null;
+
+    const DURATION = 10;
+    const root = el("div", "game");
+    root.style.background = "#f5a727";
+    container.innerHTML = "";
+    container.appendChild(root);
+
+    const timers = [];
+    function later(fn, ms) {
+      timers.push(setTimeout(fn, ms));
+    }
+    function clearTimers() {
+      timers.forEach(clearTimeout);
+      while (timers.length) timers.pop();
+    }
+
+    function cover() {
+      root.innerHTML = "";
+      const s = el("div", "g-screen");
+      s.appendChild(el("div", "g-cover-sub", "QQ Advertisement presents"));
+      s.appendChild(el("div", "g-cover-title", "READY, SET,<br>KNEAD!"));
+      const img = el("img", "g-sprite");
+      img.src = ASSETS.idle;
+      img.alt = "QQ quokka ready to knead";
+      s.appendChild(img);
+      const btn = el("button", "g-btn", "▶&nbsp; PLAY");
+      btn.addEventListener("click", play);
+      s.appendChild(btn);
+      s.appendChild(el("div", "g-cover-sub", "Knead as much dough as you can in " + DURATION + "s"));
+      root.appendChild(s);
+    }
+
+    function play() {
+      root.innerHTML = "";
+      clearTimers();
+      let count = 0;
+      let left = DURATION;
+      const bar = el("div", "g-bar");
+      root.appendChild(bar);
+
+      const hud = el("div", "g-hud");
+      const countEl = el("div", "g-count", "0");
+      const timeEl = el("div", "g-time", left.toFixed(1) + "s");
+      hud.appendChild(countEl);
+      hud.appendChild(timeEl);
+      root.appendChild(hud);
+
+      const s = el("div", "g-screen");
+      s.style.cursor = "pointer";
+      const img = el("img", "g-sprite");
+      img.src = ASSETS.idle;
+      img.alt = "QQ quokka kneading dough";
+      img.style.maxWidth = "300px";
+      img.style.width = "88%";
+      img.style.transition = "transform 0.08s ease";
+      s.appendChild(img);
+      const hint = el("div", "g-cover-sub", "TAP! TAP! TAP!");
+      s.appendChild(hint);
+      root.appendChild(s);
+
+      let revert = null;
+      let ended = false;
+
+      function onTap(e) {
+        if (ended) return;
+        count += 1;
+        countEl.textContent = String(count);
+        img.src = ASSETS.knead;
+        img.style.transform = "scale(1.12)";
+        if (revert) clearTimeout(revert);
+        revert = setTimeout(function () {
+          img.src = ASSETS.idle;
+          img.style.transform = "scale(1)";
+        }, 130);
+        timers.push(revert);
+
+        const rect = root.getBoundingClientRect();
+        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        const pop = el("div", "g-pop", count % 7 === 0 ? "BAM!" : "+1");
+        pop.style.left = x + "px";
+        pop.style.top = y - 20 + "px";
+        root.appendChild(pop);
+        later(function () {
+          pop.remove();
+        }, 650);
+        if (hint.parentNode) hint.remove();
+      }
+
+      s.addEventListener("pointerdown", onTap);
+
+      const start = performance.now();
+      function tick() {
+        if (ended) return;
+        const elapsed = (performance.now() - start) / 1000;
+        left = Math.max(0, DURATION - elapsed);
+        timeEl.textContent = left.toFixed(1) + "s";
+        bar.style.transform = "scaleX(" + left / DURATION + ")";
+        if (left <= 0) {
+          ended = true;
+          end(count);
+          return;
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* The end card is the install screen, not a score screen.
+
+       This is the beat a UA manager is actually buying: the player has
+       finished the loop and is being asked to install. So it is built
+       the way a shipped end card is built — icon, name, category,
+       rating, one reason to tap, one CTA — with the score folded into
+       the headline rather than given a screen of its own.
+
+       Nothing here claims a real product. The app being advertised is
+       this demo, and the CTA says so when tapped. */
+    function end(count) {
+      root.innerHTML = "";
+      const strong = count >= 25;
+      const card = el("div", "g-endcard");
+
+      const icon = el("div", "g-app-icon");
+      const img = el("img", null, null);
+      img.src = ASSETS.finish;
+      img.alt = "";
+      icon.appendChild(img);
+      card.appendChild(icon);
+
+      card.appendChild(el("h2", "g-app-name", "Ready, Set, Knead!"));
+      card.appendChild(el("p", "g-app-sub", "Arcade &middot; Casual"));
+
+      const stars = el("div", "g-stars");
+      const row = el("span", "g-star-row");
+      for (let i = 0; i < 5; i += 1) {
+        row.appendChild(
+          el(
+            "span",
+            "g-star",
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3-5.8 3 1.1-6.5L2.6 9.4l6.5-.9z" fill="currentColor"/></svg>'
+          )
+        );
+      }
+      stars.appendChild(row);
+      stars.appendChild(el("span", "g-star-score", "4.9"));
+      card.appendChild(stars);
+
+      // The score is the hook, so it goes in the headline.
+      card.appendChild(
+        el(
+          "p",
+          "g-end-head",
+          "You kneaded <em>" + count + "</em> " + (count === 1 ? "loaf" : "loaves")
+        )
+      );
+      card.appendChild(
+        el("p", "g-end-rank", strong ? "DOUGH MASTER &middot; TOP TIER" : "NICE KNEADING &middot; NOT BAD")
+      );
+
+      const dl = el("button", "g-cta", "Get it free");
+      dl.addEventListener("click", function () {
+        showToast(root, "↗ In a live ad, this opens the App Store");
+      });
+      card.appendChild(dl);
+
+      const rp = el(
+        "button",
+        "g-replay",
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1M3.5 4v4.4H8" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Replay'
+      );
+      rp.addEventListener("click", cover);
+      card.appendChild(rp);
+
+      root.appendChild(card);
+    }
+
+    cover();
+    return {
+      destroy: function () {
+        clearTimers();
+        root.remove();
+      }
+    };
+  }
+
+  window.initHeroTapGame = initHeroTapGame;
+})();
+
+    </script>
+    <script>
+      window.initHeroTapGame(document.getElementById("hero-demo"));
+    </script>
+  </body>
+</html>

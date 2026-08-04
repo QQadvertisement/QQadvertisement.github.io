@@ -1,406 +1,371 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
-import PlayablePhone, { type GameId } from "../components/PlayablePhone";
-import { BOOKING_URL } from "../lib/site";
+import Atmosphere from "../components/Atmosphere";
+import ContactForm from "../components/ContactForm";
+import DemoCard, { NdaCard } from "../components/DemoCard";
+import Faq from "../components/ui/Faq";
+import PlayableFrame from "../components/PlayableFrame";
+import {
+  ForkCard,
+  GuaranteeBlock,
+  NetworkWall,
+  ProcessSteps,
+  RuleGrid,
+  Section,
+} from "../components/blocks";
+import { SpecList, SpecRow } from "../components/ui/Spec";
+import { usePlayable } from "../hooks/usePlayable";
+import useScrollProgress from "../hooks/useScrollProgress";
+import { buildVolumeOptions, claims, faqs, networks } from "../data/site";
+import { demos, mb } from "../data/demos";
+import { measurements } from "../data/measurements.generated";
+import { KNEAD_URL } from "../data/playables";
 
-/* ── Hero ──────────────────────────────────────────────────── */
-function QQHero() {
-  return (
-    <header className="hero" id="top">
-      <div className="wrap hero-grid">
-        <div className="hero-copy">
-          <div className="eyebrow">Playable ads · designed + coded by one engineer</div>
-          <div className="hero-qq" aria-label="QQ">
-            <span className="q1">Q</span><span className="q2">Q</span>
-          </div>
-          <h1 className="h-xl hero-headline">
-            Playable ads that pre-qualify the install before the CPI hits.
-          </h1>
-          <p className="body-lg hero-sub muted">
-            We design and code custom HTML5 playables for consumer apps and games — players run your core loop on Meta and TikTok before they ever tap Download, so the installs you're buying already know what they're getting.
-          </p>
-          <div className="cta-row">
-            <a className="btn btn-primary" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call</a>
-            <a className="btn btn-ghost" href="#pricing">See the package</a>
-          </div>
-          <p className="hero-micro">Custom HTML5 playables for Meta &amp; TikTok · built in days, not weeks</p>
-        </div>
-        <div className="hero-stage">
-          <div className="try-tag">← it's real, tap it</div>
-          <PlayablePhone game="knead" />
-          <img
-            className="hero-mascot"
-            src="/assets/qq/qq-hero.png"
-            alt="QQ the quokka jumping"
-          />
-        </div>
-      </div>
-    </header>
-  );
-}
+const whatWeBuild = [
+  { title: "Playable ads", body: "Portrait and landscape from one build, network-conditional at runtime." },
+  { title: "Interactive end cards", body: "Video-to-playable handoff without a second load or a white flash." },
+  { title: "Variant sets", body: "Hook, tutorial and end-card splits, built as one file with flags." },
+  { title: "Localisation", body: "Copy, layout and font swaps per market at the same file weight." },
+];
 
-/* ── Pitch ─────────────────────────────────────────────────── */
-function QQPitch() {
-  return (
-    <section className="pitch">
-      <div className="wrap">
-        <div className="eyebrow" style={{ color: "inherit" }}>01 — Why playables</div>
-        <p className="statement" style={{ marginTop: 18 }}>
-          Video gets watched. Playables get <em>played</em>. When someone hits Download after thirty seconds inside your core loop, they already know what they're installing —{" "}
-          <span className="hl-amber">that install was pre-qualified before the CPI was charged.</span>
-        </p>
-        <div className="pitch-row">
-          <span>HIGHER-INTENT INSTALLS</span>
-          <span>IPM CEILINGS STATIC CAN'T TOUCH</span>
-          <span>RETENTION CURVES THAT START HONEST</span>
-        </div>
-        <p style={{ marginTop: 26 }}>
-          <Link className="link-arrow" to="/playable-ads-explained" style={{ color: "inherit" }}>
-            New to the format? Playable ads, explained →
-          </Link>
-        </p>
-      </div>
-    </section>
-  );
-}
-
-/* ── Work ──────────────────────────────────────────────────── */
-function QQWork({ onPlay }: { onPlay: (game: GameId) => void }) {
-  return (
-    <section id="work">
-      <div className="wrap">
-        <div className="sec-head reveal">
-          <div className="eyebrow">02 — Sample game & Our Clients</div>
-          <h2 className="h-lg">Sample games</h2>
-          <p className="body-lg muted">
-            These are craft samples — playables we designed and coded end-to-end. Open one, finish the loop, hit the fake Download. Then picture your app in the frame.
-          </p>
-        </div>
-        <div className="work-grid sample-game-grid">
-          <article className="work-card reveal">
-            <a
-              href="https://jenkaiwang.github.io/QQStudio-Game-Sample/"
-              target="_blank"
-              rel="noreferrer"
-              className="work-thumb"
-              style={{ background: "#1a1208", border: "none", textDecoration: "none", padding: 0 }}
-              aria-label="Play Flappy Ramen"
-            >
-              <img src="/assets/demo-card/flappyRamen.webp" alt="Flappy Ramen playable — a ramen bowl flapping between chopstick gaps" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <span className="play-hint"><span>▶ PLAY IT</span></span>
-            </a>
-            <div className="work-meta">
-              <div className="work-tags">
-                <span className="tag">2D · HTML5</span>
-                <span className="tag">tap-to-flap</span>
-              </div>
-              <h3>Flappy Ramen</h3>
-              <p className="muted" style={{ fontSize: 15 }}>
-                One-tap arcade loop — keep the ramen bowl airborne through the gaps and chase a high score. Tight game feel, instant restart, end-card CTA. Built by Kevin (game developer).
-              </p>
-              <a href="https://jenkaiwang.github.io/QQStudio-Game-Sample/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
-            </div>
-          </article>
-
-          <article className="work-card reveal">
-            <a
-              href="https://jenkaiwang.github.io/QQStudio-Game-3D-Sample/"
-              target="_blank"
-              rel="noreferrer"
-              className="work-thumb"
-              style={{ background: "#0a3a6b", border: "none", textDecoration: "none", padding: 0 }}
-              aria-label="Play Endless Runner"
-            >
-              <img src="/assets/demo-card/3Drunner.webp" alt="3D endless runner playable — character sprinting down a neon track dodging obstacles and grabbing rings" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <span className="play-hint"><span>▶ PLAY IT</span></span>
-            </a>
-            <div className="work-meta">
-              <div className="work-tags">
-                <span className="tag">3D · WebGL</span>
-                <span className="tag">endless runner</span>
-              </div>
-              <h3>Endless Runner</h3>
-              <p className="muted" style={{ fontSize: 15 }}>
-                Subway Surfers–style lane runner in 3D — swipe to dodge obstacles, grab rings, and outrun the track. Real-time WebGL right in the ad frame. Built by Kevin (game developer).
-              </p>
-              <a href="https://jenkaiwang.github.io/QQStudio-Game-3D-Sample/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
-            </div>
-          </article>
-        </div>
-        <div className="sec-head reveal" style={{ marginTop: 56 }}>
-          <h2 className="h-lg">Our Clients</h2>
-        </div>
-        <div className="work-grid customer-grid">
-          <article className="work-card reveal">
-            <a
-              href="https://qqadvertisement.com/PL01FR1N3DR4M3NCH/"
-              target="_blank"
-              rel="noreferrer"
-              className="work-thumb"
-              style={{ background: "#f5a727", border: "none", textDecoration: "none", padding: 0 }}
-              aria-label="Play Ramen Slurping Challenge"
-            >
-              <img src="/assets/demo-card/ramen-slurping-challenge.jpg" alt="Ramen Slurping Challenge playable poster" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <span className="play-hint"><span>▶ PLAY IT</span></span>
-            </a>
-            <div className="work-meta">
-              <div className="work-tags">
-                <span className="tag">Friends Ramen</span>
-                <span className="tag">gamified survey · 10s</span>
-              </div>
-              <h3>Ramen Slurping Challenge</h3>
-              <p className="muted" style={{ fontSize: 15 }}>
-                Take a quick break, play the Friends Ramen mini game. Challenge your crew for the top score and earn rewards.{" "}
-                <Link to="/case-studies/friends-ramen">Read the case study →</Link>
-              </p>
-              <a href="https://qqadvertisement.com/PL01FR1N3DR4M3NCH/" target="_blank" rel="noreferrer" className="btn btn-ghost">▶&nbsp;Play it</a>
-            </div>
-          </article>
-
-          <article className="work-card reveal">
-            <button
-              type="button"
-              onClick={() => onPlay("atta")}
-              className="work-thumb"
-              style={{ background: "#ECE3D2", border: "none", textDecoration: "none", padding: 0, cursor: "pointer" }}
-              aria-label="Play Sync Your Day for Atta"
-            >
-              <img src="/assets/casestudies/atta-sync-your-day.jpg" alt="Sync Your Day playable ad for Atta — 'Turn your cycle into a superpower' intro screen" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <span className="play-hint"><span>▶ PLAY IT</span></span>
-            </button>
-            <div className="work-meta">
-              <div className="work-tags">
-                <span className="tag">Atta</span>
-                <span className="tag">personalized quiz</span>
-              </div>
-              <h3>Sync Your Day</h3>
-              <p className="muted" style={{ fontSize: 15 }}>
-                A personalized quiz playable for Atta's women's health assistant — match your day to your cycle phase, then land on the App Store.{" "}
-                <Link to="/case-studies/atta">Read the case study →</Link>
-              </p>
-              <button type="button" onClick={() => onPlay("atta")} className="btn btn-ghost">▶&nbsp;Play it</button>
-            </div>
-          </article>
-        </div>
-        <p className="body-lg" style={{ marginTop: 32 }}>
-          <Link className="link-arrow" to="/our-work">See all projects →</Link>
-        </p>
-      </div>
-    </section>
-  );
-}
-
-/* ── Process ───────────────────────────────────────────────── */
-function QQProcess() {
-  return (
-    <section id="process">
-      <div className="wrap">
-        <div className="sec-head reveal">
-          <div className="eyebrow">03 — How it works</div>
-          <h2 className="h-lg">Call. Build. Test.</h2>
-        </div>
-        <div className="steps">
-          <div className="step reveal">
-            <div className="num"><b>01</b>THE CALL</div>
-            <h3>30 minutes on your app</h3>
-            <p>Core loop, UA goals, what your current creative mix is doing on Meta and TikTok. You bring the store listing; we bring questions.</p>
-          </div>
-          <div className="step reveal">
-            <div className="num"><b>02</b>THE BUILD</div>
-            <h3>A custom playable, in days</h3>
-            <p>We design and code the playable around the one mechanic that sells your app. You get a testable build, not a storyboard deck — and revisions happen in hours because the team is three people in one room, not three vendors on a thread.</p>
-          </div>
-          <div className="step reveal">
-            <div className="num"><b>03</b>THE TEST</div>
-            <h3>Drop it into Ads Manager</h3>
-            <p>Single-file HTML5, sized to Meta and TikTok playable specs, CTA wired to your store links. Run it against your control and read the IPM and CPI yourself.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Why QQ ────────────────────────────────────────────────── */
-function QQWhy() {
-  return (
-    <section className="why">
-      <div className="wrap why-grid">
-        <div className="reveal">
-          <div className="eyebrow">04 — Why QQ</div>
-          <h2 className="h-lg" style={{ marginTop: 12 }}>
-            A playable is three jobs.<br />We have a specialist for each.
-          </h2>
-          <ul className="why-points">
-            <li><span><b>Game development.</b> Kevin builds in Unreal and UEFN. A playable has to feel like a game within ten seconds — that's a craft, not a checkbox on a creative brief.</span></li>
-            <li><span><b>Engineering.</b> Timo ships production code — Meta AI, Mercor, Snorkel AI. Single-file HTML5, inside Meta and TikTok specs, CTA wired right the first time.</span></li>
-            <li><span><b>Growth marketing.</b> Ploy does growth at a high-growth startup. Your playable gets judged on IPM and CPI, so it gets built by someone who reads those numbers for a living.</span></li>
-            <li><span><b>Still three people.</b> Days, not the multi-week agency cycle — and no account managers in the invoice. You talk to the people who build it, every time.</span></li>
-          </ul>
-          <p style={{ marginTop: 24 }}>
-            <Link className="link-arrow" to="/about">Learn more about QQ →</Link>
-          </p>
-        </div>
-        <figure className="why-card reveal">
-          <img src="/assets/qq/qq-sawasdee.png" alt="QQ the quokka saying hello" />
-          <figcaption>QQ — studio quokka, QA department, and morale officer.</figcaption>
-        </figure>
-      </div>
-    </section>
-  );
-}
-
-/* ── Pricing ───────────────────────────────────────────────── */
-function QQPricing() {
-  return (
-    <section id="pricing">
-      <div className="wrap">
-        <div className="sec-head reveal">
-          <div className="eyebrow">05 — Pricing</div>
-          <h2 className="h-lg">One package. No retainer theater.</h2>
-        </div>
-        <div className="price-card reveal">
-          <div>
-            <div className="eyebrow">The Playable Build</div>
-            <div style={{ marginTop: 14 }}>
-              <div className="price-num" style={{ display: "inline-block" }}>$2,500</div>
-              <span className="mono-note" style={{ marginLeft: 10 }}>flat, per playable</span>
-            </div>
-            <ul className="price-list" style={{ marginTop: 26 }}>
-              <li>Concept, character art, and code — custom to your app</li>
-              <li>Single-file HTML5 export, within Meta &amp; TikTok size caps</li>
-              <li>Two revision rounds on game feel and end card</li>
-              <li>CTA wired to your store links, ready for Ads Manager</li>
-              <li>Delivered in days — one build slot at a time</li>
-            </ul>
-          </div>
-          <div className="price-cta">
-            <a className="btn btn-accent" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call →</a>
-            <span className="mono-note">Free 30-minute call. Not sure a playable fits your funnel? We'll tell you honestly.</span>
-            <a className="btn btn-ghost" href="mailto:hello@qqadvertisement.com?subject=Playable%20build%20inquiry">Email the studio</a>
-            <span className="mono-note">Prefer writing it out? Send your app link and we'll reply with a concept sketch.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Final CTA ─────────────────────────────────────────────── */
-function QQFinal() {
-  return (
-    <section className="final" id="final">
-      <div className="wrap final-inner">
-        <div className="reveal">
-          <div className="eyebrow" style={{ color: "inherit" }}>06 — Start</div>
-          <h2 className="h-lg" style={{ marginTop: 12 }}>
-            Got a core loop?<br />Let's make it the ad.
-          </h2>
-          <p className="body-lg" style={{ opacity: 0.75, marginTop: 16, maxWidth: "30em" }}>
-            One call, one build, one test cell in your next creative round. If it doesn't beat your control, you'll know in a week — not a quarter.
-          </p>
-          <div className="cta-row" style={{ marginTop: 28 }}>
-            <a className="btn btn-accent" href={BOOKING_URL} target="_blank" rel="noreferrer">Book a call</a>
-            <a className="btn btn-ghost" href="#pricing">See the package</a>
-          </div>
-        </div>
-        <img
-          className="final-mascot reveal"
-          src="/assets/qq/qq-sit.png"
-          alt="QQ the quokka sitting with a game controller"
-        />
-      </div>
-    </section>
-  );
-}
-
-/* ── Playable Overlay ──────────────────────────────────────── */
-function PlayableOverlay({
-  game,
-  onClose,
-}: {
-  game: GameId | null;
-  onClose: () => void;
-}) {
-  useEffect(() => {
-    if (!game) return;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [game, onClose]);
-
-  if (!game) return null;
-
-  return (
-    <div
-      className="overlay open"
-      role="dialog"
-      aria-modal
-      aria-label="Playable demo"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div className="overlay-box">
-        <button className="overlay-close" onClick={onClose} aria-label="Close demo">✕</button>
-        <PlayablePhone game={game} />
-      </div>
-    </div>
-  );
-}
-
-/* ── Scroll Reveal ─────────────────────────────────────────── */
-function useScrollReveal() {
-  useEffect(() => {
-    const nodes = document.querySelectorAll<HTMLElement>(".reveal");
-    let ioFired = false;
-    const io = new IntersectionObserver(
-      (entries) => {
-        ioFired = true;
-        entries.forEach((en) => {
-          if (en.isIntersecting) {
-            en.target.classList.add("in");
-            io.unobserve(en.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    nodes.forEach((n) => io.observe(n));
-    const fallback = setTimeout(() => {
-      if (!ioFired) nodes.forEach((n) => n.classList.add("in"));
-    }, 600);
-    return () => { io.disconnect(); clearTimeout(fallback); };
-  }, []);
-}
-
-/* ── Page ──────────────────────────────────────────────────── */
+/**
+ * / — the homepage.
+ *
+ * Section rhythm here is deliberately uneven and must stay that way:
+ * normalising these to one value is a regression against the design.
+ *
+ * The mobile hero order INVERTS — the playable sits above the headline.
+ * That is the single most important mobile decision in the project: it
+ * puts the tap target inside thumb reach with no scroll, on a page
+ * whose entire proposition is "play it".
+ *
+ * Teal census for this page: 3.
+ *   1. hero phone play button (with the loader rule and focus ring on
+ *      the same playable surface)
+ *   2. the one `play` demo card's button
+ *   3. the live readouts on the hero's measured panel
+ * The nav CTA, "See all demos", the TEARDOWN → card and the form
+ * submit are all neutral. They lead to a playable; they are not one.
+ *
+ * The stage's shader bloom (Atmosphere.tsx) is NOT a fourth region:
+ * it is held below the amplitude at which it reads as a coloured
+ * area rather than as light. See that file's header before raising
+ * tealGain.
+ */
 export default function Home() {
-  const [activeGame, setActiveGame] = useState<GameId | null>(null);
-  useScrollReveal();
+  /* The hero runs the house demo, so the hero measures the house demo.
+     The loader fetches the same file the frame is about to run. */
+  const knead = measurements.knead;
+  const playable = usePlayable({ assetUrl: KNEAD_URL, fallbackBytes: knead.bytes });
+  const { ref: scrollerRef, width, offset } = useScrollProgress();
 
   return (
-    <>
+    <main className="main">
       <Seo
         title="Playable Ads for Mobile App User Acquisition | QQ Advertisement"
-        description="Custom HTML5 playable ads for Meta & TikTok, designed and coded by one engineer. Players run your app's core loop before they tap Download — pre-qualifying every install."
+        description="Custom HTML5 playable ads for Meta, TikTok, AppLovin, Unity, ironSource and Mintegral. We design and code the ad, not a template — and every number on a demo page is read off the shipped file."
         path="/"
       />
 
-      <main>
-        <QQHero />
-        <QQPitch />
-        <QQWork onPlay={setActiveGame} />
-        <QQProcess />
-        <QQWhy />
-        <QQPricing />
-        <QQFinal />
-      </main>
+      {/* 1 · Hero — the navy stage */}
+      <Section
+        bleed
+        ground="dark"
+        className="hero-stage section--atmos"
+        padBlock={[20, 72]}
+        labelledBy="hero-title"
+        atmosphere={
+          <Atmosphere
+            bloomX={0.74}
+            bloomY={0.46}
+            tealGain={0.1}
+            warmX={0.1}
+            warmY={0.72}
+            warmGain={0.24}
+          />
+        }
+      >
+        <div className="hero">
+          <p className="hero__kicker" data-reveal>
+            Custom HTML5 playables · New York
+          </p>
 
-      <PlayableOverlay game={activeGame} onClose={() => setActiveGame(null)} />
-    </>
+          <div className="hero__playable" data-reveal style={{ ["--reveal-i" as string]: 1 }}>
+            <div className="hero__phone-abs">
+              <PlayableFrame
+                playable={playable}
+                game="knead"
+                buildName="READY, SET, KNEAD"
+                ariaBuildName="Ready, Set, Knead"
+              />
+
+              {/* The comp floats these measurements on a navy card
+                  overlapping the text column. In this build that card
+                  landed on top of the network table and hid it, so the
+                  claim stays and the collision goes: the strip sits
+                  under the phone, at every width, aligned to the frame
+                  it describes.
+
+                  "Aligned to the frame it describes" is the whole rule
+                  here. These numbers are the HOUSE DEMO's, because the
+                  house demo is what is playing above them. Printing the
+                  Atta unit's 25.5 KB under a frame running something
+                  else would be the same lie in a nicer typeface — the
+                  client build's numbers live on its own card and its
+                  teardown, where that build is the thing on screen.
+
+                  Weight is the total: document plus the sprites it
+                  pulls. The document alone is 9 KB and quoting that
+                  would be flattery. */}
+              <div className="hero__measured">
+                <p className="hero__measured-label">Measured, not claimed</p>
+                <dl className="hero__phone-stats">
+                  <div className="hero__phone-stat">
+                    <dt>Weight</dt>
+                    <dd>{mb(knead.totalBytes)}</dd>
+                  </div>
+                  <div className="hero__phone-stat">
+                    <dt>Sprites</dt>
+                    <dd>{mb(knead.assetBytes)}</dd>
+                  </div>
+                  <div className="hero__phone-stat">
+                    <dt>Requests</dt>
+                    <dd>{knead.requests}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+          <div className="hero__text">
+            <h1
+              id="hero-title"
+              className="hero__title t-display t-display-sm t-display-3xl-at-desktop"
+              data-reveal
+              style={{ ["--reveal-i" as string]: 1 }}
+            >
+              Playables that survive the first eight seconds.
+            </h1>
+            <p
+              className="hero__lede t-body-md t-body-lg-at-desktop"
+              style={{ maxInlineSize: "41ch", ["--reveal-i" as string]: 2 }}
+              data-reveal
+            >
+              We design and code the ad, not a template. Every build ships under 2&nbsp;MB,
+              interactive inside the first second, and QA'd against each network's spec before it
+              leaves.
+            </p>
+            <div
+              className="hero__actions btn-pair"
+              data-reveal
+              style={{ ["--reveal-i" as string]: 3 }}
+            >
+              <Link className="btn btn--on-ground btn--xl" to="/demos">
+                See all demos{" "}
+                <span className="btn__arrow" aria-hidden="true">
+                  →
+                </span>
+              </Link>
+              <span className="t-body-xs c-body">
+                or{" "}
+                <a className="link-inline" href="#contact">
+                  send us the build
+                </a>
+              </span>
+            </div>
+
+            <div className="hero__specs" data-reveal style={{ ["--reveal-i" as string]: 4 }}>
+              <h2 className="spec-group__head">Shipped and QA'd against</h2>
+              <SpecList density="compact">
+                {networks.slice(0, 5).map((n) => (
+                  <SpecRow key={n.id} label={n.name} value={n.spec} />
+                ))}
+              </SpecList>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* 2 · Network wall — full bleed */}
+      <NetworkWall />
+
+      {/* 3 · Gallery — the cards run off the right edge on purpose */}
+      <Section bleed padBlock={[68, 22]} labelledBy="gallery-head">
+        <div className="section-head-row" data-reveal>
+          <div className="section-head">
+            <p className="section-head__kicker t-mono t-mono-xs">
+              Selected builds · {String(demos.length).padStart(2, "0")}
+            </p>
+            <h2 id="gallery-head" className="t-display t-display-2xs t-display-xl-at-desktop">
+              Play them. They're the real files.
+            </h2>
+          </div>
+          <p className="section-head-row__note t-body-sm" style={{ maxInlineSize: "34ch" }}>
+            Not video captures. The same HTML that ran on the network, weight and timing included.
+          </p>
+        </div>
+      </Section>
+
+      {/* The reveal sits on the scroller's wrapper, not on each card:
+          the cards live on a horizontal axis, so staggering them would
+          animate the off-screen ones where nobody sees it and leave
+          the first one arriving alone. */}
+      <div style={{ paddingBlockEnd: 72 }} data-reveal>
+        <div className="scroller" ref={scrollerRef}>
+          {demos.map((d) => (
+            <DemoCard key={d.slug} demo={d} />
+          ))}
+          <NdaCard />
+        </div>
+        <div className="scroll-progress">
+          <span className="t-mono t-mono-2xs c-muted u-upper">
+            Swipe · {String(demos.length).padStart(2, "0")} builds
+          </span>
+          <span className="scroll-progress__track">
+            <span
+              className="scroll-progress__thumb"
+              style={{ inlineSize: `${width}%`, transform: `translateX(${offset}%)` }}
+            />
+          </span>
+        </div>
+      </div>
+
+      {/* 4 · The fork — both cards must be co-visible without scrolling */}
+      <Section padBlock={[0, 64]} labelledBy="fork-head">
+        <h2 id="fork-head" className="u-visually-hidden">
+          Who we work with
+        </h2>
+        <div className="fork" data-reveal>
+          <ForkCard
+            kicker="01 · You make the game"
+            title="I'm a game studio"
+            body="We read your core loop and build a playable that keeps the mechanic honest — not a mini-game wearing your art."
+            action="For Studios"
+            to="/for-studios"
+          />
+          <ForkCard
+            kicker="02 · You buy the media"
+            title="I'm a UA agency"
+            body="Concurrent titles, 48-hour variant turns, delivered under your brand. We stay invisible to your client."
+            action="For Agencies"
+            to="/for-agencies"
+          />
+        </div>
+      </Section>
+
+      {/* 5 · What we build */}
+      <Section id="what-we-build" padBlock={[0, 60]} labelledBy="build-head">
+        <div className="section-head-row" style={{ marginBlockEnd: 24 }} data-reveal>
+          <h2 id="build-head" className="t-display t-display-2xs t-display-xl-at-desktop">
+            What we build
+          </h2>
+          <p className="section-head-row__note t-mono t-mono-xs c-muted u-upper">
+            Four formats · one codebase
+          </p>
+        </div>
+        <div data-reveal style={{ ["--reveal-i" as string]: 1 }}>
+          <RuleGrid items={whatWeBuild} />
+        </div>
+      </Section>
+
+      {/* 6 · Process — navy stage, full bleed */}
+      <Section
+        id="process"
+        ground="dark"
+        bleed
+        className="section--atmos"
+        padBlock={[64, 64]}
+        labelledBy="process-head"
+      >
+        <div className="section-head-row" style={{ marginBlockEnd: 26 }} data-reveal>
+          <h2 id="process-head" className="t-display t-display-2xs t-display-xl-at-desktop c-primary">
+            {claims.processTitle}
+          </h2>
+          <p className="section-head-row__note t-mono t-mono-xs c-muted u-upper">
+            Durations are commitments
+          </p>
+        </div>
+        <div data-reveal style={{ ["--reveal-i" as string]: 1 }}>
+          <ProcessSteps steps={claims.process} />
+        </div>
+      </Section>
+
+      {/* 7 · How we work */}
+      <Section padBlock={[60, 64]} labelledBy="how-head">
+        <div className="offset offset--prose" data-reveal>
+          <h2 id="how-head" className="offset__label">
+            How we work
+          </h2>
+          <div className="offset__body">
+            <p className="t-quote t-quote-at-desktop" style={{ fontSize: 21, marginBlockEnd: 18 }}>
+              One thread, one build owner, and the source files at the end of it. No account layer
+              between you and the person writing the code.
+            </p>
+            <p className="t-body-md c-body" style={{ lineHeight: 1.65 }}>
+              Weekly builds land in your inbox as a link, not a zip. Feedback goes in one thread and
+              gets versioned. When the campaign ends you keep the repository, the sprites and the
+              spec sheet — including the parts that didn't win, so the next studio you hire doesn't
+              retest them.
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* 8 · Guarantee — the panel overlaps the navy band above it */}
+      <GuaranteeBlock />
+
+      {/* 9 · FAQ */}
+      <Section id="faq" padBlock={[44, 64]} labelledBy="faq-head">
+        <div style={{ maxInlineSize: 820, marginInline: "auto" }}>
+          <h2
+            id="faq-head"
+            className="t-display t-display-2xs t-display-xl-at-desktop"
+            style={{ marginBlockEnd: 24 }}
+            data-reveal
+          >
+            Questions we get weekly
+          </h2>
+          <div data-reveal style={{ ["--reveal-i" as string]: 1 }}>
+            <Faq items={faqs} defaultOpen={0} />
+          </div>
+        </div>
+      </Section>
+
+      {/* 10 · Contact */}
+      <Section id="contact" padBlock={[56, 64]} labelledBy="contact-head" className="section--rule">
+        <div className="split split--wide-gap" style={{ ["--side" as string]: "560px" }} data-reveal>
+          <div className="split__main">
+            <h2
+              id="contact-head"
+              className="t-display t-display-2xs t-display-lg-at-desktop"
+              style={{ marginBlockEnd: 16 }}
+            >
+              <span style={{ display: "block" }}>Send us the build.</span>
+              <span style={{ display: "block" }}>We'll send back a plan.</span>
+            </h2>
+            <p className="t-body-md c-body" style={{ maxInlineSize: "42ch", marginBlockEnd: 28 }}>
+              Tell us the title, the networks and the volume. We reply within one business day with
+              a mechanic recommendation and a date.
+            </p>
+            <div style={{ maxInlineSize: 340 }}>
+              <SpecList density="compact" variant="top-ruled">
+                {claims.replyRows.map((r) => (
+                  <SpecRow key={r.label} label={r.label} value={r.value} />
+                ))}
+              </SpecList>
+            </div>
+          </div>
+          <div className="split__side">
+            <ContactForm
+              volumeLabel="Monthly build volume"
+              volumeOptions={buildVolumeOptions}
+              detailLabel="What are you running now?"
+              detailPlaceholder="Store link or a build we can play is enough."
+              submitLabel="Send brief"
+            />
+          </div>
+        </div>
+      </Section>
+    </main>
   );
 }
