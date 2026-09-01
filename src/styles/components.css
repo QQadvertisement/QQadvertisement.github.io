@@ -2,12 +2,38 @@
    COMPONENTS — the thirteen in design/components.md, plus the
    button and table primitives they share.
 
-   THE TEAL GATE governs every colour decision below:
-     Does tapping this element start a playable, in place, now?
-       YES -> --color-action-playable as a FILL
-       NO  -> --color-action-neutral / -on-ground
-   Teal appears on exactly eight element types. They are marked
-   with a "TEAL GATE" comment. Any ninth requires sign-off.
+   THE TEAL GATE governs every colour decision below.
+
+   Briefly widened on 2026-08-20 to "does this respond to the reader",
+   then narrowed back the same day when the `1b` composition was
+   adopted: `1b` puts amber on every primary action and uses no teal
+   outside the playable. That is a cleaner system than the widening
+   was, and it restores the original contrast-proven rule. Three
+   colours, three jobs, no overlap:
+
+     TEAL  = PLAY. The playable and nothing else — the device frame's
+             play affordance, a card's PLAY, the frame's own progress
+             and focus states. As a FILL, NEVER A WORD (1.87:1 as text
+             on paper fails; navy ink on a teal fill is 6.96:1 and
+             passes). --color-action-playable-measure stays the sole
+             text exception, on navy grounds, for measured values.
+
+     AMBER = BUY. The primary conversion action wherever one appears:
+             "Get a flat quote", "See pricing", the emphasised fork
+             lane, the flagged pricing tier, the guarantee band. Ink on
+             an amber fill is ALWAYS --color-text-primary: the emphasis
+             ink is calibrated for amber-as-a-word on paper and lands
+             at 2.94:1 the other way round. See .btn--accent for why
+             the fill also carries a border on light grounds.
+
+     NAVY  = EVERYTHING ELSE. Structure, secondary actions, nav.
+
+   Teal is still forbidden on nav, form submits, secondary CTAs, links
+   and rules. The numeric census (<=3 regions on /, <=5 on a teardown)
+   stays retired; the replacement is positional — AT MOST ONE TEAL
+   REGION PER FOLD, never two in the same visual band.
+
+   Legal uses stay marked with a "TEAL GATE" comment.
    ============================================================ */
 
 /* ------------------------------------------------------------
@@ -120,6 +146,27 @@
   box-shadow: 0 3px 12px var(--color-action-playable-halo);
 }
 .btn--playable:focus-visible { box-shadow: var(--focus-ring-playable); }
+
+/* AMBER = BUY. The primary conversion action, on either ground.
+   Two contrast facts drive every value here:
+     · navy ink on the fill is 7.12:1 — the emphasis ink is 2.94:1 and
+       must never be used this way round.
+     · the fill against paper is only 1.88:1, so on a light ground the
+       button has no identifiable boundary on its own. The border is
+       what supplies it (#8A5A0E is 5.7:1 on paper). Against the navy
+       stage the fill is already 8.56:1 and the border is invisible
+       there, so one declaration serves both grounds. */
+.btn--accent {
+  background: var(--color-accent-emphasis-fill);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-accent-emphasis-ink);
+}
+.btn--accent:hover {
+  background: var(--color-accent-emphasis-ink);
+  color: var(--color-surface-page);
+  transition-duration: var(--duration-lift);
+}
+.btn--accent:active { background: var(--color-accent-emphasis-ink); }
 
 .btn--sm  { min-block-size: 44px; padding: 9px var(--space-04); font-size: var(--text-body-2xs); border-radius: var(--radius-sm); }
 .btn--lg  { min-block-size: 50px; padding: 0 var(--space-06); }
@@ -313,6 +360,15 @@
 .ground-dark .wordmark,
 .ground-deep .wordmark { color: var(--color-text-primary-on-ground); }
 
+/* The list sits on the RIGHT, banked against the contact address and
+   the CTA, with the wordmark alone on the left.
+
+   Left-anchored links next to a two-letter wordmark left the whole
+   bar weighted into one corner and a long dead span before the CTA.
+   Grouping every actionable thing at the trailing edge gives the bar
+   one centre of gravity and reads as one cluster rather than three.
+   Breadcrumbs are the exception and keep the left: a path is
+   positional, so it belongs against the mark it descends from. */
 .nav__list {
   display: none;
   align-items: center;
@@ -340,13 +396,41 @@
   align-items: center;
   gap: var(--space-04);
 }
+/* Left side, banked against the wordmark — identity, not action.
+   The hairline is doing real work here: a mono uppercase address set
+   directly beside a two-letter mark reads as a continuation of the
+   mark. The rule says they are two things. */
 .nav__contact {
   display: none;
+  align-items: center;
+  gap: var(--space-04);
   font-family: var(--font-mono);
   font-size: var(--text-mono-xs);
   letter-spacing: 0.04em;
   color: var(--color-text-muted);
   text-transform: uppercase;
+  transition: color var(--duration-quick) var(--ease-out);
+}
+/* ::after with order:-1, NOT ::before. The tap-target block at the
+   foot of this file claims ::before on every small nav link to expand
+   its hit area to 44×44, and a 44px invisible square with a background
+   colour on it is a grey block. The rule takes the free pseudo and
+   flex order puts it back on the leading edge. */
+.nav__contact::after {
+  content: "";
+  order: -1;
+  inline-size: 1px;
+  block-size: 15px;
+  background: var(--color-border-strong);
+}
+.nav__contact:hover { color: var(--color-text-primary); }
+.ground-deep .nav__contact:hover,
+.nav--over-stage:not(.nav--condensed) .nav__contact:hover {
+  color: var(--color-text-primary-on-ground);
+}
+.ground-deep .nav__contact::after,
+.nav--over-stage:not(.nav--condensed) .nav__contact::after {
+  background: var(--color-border-on-ground-strong);
 }
 
 /* Hamburger. The glyph stays 22px; the hit area is padded to 44×44
@@ -375,14 +459,28 @@
 .ground-deep .nav__burger span { background: var(--color-text-primary-on-ground); }
 
 @media (min-width: 1024px) {
-  .nav__list { display: flex; gap: var(--space-06); }
+  /* The list takes the free space, so the trailing cluster is
+     list → address → CTA with no gap opening inside it. Below this
+     width the list is display:none and .nav__end keeps the auto
+     margin on its own. */
+  .nav__list {
+    display: flex;
+    gap: var(--space-06);
+    margin-inline-start: auto;
+    margin-inline-end: var(--space-02);
+  }
+  /* Only when the list is actually present. The teardown bar renders
+     .nav__crumbs instead and has no list to take up the slack, so
+     there .nav__end keeps its own auto margin and stays right. */
+  .nav__inner:has(.nav__list) .nav__end { margin-inline-start: 0; }
   .nav__burger { display: none; }
 }
-/* The contact address is the first thing to go: at 1024 the six nav
-   items, the address and the CTA together overrun the bar and the
-   list wraps to two lines. */
+/* The contact address is still the first thing to go, and moving it
+   to the left did not change that: it is the same run of characters
+   competing for the same bar. At 1024 the six nav items, the address
+   and the CTA together overrun it and the list wraps to two lines. */
 @media (min-width: 1240px) {
-  .nav__contact { display: block; }
+  .nav__contact { display: flex; }
   .nav__list { gap: var(--space-07); }
   .nav__end { gap: var(--space-05); }
 }
@@ -549,17 +647,67 @@
    The viewport is the focus target and the hit target for the
    whole playable; never a small inner button.
    ------------------------------------------------------------ */
+/* THE DEVICE IS SIZED BY ITS HEIGHT, NOT ITS WIDTH.
+
+   The frame used to be a width with an aspect ratio hung off it —
+   350px wide at 330/440, which is 4:3. Nothing has been that shape
+   since 2011, and it is why the mobile hero read as "a rounded box"
+   rather than as a phone. Every real handset the builds ship to is
+   between 19.5:9 and 20:9, so the ratio is now fixed at 9/19.5 and
+   is not negotiable per breakpoint.
+
+   The consequence is that WIDTH has to become the derived dimension.
+   A 19.5:9 device sized off the width of a phone-sized viewport is
+   taller than that viewport, which would push the hero's play button
+   below the fold on the one page whose entire proposition is "tap
+   it". So callers set --phone-screen-h — how much vertical room the
+   device may take — and the width falls out of the ratio. Contexts
+   that have more room (the desktop hero, the play lightbox) raise
+   that one value and nothing else.
+
+   The min(100%, …) is the floor: on a viewport too narrow for the
+   derived width, the device gives up height instead of overflowing,
+   and the ratio still holds. */
 .phone {
-  inline-size: 100%;
-  max-inline-size: 350px;
+  /* 68svh, up from 56. On a handset the frame was landing at ~200px
+     wide, which is narrow enough that the build inside it has to fight
+     for every line. The ceiling is what stops this running away on a
+     tall desktop window; the min(…,92vw) guard below is what stops the
+     derived WIDTH overflowing a narrow one, since the height is now
+     generous enough to produce a width the viewport cannot hold. */
+  --phone-screen-h: min(68vh, 560px);
+  --phone-screen-h: min(68svh, 560px);
+  --phone-bezel: 11px;
+  /* The frame is now a size container. The build inside it is fluid
+     against its own viewport (see replication-kit/hero-tap-game.css),
+     and the site's own chrome on the frame has to do the same — a bar
+     of 9px mono that fits at 330px wraps to two lines at 200px. */
+  container-type: inline-size;
+  container-name: phone;
+  --phone-screen-w: calc(var(--phone-screen-h) * 9 / 19.5);
+  /* Concentric corners. A real device's screen radius is the body
+     radius minus the bezel, and getting this wrong is the single
+     most reliable tell of a fake phone: the old frame drew a 30px
+     body around a 22px screen over a 10px bezel, so the corners ran
+     8px out of parallel. Body radius tracks the device's own width
+     (~17%, measured off current hardware) instead of being a flat
+     token, because a fixed 30px radius on a 240px device is a
+     different object from a fixed 30px radius on a 400px one. */
+  --phone-radius: clamp(26px, calc(var(--phone-screen-w) * 0.17 + var(--phone-bezel)), 60px);
+
+  inline-size: min(
+    100%,
+    92vw,
+    calc(var(--phone-screen-w) + var(--phone-bezel) * 2)
+  );
   margin-inline: auto;
   /* A machined edge rather than a flat navy slab: a soft vertical
      ramp for the body, plus a hairline top highlight and a darker
      bottom, so the bezel has a near face and a far one. */
   background:
     linear-gradient(168deg, #2B4573 0%, #1B3054 46%, #101F39 100%);
-  border-radius: var(--radius-device-mobile);
-  padding: 10px;
+  border-radius: var(--phone-radius);
+  padding: var(--phone-bezel);
   box-shadow: var(--shadow-device);
   flex: none;
   position: relative;
@@ -584,37 +732,144 @@
 .playable-stage {
   position: relative;
   inline-size: 100%;
-  aspect-ratio: 330 / 440;
+  aspect-ratio: 9 / 19.5;
   background: var(--color-surface-sunken);
-  border-radius: var(--radius-screen-mobile);
+  border-radius: calc(var(--phone-radius) - var(--phone-bezel));
   overflow: hidden;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  /* THE TAP RULE. Everything from here down to .playable-game exists
+     so that a fast tap streak stays a tap streak.
+
+     A playable's whole proposition is "tap it, repeatedly, now". The
+     browser reads two taps inside ~300ms as double-tap-to-zoom, so the
+     better the player is at the mechanic the more certainly the page
+     zooms out from under them. On the frame's own chrome `manipulation`
+     is enough — it kills double-tap zoom while leaving a deliberate
+     pinch and a page scroll alone, which is right for a surface that is
+     still part of the page. The layer the BUILD runs in goes further;
+     see .play-layer. */
+  touch-action: manipulation;
   box-shadow: var(--shadow-inset-viewport);
   outline: none;
 }
 /* TEAL GATE 4 — the one legal teal focus ring, on a playable surface. */
 .playable-stage:focus-visible { box-shadow: var(--focus-ring-playable); }
 
-.phone__notch {
+/* THE ISLAND. The old element was a 76×6 grey bar — a 2016 earpiece
+   slot rendered in the border colour, which read as a divider rule
+   sitting on the screen rather than as part of the hardware. This is
+   the cutout: near-black (a hole in the display, not a painted
+   shape), 32% of the screen's width at the 125:36 ratio the hardware
+   actually uses, inset from the top by roughly the same margin.
+
+   It stays on top of a running build on purpose. Real hardware
+   occludes real ads, and a demo that quietly gives the client's file
+   a rectangle no handset would give it is flattering the build. */
+.phone__island {
   position: absolute;
-  inset-block-start: 13px;
+  inset-block-start: 2.4%;
   inset-inline-start: 50%;
   transform: translateX(-50%);
-  inline-size: 76px;
-  block-size: 6px;
-  background: var(--color-border-strong);
-  border-radius: var(--radius-md);
+  inline-size: 32%;
+  aspect-ratio: 125 / 36;
+  background: #05070C;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
   z-index: 5;
+}
+
+/* THE HOME INDICATOR. Present in every phase including play — it is
+   the device's, not the site's, so unlike .phone__chrome it does not
+   come off when the build starts.
+
+   Half-transparent black rather than a fixed ink: it has to sit on
+   the cream loader screen, on Atta's white quiz and on the house
+   demo's amber play field, and no opaque colour reads on all three. */
+.phone__home {
+  position: absolute;
+  inset-block-end: 7px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  inline-size: 34%;
+  block-size: 4px;
+  background: rgb(6 10 18 / 0.30);
+  border-radius: 999px;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* THE GLASS. One soft diagonal specular band across the screen.
+   Held at 0.05 — enough that the screen reads as something with a
+   surface, low enough that it never washes a client's artwork. This
+   is the cheapest of the realism cues and the easiest to overdo. */
+.playable-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    104deg,
+    rgb(255 255 255 / 0.05) 0%,
+    rgb(255 255 255 / 0.05) 26%,
+    rgb(255 255 255 / 0) 44%
+  );
+}
+
+/* THE SIDE BUTTONS. Drawn on one aria-hidden node rather than four,
+   with the left rail's three buttons cut out of a single gradient —
+   volume up, volume down and the action button in the positions the
+   hardware puts them. They sit OUTSIDE the body's rounded edge by a
+   hair, which is what makes them read as parts rather than as
+   printed marks. */
+.phone__hardware {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.phone__hardware::before,
+.phone__hardware::after {
+  content: "";
+  position: absolute;
+  inline-size: 2.5px;
+  background: linear-gradient(90deg, #16294A, #33507F 60%, #24395F);
+  border-radius: 2px;
+}
+/* Left rail: action button, then the two volume keys. The transparent
+   bands between the stops are the gaps. */
+.phone__hardware::before {
+  inset-inline-start: -2px;
+  inset-block-start: 15%;
+  block-size: 26%;
+  background: linear-gradient(
+    180deg,
+    #2C4772 0% 21%,
+    transparent 21% 34%,
+    #2C4772 34% 66%,
+    transparent 66% 72%,
+    #2C4772 72% 100%
+  );
+}
+/* Right: the side button, lower and longer than any single left key. */
+.phone__hardware::after {
+  inset-inline-end: -2px;
+  inset-block-start: 26%;
+  block-size: 13%;
 }
 .phone__chrome {
   position: absolute;
   inset-inline: 0;
-  inset-block-end: 0;
-  padding: 13px 18px;
+  /* Clears the home indicator, which is hardware and outranks it. */
+  inset-block-end: 18px;
+  padding: 0 14px;
   display: flex;
+  gap: var(--space-02);
   justify-content: space-between;
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: var(--text-mono-4xs);
   letter-spacing: var(--text-mono-4xs-ls);
@@ -626,16 +881,27 @@
   z-index: 4;
   pointer-events: none;
 }
+/* Under ~250px of frame the two halves cannot both hold their line, so
+   the second one goes. The build's name is the one that has to survive
+   — "SOUND OFF" is a courtesy, the name is what the frame is labelling.
+   Truncating either instead would be worse: half a build name is a
+   different build name. */
+@container phone (max-width: 250px) {
+  .phone__chrome span:last-child { display: none; }
+}
+@container phone (max-width: 190px) {
+  .phone__chrome { display: none; }
+}
+/* Desktop has vertical room the handset does not, so the device grows
+   by raising its height allowance — the one value the whole frame is
+   derived from. Ratio, radii, island and buttons all follow without a
+   second declaration, which is the point of driving it from one
+   custom property rather than restating a width per breakpoint. */
 @media (min-width: 1024px) {
   .phone {
-    inline-size: 344px;
-    max-inline-size: none;
-    padding: 12px;
-    border-radius: var(--radius-device-desktop);
-  }
-  .playable-stage {
-    aspect-ratio: 320 / 640;
-    border-radius: var(--radius-screen-desktop);
+    --phone-screen-h: min(68vh, 620px);
+    --phone-screen-h: min(68svh, 620px);
+    --phone-bezel: 12px;
   }
 }
 
@@ -652,6 +918,11 @@
   align-items: center;
   justify-content: center;
   padding-inline: 22px;
+  /* The bear group centres in the screen, but the play button and the
+     chrome own the bottom of it. Without this the group centres against
+     the full height and crowds the button from above — which is what
+     put the readout a few pixels off "TAP TO PLAY" on a handset. */
+  padding-block-end: 96px;
   pointer-events: none;          /* the frame owns the hit area */
   transition: opacity var(--duration-exit) var(--ease-in);
 }
@@ -744,8 +1015,9 @@
 .loader__play {
   position: absolute;
   inset-inline: 22px;
-  /* Clears the chrome footer, which sits above the playable ground. */
-  inset-block-end: 40px;
+  /* Clears the chrome footer, which sits above the playable ground,
+     and the home indicator below that. */
+  inset-block-end: 54px;
   opacity: 0;
   transform: translateY(8px);
   transition:
@@ -757,7 +1029,7 @@
 .loader__play .btn { block-size: 56px; inline-size: 100%; }
 
 @media (min-width: 1024px) {
-  .loader { padding-inline: 28px; }
+  .loader { padding-inline: 28px; padding-block-end: 120px; }
   .loader__bear img { inline-size: 136px; }
   .loader__spacer { block-size: 26px; }
   .loader__readout { margin-block-start: var(--space-03); }
@@ -777,7 +1049,16 @@
   pointer-events: none;
   transition: opacity var(--duration-enter) var(--ease-out);
 }
-.play-layer[data-visible="true"] { opacity: 1; pointer-events: auto; }
+/* Once a build is up, this rectangle stops being part of the page and
+   becomes the build's screen. Touches on it belong to the file inside
+   it and to nothing else: no pan, no double-tap zoom, and no scroll
+   chaining out to the document behind it. */
+.play-layer[data-visible="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
 
 /* ------------------------------------------------------------
    THE REAL BUILD, MOUNTED IN THE FRAME
@@ -792,8 +1073,21 @@
   inset: 0;
   overflow: hidden;
   border-radius: inherit;
+  /* Restated on the iframe's own box rather than inherited from
+     .play-layer. A nested browsing context decides its own gestures,
+     so the host has to refuse them at the frame element AND the build
+     has to refuse them in its own document — see the embedded style
+     block in scripts/build-playables.mjs. Either alone leaves a gap. */
+  touch-action: none;
+  overscroll-behavior: contain;
 }
-.playable-game iframe { display: block; inline-size: 100%; block-size: 100%; border: 0; }
+.playable-game iframe {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  touch-action: none;
+}
 
 /* A build we will not embed still shows its own still frame. */
 .playable-poster {
@@ -805,226 +1099,382 @@
 }
 
 /* ------------------------------------------------------------
-   3. DEMO CARD + horizontal scroller
+   3. BUILD TILE — the gallery
+
+   Replaces the bordered demo card and the horizontal scroller it
+   lived in. The scroller was carrying three items; a swipe rail
+   whose content already fits is chrome promising a scroll that
+   does not exist, and it was doing that on the one row of the
+   page that is supposed to feel like a body of work.
+
+   THE ANATOMY, and what each part is for:
+
+     .build-tile__frame   the artwork, and nothing over it at rest
+     .build-tile__hit     one control covering the whole frame
+     .build-panel         the file's numbers + the action, on intent
+     .build-tile__caption title and one measured line, under the art
+
+   There is no card. No border, no fill, no shadow, no padding box —
+   the tile is art on the page with type beneath it. That is the whole
+   move: the previous version put four framed elements around each
+   thumbnail and the frames read louder than the work.
    ------------------------------------------------------------ */
-.scroller {
-  display: flex;
-  gap: 14px;
-  padding-inline-start: max(var(--gutter), calc((100% - var(--content-max)) / 2));
-  /* No padding-inline-end: the last card runs off the edge. That
-     run-off is the affordance that says "there are more". */
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
+.build-grid {
+  display: grid;
+  /* Tiles hold their size and the row runs out of them, rather than
+     stretching to fill the width. Two published builds and an NDA
+     notice stretched across 1240px would each be a 400px slab, and
+     the gallery would claim a fullness the roster does not have.
+     Left-packed with the space left visible is the honest shape, and
+     it is also the reference's. */
+  grid-template-columns: repeat(auto-fill, minmax(0, 300px));
+  justify-content: start;
+  gap: var(--space-10) var(--space-06);
 }
-.scroller::-webkit-scrollbar { display: none; }
-.scroller > * { scroll-snap-align: start; }
-@media (min-width: 1024px) { .scroller { gap: 22px; } }
 
-.scroll-progress {
-  display: flex;
-  align-items: center;
-  gap: var(--space-03);
-  padding: var(--space-05) max(var(--gutter), calc((100% - var(--content-max)) / 2)) 0;
-}
-.scroll-progress__track {
-  flex: 1;
-  block-size: 2px;
-  background: var(--color-border-default);
-  border-radius: 1px;
-  position: relative;
-}
-/* Not teal: scrolling is not a playable action. */
-.scroll-progress__thumb {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  background: var(--color-action-neutral);
-  border-radius: 1px;
-  transition: inline-size var(--duration-quick) var(--ease-out),
-              transform var(--duration-quick) var(--ease-out);
-}
-@media (min-width: 1024px) { .scroll-progress { display: none; } }
-
-/* The card is paper lifted off the page, not a panel sunk into it.
-   White-on-white separated by a real shadow reads as an object; the
-   old sunken fill with a hairline read as a table cell. */
-.demo-card {
-  inline-size: 266px;
-  flex: none;
-  background: var(--color-surface-raised);
-  border: var(--border-hairline) solid var(--color-border-subtle);
-  border-radius: var(--radius-2xl);
-  overflow: hidden;
+.build-tile {
   display: flex;
   flex-direction: column;
-  box-shadow: var(--elev-2);
-  /* Fast in, slower out — the lift feels weighted rather than twitchy
-     (Apple: response ~0.4, no overshoot; the card was not thrown). */
-  transition:
-    box-shadow var(--duration-drop) var(--ease-glide),
-    transform var(--duration-drop) var(--ease-glide),
-    border-color var(--duration-drop) var(--ease-glide);
+  gap: var(--space-04);
+  position: relative;
 }
-.demo-card:hover {
-  border-color: var(--color-border-default);
-  box-shadow: var(--elev-4);
+
+.build-tile__frame {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: var(--color-surface-sunken);
+  /* An inset hairline rather than a border: on cream, art that runs
+     to a hard edge with nothing holding it reads as a bleed, but a
+     real border would put a box back around the tile. This sits
+     inside the artwork's own edge. */
+  box-shadow: inset 0 0 0 1px rgb(23 42 74 / 0.07);
+  transition:
+    transform var(--duration-drop) var(--ease-glide),
+    box-shadow var(--duration-drop) var(--ease-glide);
+}
+.build-tile:hover .build-tile__frame,
+.build-tile:focus-within .build-tile__frame {
   transform: translate3d(0, -4px, 0);
+  box-shadow: inset 0 0 0 1px rgb(23 42 74 / 0.10), var(--elev-4);
   transition-duration: var(--duration-lift);
 }
-/* Press responds on pointer-down, not on release. */
-.demo-card:active {
+.build-tile:active .build-tile__frame {
   transform: translate3d(0, -1px, 0);
   transition-duration: var(--duration-instant);
 }
 @media (prefers-reduced-motion: reduce) {
-  .demo-card:hover,
-  .demo-card:active { transform: none; }
+  .build-tile:hover .build-tile__frame,
+  .build-tile:focus-within .build-tile__frame,
+  .build-tile:active .build-tile__frame { transform: none; }
 }
 
-.demo-card__thumb {
-  position: relative;
-  block-size: 190px;
-  background: var(--color-ground-board);
-  border-block-end: var(--border-hairline) solid var(--color-border-default);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-block-end: 16px;
-  overflow: hidden;
-}
-.demo-card__thumb img {
+.build-tile__art {
   position: absolute;
   inset: 0;
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
+  /* A slow push-in on hover. The frame clips it, so the art grows
+     into its own edges instead of the tile growing. */
+  transform: scale(1.02);
+  transition: transform var(--duration-drop) var(--ease-glide);
 }
-/* The comps use neutral placeholder blocks; real thumbnails need a
-   scrim, or the outlined TEARDOWN → button loses its edge against the
-   artwork. Paper-tinted rather than black — no near-black in this
-   system, even in a gradient. */
-.demo-card__thumb img + .demo-card__orientation,
-.demo-card__thumb img ~ .demo-card__action { z-index: 3; }
-.demo-card__thumb:has(img)::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  block-size: 96px;
-  /* Warmed to match the cream surfaces. Opacity stays at 0.94 — this
-     scrim exists to keep the outlined TEARDOWN button's edge legible
-     against the artwork, and going opaque would cut the image off in
-     a hard band. */
-  background: linear-gradient(to top, rgb(250 247 241 / 0.94), rgb(250 247 241 / 0));
-  z-index: 2;
-  pointer-events: none;
-}
-/* This label floats at the TOP of the thumbnail, above the bottom
-   scrim, so it sits directly on whatever the client's artwork happens
-   to be — it measured 3.59:1 over the Atta art. Bare text can never be
-   guaranteed legible over an arbitrary image, so it carries its own
-   backing chip rather than a colour that happens to work on today's
-   thumbnails. */
-.demo-card__orientation {
-  position: absolute;
-  inset-block-start: 15px;
-  inset-inline-start: 16px;
-  font-family: var(--font-mono);
-  font-size: var(--text-mono-4xs);
-  letter-spacing: 0.12em;
-  color: var(--color-text-primary);
-  background: rgb(250 247 241 / 0.92);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  padding: 4px 7px;
-  border-radius: var(--radius-sm);
-  z-index: 2;
-}
-.demo-card__action { position: relative; z-index: 2; }
-.demo-card:hover .demo-card__action {
-  transform: translateY(-2px);
-  transition: transform var(--duration-quick) var(--ease-out);
-}
-/* position: relative is the containing block for the stretched title
-   link — see .demo-card__title a::after at the end of this file. */
-.demo-card__body { padding: 16px; display: flex; flex-direction: column; flex: 1; position: relative; }
-.demo-card__title { letter-spacing: -0.01em; margin-block-end: var(--space-01); }
-.demo-card__subtitle { color: var(--color-text-body); margin-block-end: 13px; }
-.demo-card__specs {
-  margin-block-start: auto;
-  border-block-start: var(--border-hairline) solid var(--color-border-default);
-  padding-block-start: 3px;
-}
-/* Scroller run-off affordance. */
-.demo-card--unavailable {
-  opacity: 0.45;
-  pointer-events: none;
+.build-tile:hover .build-tile__art,
+.build-tile:focus-within .build-tile__art { transform: scale(1.06); }
+@media (prefers-reduced-motion: reduce) {
+  .build-tile__art,
+  .build-tile:hover .build-tile__art { transform: none; }
 }
 
-/* Post-tap: the bear loader mounts inside the thumbnail region, then
-   the mechanic runs there. The card never navigates for `play`. */
-.card-play {
+/* The control. Covers the frame, carries the focus ring, and holds no
+   visible content of its own. */
+.build-tile__hit {
   position: absolute;
   inset: 0;
   z-index: 3;
-  background: var(--color-surface-sunken);
+  display: block;
+  inline-size: 100%;
+  border-radius: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.build-tile__hit:focus-visible { box-shadow: var(--focus-ring-neutral); }
+
+/* --- the floating panel ---------------------------------------
+   Touch first: no hover to wait for, so the ACTION alone is pinned
+   to the tile and the stats never render — they are already on the
+   caption line, and a permanent translucent slab over the artwork
+   would undo the reason the tile exists. Pointer devices get the
+   full panel on hover, below.
+   --------------------------------------------------------------- */
+.build-panel {
+  position: absolute;
+  z-index: 2;
+  inset-inline: var(--space-03);
+  inset-block-end: var(--space-03);
+  display: flex;
+  justify-content: flex-end;
+}
+.build-panel__stats { display: none; }
+.build-panel__action { pointer-events: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .build-panel {
+    display: block;
+    padding: var(--space-04);
+    border-radius: var(--radius-2xl);
+    /* Deep translucent, the same material as the condensed nav — it
+       is a layer over content, and this system already has a way of
+       saying that. */
+    background: var(--material-deep-bg);
+    backdrop-filter: var(--material-blur);
+    -webkit-backdrop-filter: var(--material-blur);
+    box-shadow: var(--edge-lit-on-ground), var(--elev-on-ground-4);
+    border: var(--border-hairline) solid var(--material-edge-deep);
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition:
+      opacity var(--duration-exit) var(--ease-in),
+      transform var(--duration-exit) var(--ease-in);
+  }
+  .build-tile:hover .build-panel,
+  .build-tile:focus-within .build-panel {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity var(--duration-enter) var(--ease-out),
+      transform var(--duration-enter) var(--ease-settle);
+  }
+
+  .build-panel__stats {
+    display: flex;
+    margin-block-end: var(--space-03);
+    padding-block-end: var(--space-03);
+    border-block-end: var(--border-hairline) solid var(--color-border-on-ground);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .build-panel__stat { flex: 1; min-inline-size: 0; }
+  .build-panel__stat + .build-panel__stat {
+    padding-inline-start: var(--space-03);
+    border-inline-start: var(--border-hairline) dotted var(--color-border-on-ground);
+  }
+  .build-panel__stat dt {
+    font-size: var(--text-mono-4xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted-on-ground);
+    margin-block-end: var(--space-01);
+  }
+  .build-panel__stat dd {
+    font-size: var(--text-mono-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary-on-ground);
+    white-space: nowrap;
+  }
+  .build-panel__action { display: flex; inline-size: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .build-panel { transform: none !important; }
+}
+
+/* --- the caption ----------------------------------------------- */
+.build-tile__caption { display: flex; flex-direction: column; gap: 5px; }
+.build-tile__title { letter-spacing: -0.01em; }
+.build-tile__title a { color: inherit; }
+.build-tile__title a:hover { color: var(--color-text-body); }
+/* The title link stretches over the caption only, NOT over the frame:
+   the frame already has its own control, and two overlapping targets
+   on one tile is how a play button ends up navigating. */
+.build-tile__title a::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  block-size: 3.5rem;
+}
+.build-tile__meta {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- the NDA slot ----------------------------------------------
+   The reference's empty "add" tile, doing the job the old dashed
+   card did: a shaped hole in the grid. It is not a build, so it
+   gets no artwork, no control and no hover.
+   --------------------------------------------------------------- */
+.build-tile__frame--empty {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-03);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  /* Drawn as a dashed inset ring rather than a dashed border, so it
+     matches the solid hairline the real tiles carry. */
+  background-image: none;
+}
+.build-tile--nda .build-tile__frame--empty {
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(23 42 74 / 0.024) 0 10px,
+    transparent 10px 20px
+  );
+}
+.build-tile__mark {
+  font-size: 26px;
+  line-height: 1;
+  color: var(--color-border-strong);
+}
+.build-tile__empty-note { color: var(--color-text-muted); }
+.build-tile--nda .build-tile__title { color: var(--color-text-body); }
+
+/* ------------------------------------------------------------
+   3b. PLAY LIGHTBOX — where a build actually runs
+
+   The card opens this rather than running the file in its own
+   thumbnail. See PlayableLightbox.tsx for the argument; the short
+   version is that a 190px frame is smaller than the loader bear.
+   ------------------------------------------------------------ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-04);
+  /* Deep enough that the cream page underneath does not read through
+     as grey. The build is the only lit thing once this is open. */
+  background: rgb(6 13 26 / 0.88);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  animation: lightboxIn var(--duration-overlay) var(--ease-out) both;
+  overscroll-behavior: contain;
+}
+@keyframes lightboxIn { from { opacity: 0; } to { opacity: 1; } }
+
+.lightbox__panel {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-03);
-  padding: var(--space-05);
-  text-align: center;
-  cursor: pointer;
+  gap: var(--space-04);
+  inline-size: 100%;
+  /* Sized to the device, not to the overlay. Wider and the close
+     button and the stat strip drift away from the frame they belong
+     to, and the composition stops reading as one object. */
+  max-inline-size: 440px;
+  animation: lightboxRise var(--duration-settle) var(--ease-settle) both;
 }
-.card-play--loader .loader__track { inline-size: 100%; }
-.card-play__bear {
-  inline-size: 92px;
-  block-size: auto;
-  transform-origin: 50% 90%;
-  animation: bearBob var(--duration-loop) var(--ease-in-out) infinite;
+@keyframes lightboxRise {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
 }
-.card-play__bear[data-settled="true"] {
-  animation: none;
-  transform: translateY(-6px) scale(0.92);
-  transition: transform var(--duration-settle) var(--ease-settle);
+@media (prefers-reduced-motion: reduce) {
+  .lightbox__panel { animation-name: lightboxIn; }
 }
-.card-play__readout { color: var(--color-text-muted); }
 
-/* The real build, running in the thumbnail. No padding and no gap:
-   the file gets the whole region, and CLOSE floats over it. */
-.card-play--live {
-  padding: 0;
-  gap: 0;
-  cursor: default;
+.lightbox__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-04);
+  inline-size: 100%;
 }
-.card-play--live .card-play__reset {
-  position: absolute;
-  inset-block-start: var(--space-02);
-  inset-inline-end: var(--space-02);
-  z-index: 2;
-  padding: 6px 10px;
-  border-radius: var(--radius-md);
-  background: var(--color-ground-primary);
+.lightbox__client {
+  color: var(--color-text-muted-on-ground);
+  margin-block-end: var(--space-01);
+}
+.lightbox__title { color: var(--color-text-primary-on-ground); }
+
+.lightbox__close {
+  flex: none;
+  inline-size: 44px;
+  block-size: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  font-size: 15px;
   color: var(--color-text-primary-on-ground);
+  background: rgb(255 255 255 / 0.10);
+  border: var(--border-hairline) solid var(--material-edge-deep);
+  cursor: pointer;
+  transition: background-color var(--duration-quick) var(--ease-out);
 }
-.card-play__reset { color: var(--color-text-muted); letter-spacing: 0.1em; }
-.demo-card__thumb--nda {
+.lightbox__close:hover { background: rgb(255 255 255 / 0.18); }
+.lightbox__close:focus-visible { box-shadow: var(--focus-ring-on-ground); }
+
+/* inline-size:100% is REQUIRED, not tidiness. .phone's width is
+   min(100%, <derived>), and the panel above centres its children, so
+   without a definite width here the stage is shrink-to-fit, that 100%
+   has nothing to resolve against, and the device collapses to a dot.
+   Any new container for a .phone needs a definite inline size. */
+.lightbox__stage {
+  inline-size: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* The device sizes off the room the overlay leaves it, which is the
+   whole point of driving .phone from a height. The head and foot are
+   ~150px together, so the frame takes what is left. */
+.lightbox__stage .phone {
+  --phone-screen-h: min(62vh, 620px);
+  --phone-screen-h: min(62svh, 620px);
+  --phone-bezel: 12px;
+}
+
+.lightbox__foot {
+  display: flex;
   align-items: center;
-  padding-block-end: 0;
-  background: var(--color-surface-sunken);
-  border-block-end-style: dashed;
+  justify-content: space-between;
+  gap: var(--space-05);
+  inline-size: 100%;
+  padding-block-start: var(--space-03);
+  border-block-start: var(--border-hairline) solid var(--color-border-on-ground);
 }
-.demo-card--nda { background: var(--color-surface-raised); }
-@media (prefers-reduced-motion: reduce) { .card-play__bear { animation: none; } }
+.lightbox__stats {
+  display: flex;
+  gap: var(--space-05);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.lightbox__stat dt {
+  font-size: var(--text-mono-4xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted-on-ground);
+  margin-block-end: 2px;
+}
+.lightbox__stat dd {
+  font-size: var(--text-mono-sm);
+  font-weight: var(--font-weight-medium);
+  /* TEAL GATE — measured values on a dark ground, the documented
+     teal-as-text exception. Same claim class as the loader readout
+     and the hero's measured panel. */
+  color: var(--color-action-playable-measure);
+}
+.lightbox__teardown {
+  flex: none;
+  color: var(--color-text-body-on-ground);
+  transition: color var(--duration-quick) var(--ease-out);
+}
+.lightbox__teardown:hover { color: var(--color-text-primary-on-ground); }
+
+/* Below ~700px tall there is no room for both the head and the foot
+   around a device worth playing. The numbers go — they are on the
+   tile and on the teardown — and the frame keeps the space. */
+@media (max-height: 700px) {
+  .lightbox__foot { display: none; }
+  .lightbox__stage .phone { --phone-screen-h: min(74svh, 620px); }
+}
+
 @media (min-width: 1024px) {
-  .demo-card { inline-size: 326px; }
-  .demo-card__thumb { block-size: 228px; padding-block-end: 18px; }
-  .demo-card__body { padding: 18px 18px 19px; }
-  .demo-card__subtitle { margin-block-end: 15px; }
-  .demo-card__specs { padding-block-start: var(--space-01); }
+  .lightbox { padding: var(--space-08); }
 }
 
 /* ------------------------------------------------------------
@@ -1435,18 +1885,38 @@ select.field__control {
   /* The band takes the stage's gradient — the panel has to be lit
      from somewhere for its shadow to be believable. */
   background: var(--atmos-stage);
-  padding-block: 0 var(--rhythm-sm);   /* no top padding — the panel's
-                                          negative offset supplies it */
+  /* flow-root, so the panel's negative top margin lifts THE PANEL
+     inside the band instead of collapsing through and dragging the
+     band's own top edge up with it. Without a block formatting
+     context the two move together, the overlap disappears, and the
+     panel ends up flush with the band — which is exactly what shipped
+     before this line existed. */
+  display: flow-root;
+  padding-block: 0 var(--space-12);   /* no top padding — the panel's
+                                         negative margin supplies it */
   padding-inline: max(var(--gutter), calc((100% - var(--content-max)) / 2));
 }
 .guarantee {
   inline-size: 100%;
-  max-inline-size: var(--content-inset);
+  /* Aligned to the CONTENT column, not the narrower inset. On the home
+     page the inset read as a floating panel; on /pricing it sits
+     between a tier grid and an FAQ that both run to --content-max, and
+     an 90px inset off each of those edges reads as a misalignment
+     rather than a decision. Same edges as its neighbours. */
+  max-inline-size: var(--content-max);
   margin-inline: auto;
   background: var(--color-surface-raised);
   border-radius: var(--radius-2xl);
   padding: 32px 26px 30px;
-  transform: translateY(-24px);
+  /* NEGATIVE MARGIN, NOT transform: translateY.
+     A transform lifts the panel visually but leaves its box at full
+     height, so the band kept 24px (40px at desktop) of navy that
+     nothing sat in — on /pricing, where this band is isolated between
+     two cream sections instead of continuing one, that dead strip
+     read as an empty slab. A negative margin lifts the layout too, so
+     the band's height is the panel's height and the padding below is
+     a number you can point at. */
+  margin-block-start: -24px;
   /* The overlap is the argument, so the panel has to read as being in
      front of the band rather than cut into it. Deepest elevation on
      the page, plus a bright top edge where it catches the light. */
@@ -1497,24 +1967,67 @@ select.field__control {
 }
 
 @media (min-width: 1024px) {
-  .guarantee-band { padding-block-end: var(--rhythm-lg); }
+  /* Hugs the panel: the navy exists to light it, not to be a section
+     of its own. */
+  .guarantee-band { padding-block-end: var(--rhythm-sm); }
   .guarantee {
     padding: 60px 60px 56px;
-    transform: translateY(-40px);
+    margin-block-start: -40px;
+    /* TWO COLUMNS at desktop. At --content-inset the panel was narrow
+       enough for one text column; aligned to --content-max it is not,
+       and a 60ch measure left ~550px of void beside it. The prose
+       takes the left, the three commitments stack down the right —
+       which also suits them better than a row, since each is a
+       label/value pair and pairs read down, not across. */
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    column-gap: var(--space-16);
+    align-items: start;
+  }
+  .guarantee__kicker,
+  .guarantee__title,
+  .guarantee__body { grid-column: 1; }
+  .guarantee__body { margin-block-end: 0; }
+  .guarantee__stats {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: stretch;
   }
   .guarantee__kicker { font-size: var(--text-mono-xs); margin-block-end: 22px; }
   .guarantee__title { margin-block-end: var(--space-05); }
-  .guarantee__body { margin-block-end: 38px; }
+  .guarantee__body { margin-block-end: 0; }
+  /* Stacked, one per row, in the right column. Each stat is a
+     label/value pair and pairs read down; three across also forced the
+     longest caption ("networks it's tested on before you see it") to
+     wrap to three lines while its neighbours took one. */
   .guarantee__stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
+    border-block-start: 0;
   }
+  /* Value over caption, left-aligned — the same shape as .metric-big
+     everywhere else on the site, so the page has one way of setting a
+     number and its label rather than two.
+
+     The horizontal pair was tried first and failed on the longest
+     caption: right-aligned mono running to three ragged-left lines
+     beside a two-character value is hard to read and looks accidental.
+     The leader dots go with it — they exist to join a pair across a
+     line, and there is no line to cross now. */
   .guarantee__stat {
-    display: block;
-    padding: var(--space-06) 30px 0;
-    border-block-end: 0 !important;
-    border-inline-end: var(--border-hairline) solid var(--color-border-strong);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-02);
+    padding-block: var(--space-05);
+    border-inline-end: 0;
   }
+  .guarantee__stat:first-child { padding-block-start: 0; }
+  .guarantee__stat:not(:last-child) {
+    border-block-end: var(--border-hairline) dotted var(--color-border-strong);
+  }
+  .guarantee__stat .spec-row__leader { display: none; }
+  .guarantee__caption { text-align: start; max-inline-size: 30ch; }
   .guarantee__stat:first-child { padding-inline-start: 0; }
   .guarantee__stat:last-child { padding-inline-end: 0; border-inline-end: 0; }
   .guarantee__caption { display: block; margin-block-start: 10px; font-size: var(--text-mono-xs); letter-spacing: 0.13em; }
@@ -1786,16 +2299,14 @@ select.field__control {
 .nav__link,
 .nav__contact,
 .nav__crumb,
-.footer__link,
-.card-play__reset {
+.footer__link {
   position: relative;
 }
 .wordmark::before,
 .nav__link::before,
 .nav__contact::before,
 .nav__crumb::before,
-.footer__link::before,
-.card-play__reset::before {
+.footer__link::before {
   content: "";
   position: absolute;
   inset-block-start: 50%;
@@ -1805,12 +2316,673 @@ select.field__control {
   block-size: max(100%, 44px);
 }
 
-/* The demo card's title link stretches over the whole body, so the
-   card reads as one target — while the thumbnail's PLAY button, which
-   does something else entirely, stays its own. The containing block
-   for this is set on .demo-card__body where it is declared. */
-.demo-card__title a::after {
+/* ---------------------------------------------------------------
+   COMPARISON  (Component 12)
+   Two columns at every width — blocks.tsx carries the reason it
+   never collapses to one.
+
+   The right column is the argument, so it takes the full-strength
+   ink and the warm rule; the left is muted. That asymmetry is the
+   component's only decoration: no icons, no crosses and ticks, no
+   red. The losing column is a fair description of a video ad, not
+   a strawman, and colouring it as a failure would read as one.
+   --------------------------------------------------------------- */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--space-03);
+  align-items: start;
+}
+.compare__head {
+  font-family: var(--font-display);
+  font-size: var(--text-body-sm);
+  line-height: var(--text-body-sm-lh);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  padding-block: var(--space-03);
+  border-block-start: var(--border-accent) solid var(--color-border-subtle);
+}
+.compare__head--from { color: var(--color-text-muted); }
+.compare__head--to {
+  color: var(--color-text-primary);
+  border-block-start-color: var(--color-accent-emphasis-fill);
+}
+.compare__cell {
+  font-size: var(--text-body-xs);
+  line-height: var(--text-body-xs-lh);
+  padding-block: var(--space-03);
+  border-block-start: 1px solid var(--color-border-subtle);
+}
+.compare__cell--from { color: var(--color-text-muted); }
+.compare__cell--to { color: var(--color-text-primary); font-weight: 500; }
+
+@media (min-width: 1024px) {
+  .compare { column-gap: var(--space-08); }
+  .compare__head { font-size: var(--text-body-lg); padding-block: var(--space-04); }
+  .compare__cell { font-size: var(--text-body-md); padding-block: var(--space-05); }
+}
+
+/* The header carries both paths. Below 600px the bar has room for one
+   button and the burger, so the quote folds into the sheet — where it
+   is the first thing in the footer, above the call. It is never
+   dropped, only relocated. */
+@media (max-width: 599px) {
+  .nav__quote { display: none; }
+}
+.sheet__foot .btn + .btn { margin-block-start: var(--space-03); }
+
+/* ============================================================
+   REBUILD COMPONENTS — 2026-08-20
+   The four the wireframes needed that the system did not have.
+   `1h` is the state sheet these are drawn from.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   BIG METRIC + PROOF BAR
+
+   `1h` puts a floor of 34px on the large metric and `1c` draws the
+   proof bar at 40px+. The floor lives here rather than at each call
+   site, because the failure this prevents is a metric set at body
+   size inside someone else's grid, where it stops reading as proof.
+
+   The value is DISPLAY, not mono. Mono on this site asserts that we
+   measured the number ourselves; a campaign outcome was measured by
+   the network. The label beneath is mono, because the label names
+   what was measured against.
+   ------------------------------------------------------------ */
+.metric-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-08) var(--space-16);
+  align-items: baseline;
+}
+.metric-big { display: flex; flex-direction: column; gap: var(--space-01); }
+.metric-big__value {
+  font-size: var(--text-display-numeral);     /* 38px — above the 34 floor */
+  line-height: var(--text-display-numeral-lh);
+  letter-spacing: var(--text-display-numeral-ls);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 1024px) {
+  .metric-big__value { font-size: 52px; }
+}
+.metric-big__label { color: var(--color-text-muted); letter-spacing: 0.12em; }
+
+/* On a navy ground the pair inverts. The value takes the measured-
+   value teal only where it IS a measurement; campaign outcomes stay
+   in plain ink, so this rule sets ink and leaves teal to the frame. */
+[data-ground="dark"] .metric-big__value { color: var(--color-text-primary-on-ground); }
+[data-ground="dark"] .metric-big__label { color: var(--color-text-muted-on-ground); }
+
+/* --- the small pill on a card ------------------------------------ */
+.metric-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-01);
+  min-block-size: 26px;
+  padding: 0 var(--space-03);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  color: var(--color-text-body);
+  white-space: nowrap;
+}
+/* A sourced number gets the amber rule under it — amber asserts.
+   A tag (network, vertical) is a fact, not a claim, and stays plain. */
+.metric-chip[data-variant="metric"] {
+  border-color: var(--color-accent-emphasis-fill);
+  color: var(--color-accent-emphasis-ink);
+}
+
+/* ------------------------------------------------------------
+   CTA BAND — always two buttons, on every page.
+   No teal: the quote button carries amber, the page's buy colour.
+   ------------------------------------------------------------ */
+.cta-band {
+  padding-block: var(--space-16);
+  padding-inline: var(--gutter);
+}
+.cta-band__inner {
+  inline-size: 100%;
+  max-inline-size: var(--content-max);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-06);
+}
+@media (min-width: 900px) {
+  .cta-band__inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12);
+  }
+}
+.cta-band__title { max-inline-size: 30ch; }
+.cta-band__actions { flex-shrink: 0; }
+
+/* `1b` ends on a PAPER band with an amber primary, not a teal one.
+   A full-width teal band was a second teal region competing with the
+   playable for the same meaning, on a page whose only teal should be
+   the thing you can press to play. */
+.cta-band[data-variant="primary"] {
+  background: var(--color-surface-sunken);
+  border-block-start: 1px solid var(--color-border-strong);
+}
+.cta-band[data-variant="primary"] .cta-band__title { color: var(--color-text-primary); }
+
+.cta-band[data-variant="secondary"] {
+  background: var(--color-surface-sunken);
+  border-block-start: 1px solid var(--color-border-subtle);
+}
+.cta-band[data-variant="secondary"] .cta-band__title { color: var(--color-text-primary); }
+
+/* ------------------------------------------------------------
+   PRICING TIER — `1f`
+   The flagged tier is amber and its button stays navy: the card
+   asserts, the button is what gets pressed.
+   ------------------------------------------------------------ */
+.tier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  padding: var(--space-08) var(--space-06) var(--space-06);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+}
+.tier[data-flagged] {
+  background: var(--color-accent-emphasis-wash);
+  border-color: var(--color-accent-emphasis-fill);
+}
+.tier__flag {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: var(--space-06);
+  transform: translateY(-50%);
+  padding: var(--space-01) var(--space-03);
+  background: var(--color-text-primary);
+  color: var(--color-text-primary-on-ground);
+  border-radius: 999px;
+  letter-spacing: 0.1em;
+}
+.tier__name { color: var(--color-text-muted); letter-spacing: 0.12em; }
+.tier__price {
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+/* Awaiting sign-off: the turnaround takes the large slot instead of
+   a dash. See content/metrics.ts. */
+.tier__price--pending { color: var(--color-text-body); }
+.tier__unit { color: var(--color-text-muted); }
+.tier__cadence { color: var(--color-text-muted); letter-spacing: 0.12em; }
+.tier__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-02);
+  margin-block: var(--space-04) auto;
+  padding-block-end: var(--space-06);
+  color: var(--color-text-body);
+}
+.tier__list li { padding-inline-start: var(--space-05); position: relative; }
+.tier__list li::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset-block-start: 0.62em;
+  inset-inline-start: 0;
+  inline-size: 8px;
+  block-size: 1px;
+  background: var(--color-border-strong);
+}
+.tier__cta { margin-block-start: auto; }
+
+/* --- the three-tier grid ---------------------------------------- */
+/* THREE TIERS NEVER GO THROUGH TWO COLUMNS.
+   The 768px two-column step stranded the retainer alone on a second
+   row beside a hole — the same failure as the resources grid, and for
+   the same reason: a symmetric grid always orphans an odd count. So
+   this goes one column straight to three at 860px, where three cards
+   still clear ~250px each. Between the two it stacks, which is the
+   correct answer for a page people scroll to compare anyway. */
+.tier-grid {
+  display: grid;
+  gap: var(--space-06);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+}
+@media (min-width: 860px) {
+  .tier-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-05); }
+}
+@media (min-width: 1200px) {
+  .tier-grid { gap: var(--space-08); }
+}
+
+/* --- us vs in-house --------------------------------------------- */
+.compare-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  text-align: start;
+}
+.compare-table th,
+.compare-table td {
+  padding: var(--space-04) var(--space-04);
+  border-block-end: 1px solid var(--color-border-subtle);
+  vertical-align: baseline;
+}
+.compare-table thead th {
+  color: var(--color-text-muted);
+  letter-spacing: 0.12em;
+  border-block-end-color: var(--color-border-strong);
+}
+.compare-table tbody th {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+.compare-table td { color: var(--color-text-body); }
+
+/* --- the value map / value ladder rows --------------------------
+   `2a` draws this as a table and `2b` as a stack of full-width rows.
+   They are the same object at two rhythms, so they share a class and
+   differ by an attribute rather than by two implementations.
+   ---------------------------------------------------------------- */
+.ladder { display: flex; flex-direction: column; gap: var(--space-03); }
+.ladder__row {
+  display: grid;
+  gap: var(--space-02) var(--space-06);
+  grid-template-columns: minmax(0, 1fr);
+  padding: var(--space-05) var(--space-06);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  align-items: baseline;
+}
+@media (min-width: 900px) {
+  .ladder__row { grid-template-columns: 12rem minmax(0, 1fr) auto; }
+}
+.ladder__label {
+  color: var(--color-text-muted);
+  letter-spacing: 0.12em;
+}
+.ladder__claim { color: var(--color-text-primary); }
+.ladder__note { color: var(--color-text-body); }
+
+/* --- the "where does it hurt?" card ------------------------------ */
+.hurt {
+  padding: var(--space-06);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+}
+.hurt__head { color: var(--color-text-muted); letter-spacing: 0.12em; }
+.hurt__chips { display: flex; flex-direction: column; gap: var(--space-02); }
+.hurt__chip {
+  display: block;
+  padding: var(--space-03) var(--space-04);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: 999px;
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+.hurt__chip:hover { border-color: var(--color-text-muted); }
+
+/* --- two-column page opener, shared by 2a and 2b ----------------- */
+.opener {
+  display: grid;
+  gap: var(--space-08);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .opener { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--space-16); }
+}
+
+/* --- the library filter bar — `1g` ------------------------------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-03);
+  padding-block-end: var(--space-05);
+  border-block-end: 1px solid var(--color-border-subtle);
+}
+.filter-bar__count {
+  padding: var(--space-02) var(--space-04);
+  background: var(--color-text-primary);
+  color: var(--color-text-primary-on-ground);
+  border-radius: 999px;
+  letter-spacing: 0.1em;
+}
+.filter { display: inline-flex; }
+.filter__select {
+  min-block-size: 34px;
+  padding: 0 var(--space-06) 0 var(--space-04);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  /* The native arrow sits too close to the pill's radius; the caret
+     is drawn into the padding instead. */
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: right 18px top 15px, right 13px top 15px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+.filter__select:hover { border-color: var(--color-text-muted); }
+.filter__clear {
+  background: none;
+  border: 0;
+  padding: var(--space-02);
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.filter__clear:hover { color: var(--color-text-primary); }
+
+.build-grid__more {
+  display: flex;
+  justify-content: center;
+  margin-block-start: var(--space-10);
+}
+
+/* --- /for-brands opener foot: metric row + CTA pair on one line --- */
+.brand-hero__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-06);
+  margin-block-start: var(--space-10);
+}
+@media (min-width: 900px) {
+  .brand-hero__foot {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-12);
+  }
+}
+
+/* --- the agency rate-card callout -------------------------------- */
+.rate-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-04);
+  margin-block-start: var(--space-06);
+  padding: var(--space-05) var(--space-06);
+  background: var(--color-accent-emphasis-wash);
+  border: 1px solid var(--color-accent-emphasis-fill);
+  border-radius: var(--radius-2xl);
+}
+
+/* The struck-through 'before' beside a new value — `2a`'s centrepiece.
+   Smaller and muted, so the pair reads as one number that moved rather
+   than two numbers competing. */
+.metric-big__before {
+  font-size: 0.5em;
+  color: var(--color-text-muted);
+  margin-inline-end: 0.28em;
+  text-decoration-thickness: 1px;
+}
+[data-ground="dark"] .metric-big__before { color: var(--color-text-muted-on-ground); }
+
+.genre-chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-02);
+}
+
+/* The studios page buys two of the three tiers. Two is an even count,
+   so it can take a two-column step the three-tier grid cannot. */
+@media (min-width: 768px) {
+  .tier-grid--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ============================================================
+   `1b` HOME — the lean composition, 2026-08-20
+   ============================================================ */
+
+/* --- THE FORK BAND ----------------------------------------------
+   Full bleed, two lanes, directly under the hero. Deliberately NOT
+   symmetrical: the left lane is filled and the right one sits on
+   paper. Two identical halves produce the coin-flip pause that every
+   balanced fork produces, and the band's whole job is to be decided
+   quickly.
+
+   Amber is the assertion colour under the site's split — the lane
+   asserts, the buttons inside it are what get pressed. No teal here:
+   the hero above already spends the fold's one teal region on the
+   playable.
+   ---------------------------------------------------------------- */
+.fork-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-block: 1px solid var(--color-border-subtle);
+}
+@media (min-width: 900px) {
+  .fork-band { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.fork-lane {
+  padding: var(--space-10) var(--gutter);
+  background: var(--color-surface-sunken);
+}
+.fork-lane[data-emphasis] {
+  background: var(--color-accent-emphasis-fill);
+}
+/* The lanes' content aligns to the page's content column rather than
+   to each lane's own edge, so the left lane's text lines up with the
+   hero headline above it instead of floating in a coloured box. */
+.fork-lane__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  max-inline-size: calc(var(--content-max) / 2);
+}
+.fork-lane:first-child .fork-lane__inner { margin-inline-start: auto; padding-inline-end: var(--space-10); }
+.fork-lane:last-child .fork-lane__inner { margin-inline-end: auto; }
+@media (max-width: 899px) {
+  .fork-lane:first-child .fork-lane__inner { padding-inline-end: 0; }
+  .fork-lane__inner { margin-inline: 0; max-inline-size: none; }
+}
+.fork-lane__title { color: var(--color-text-primary); }
+.fork-lane__body { color: var(--color-text-body); max-inline-size: 42ch; }
+.fork-lane__actions { margin-block-start: var(--space-04); }
+/* INK ON THE AMBER FILL IS NAVY, and this is a contrast rule rather
+   than a preference. Measured against #F0A93B:
+
+     --color-accent-emphasis-ink  #8A5A0E   2.94:1   FAILS
+     --color-text-muted           #5F6E86   2.69:1   FAILS
+     --color-text-primary         #172A4A   8.13:1   passes
+
+   The emphasis ink is calibrated for amber as a WORD on paper, not for
+   paper-coloured words on amber, and the muted greys have nothing left
+   once the ground is this light. So the whole lane — eyebrow, body and
+   the outline button — takes the primary navy. The eyebrow loses its
+   muted step; on a filled lane the fill is already doing the
+   separating that the muting used to do. */
+.fork-lane[data-emphasis] .fork-lane__body { color: var(--color-text-primary); }
+.fork-lane[data-emphasis] .btn--outline {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+.fork-lane[data-emphasis] .btn--outline:hover { background: rgb(14 27 49 / 0.06); }
+
+/* --- FEATURED WORK, four up -------------------------------------- */
+@media (min-width: 1024px) {
+  .build-grid--wide { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* --- HOW IT WORKS + PRICING TEASER share a row ------------------- */
+.how-row {
+  display: grid;
+  gap: var(--space-10);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .how-row { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--space-16); }
+}
+
+.steps { list-style: none; display: flex; flex-direction: column; gap: var(--space-06); }
+.steps__item { display: flex; gap: var(--space-04); align-items: flex-start; }
+.steps__num {
+  flex-shrink: 0;
+  inline-size: 26px;
+  block-size: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-text-primary);
+  color: var(--color-text-primary-on-ground);
+}
+.steps__title { color: var(--color-text-primary); }
+.steps__day { color: var(--color-text-muted); margin-inline-start: var(--space-02); letter-spacing: 0.1em; }
+.steps__body { color: var(--color-text-body); margin-block-start: var(--space-01); max-inline-size: 46ch; }
+
+.teaser {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  padding: var(--space-08) var(--space-06);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+}
+.teaser__label { color: var(--color-text-muted); letter-spacing: 0.12em; }
+.teaser__price { color: var(--color-text-primary); }
+.teaser__body { color: var(--color-text-body); margin-block-end: var(--space-03); }
+
+/* --- FAQ, two columns on the home page --------------------------- */
+@media (min-width: 900px) {
+  .faq[data-columns="2"] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-08);
+    align-content: start;
+  }
+}
+
+/* --- the in-progress page's outline ------------------------------
+   Set as a plan, not as content: muted, ruled, numbered. It must not
+   be mistakable for the page's actual sections. */
+.outline {
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-06);
+  border-block-start: 1px solid var(--color-border-subtle);
+  max-inline-size: 46rem;
+}
+.outline__head { color: var(--color-text-muted); letter-spacing: 0.14em; }
+.outline__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  margin-block-start: var(--space-05);
+}
+.outline__item {
+  display: flex;
+  gap: var(--space-04);
+  align-items: baseline;
+  color: var(--color-text-body);
+}
+.outline__num { color: var(--color-text-muted); }
+
+/* --- /contact's three routes ------------------------------------- */
+.contact-routes {
+  display: grid;
+  gap: var(--space-06);
+  grid-template-columns: minmax(0, 1fr);
+  margin-block-start: var(--space-10);
+}
+@media (min-width: 900px) {
+  .contact-routes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-08); }
+}
+.contact-route {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  align-items: flex-start;
+  padding: var(--space-06);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+}
+.contact-route__head { color: var(--color-text-muted); letter-spacing: 0.12em; }
+.contact-route .btn { margin-block-start: auto; }
+
+/* --- /resources cards -------------------------------------------
+   Two grids, not one. See Resources.tsx for why five items in a
+   symmetric grid always strands the fifth.
+   ---------------------------------------------------------------- */
+.res-list {
+  list-style: none;
+  display: grid;
+  gap: var(--space-04);
+  grid-template-columns: minmax(0, 1fr);
+}
+/* Counts drive the columns, and they differ between the two grids.
+   The lead row holds the two WRITTEN resources — an even count, so it
+   takes two columns. The row below holds the three being written, so
+   it goes one column straight to three for exactly the reason the
+   tier grid does: two columns would strand the third. */
+@media (min-width: 768px) {
+  .res-list--lead { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-05); }
+}
+@media (min-width: 860px) {
+  .res-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .res-list--lead { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.res-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+  block-size: 100%;
+  padding: var(--space-06);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-drop) var(--ease-glide),
+    transform var(--duration-drop) var(--ease-glide);
+}
+.res-card:hover { border-color: var(--color-text-muted); }
+/* Feedback on press, not on release — the card commits on pointer-up
+   but acknowledges on pointer-down. */
+.res-card:active { transform: scale(0.994); }
+
+.res-card[data-lead="true"] {
+  padding: var(--space-08);
+  gap: var(--space-04);
+}
+/* Tracking is size-specific: the lead card's title is set at display
+   size and needs the negative tracking that size wants. The smaller
+   cards keep the body face's own. */
+.res-card[data-lead="true"] .res-card__title { letter-spacing: -0.018em; }
+
+.res-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-04); }
+.res-card__title { color: var(--color-text-primary); }
+.res-card__body { color: var(--color-text-body); }
+.res-card__go { color: var(--color-text-muted); margin-block-start: auto; letter-spacing: 0.1em; }
+.res-card:hover .res-card__go { color: var(--color-text-primary); }
+
+@media (prefers-reduced-motion: reduce) {
+  .res-card { transition: border-color var(--duration-drop) var(--ease-glide); }
+  .res-card:active { transform: none; }
 }

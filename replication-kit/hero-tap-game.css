@@ -52,10 +52,35 @@ body {
   font-family: "Arial Black", Arial, sans-serif;
   user-select: none;
   -webkit-user-select: none;
-  touch-action: manipulation;
+  /* `none`, not `manipulation`. manipulation only drops the ~300ms
+     click delay and double-tap zoom; it still lets a touch pan. The
+     mechanic here is a tap streak inside a fixed frame, so every
+     browser-owned gesture on this surface — pan, double-tap zoom,
+     pinch — is something the player did not mean to do. Taps still
+     fire clicks under touch-action:none. */
+  touch-action: none;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* EVERY SIZE ON THE PLAY SCREENS IS FLUID, and the units are the
+   frame's, not the page's.
+
+   This file runs inside an iframe, so vw and vh here resolve against
+   the FRAME the host mounts it in — which is exactly the box the
+   layout has to survive. Fixed pixels were the bug: at 32px the cover
+   title, a 52px button and a 72%-wide sprite the column came to more
+   than a phone-sized frame is tall, so the button landed on top of the
+   line under it and the top line went behind the island.
+
+   clamp() with a low floor rather than a media query, because there is
+   no breakpoint to write against: the host sizes this frame from the
+   viewport's height, so its width is continuous.
+
+   The block-start padding is the island's clearance. The host draws a
+   cutout over roughly the top 7% of the screen; 9vh puts the first
+   line clear of it at every size, and costs nothing when this file is
+   opened standalone. */
 .g-screen {
   position: absolute;
   inset: 0;
@@ -63,13 +88,16 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  padding: 24px;
+  gap: clamp(6px, 1.8vh, 14px);
+  padding:
+    clamp(30px, 9vh, 52px)
+    clamp(12px, 5vw, 24px)
+    clamp(14px, 4vh, 24px);
   text-align: center;
 }
 
 .g-cover-title {
-  font-size: 32px;
+  font-size: clamp(20px, 9.5vw, 34px);
   font-weight: 800;
   line-height: 1.05;
   color: var(--ink-deep);
@@ -78,7 +106,7 @@ body {
 }
 
 .g-cover-sub {
-  font-size: 12px;
+  font-size: clamp(8.5px, 3.4vw, 12px);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -87,24 +115,31 @@ body {
   margin: 0;
 }
 
+/* max-height is the load-bearing half. The sprite is the tallest item
+   in the column and the only one whose height is set by its own aspect
+   ratio, so without a cap it is what pushes the button off-screen. */
 .g-sprite {
-  width: 72%;
+  width: 66%;
   max-width: 250px;
+  max-height: 34vh;
+  object-fit: contain;
   pointer-events: none;
 }
 
 .g-btn {
   font-weight: 800;
-  font-size: 18px;
-  padding: 14px 34px;
+  font-size: clamp(14px, 5.2vw, 18px);
+  padding: clamp(9px, 2.6vh, 14px) clamp(18px, 9vw, 34px);
   border-radius: 999px;
-  border: 3px solid var(--ink-deep);
+  border: clamp(2px, 0.9vw, 3px) solid var(--ink-deep);
   background: #fff;
   color: var(--ink-deep);
   cursor: pointer;
-  box-shadow: 0 5px 0 var(--ink-deep);
+  box-shadow: 0 clamp(3px, 1vw, 5px) 0 var(--ink-deep);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
-  min-height: 52px;
+  /* 44 is the tap floor and this must never clamp below it. */
+  min-height: clamp(44px, 11vh, 52px);
+  white-space: nowrap;
 }
 
 .g-btn:active {
@@ -123,7 +158,8 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  padding: 56px 18px 0;
+  /* Clears the island AND the timer bar that now sits under it. */
+  padding: clamp(40px, 12vh, 70px) clamp(12px, 5vw, 18px) 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -133,22 +169,29 @@ body {
 
 .g-hud .g-count {
   font-weight: 800;
-  font-size: 30px;
+  font-size: clamp(20px, 8vw, 30px);
   color: var(--ink-deep);
   line-height: 1;
 }
 
 .g-hud .g-time {
   font-weight: 700;
-  font-size: 16px;
+  font-size: clamp(11px, 4.4vw, 16px);
   color: var(--ink-deep);
 }
 
+/* The timer, dropped clear of the top edge.
+   At top:0 this is a near-black bar running the full width of the
+   screen directly under the host frame's island cutout — two black
+   shapes touching, which reads as a rendering fault rather than as a
+   countdown. Below the island it reads as what it is.
+   left/width/transform-origin are untouched: the game scales this on
+   the X axis every frame and owns that transform. */
 .g-bar {
   position: absolute;
-  top: 0;
+  top: clamp(26px, 7.5vh, 44px);
   left: 0;
-  height: 7px;
+  height: clamp(5px, 1.4vh, 7px);
   background: var(--ink-deep);
   width: 100%;
   transform-origin: left;
@@ -158,7 +201,7 @@ body {
 .g-pop {
   position: absolute;
   font-weight: 800;
-  font-size: 26px;
+  font-size: clamp(17px, 7vw, 26px);
   color: #fff;
   -webkit-text-stroke: 1.5px var(--ink-deep);
   pointer-events: none;
@@ -168,13 +211,14 @@ body {
 
 .g-toast {
   position: absolute;
-  bottom: 26px;
+  bottom: clamp(16px, 5vh, 26px);
   left: 50%;
   transform: translateX(-50%);
   background: var(--ink-deep);
   color: #fff;
-  font-size: 11.5px;
-  padding: 9px 16px;
+  font-size: clamp(9px, 3.2vw, 11.5px);
+  padding: clamp(6px, 2vw, 9px) clamp(11px, 5vw, 16px);
+  max-width: 86%;
   border-radius: 999px;
 }
 
@@ -193,8 +237,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 26px 24px;
+  gap: clamp(4px, 1.2vh, 10px);
+  /* The end card already scaled with vw, but every clamp() FLOOR was
+     written for a 320px-wide unit. In a frame two thirds that width
+     the floors all bind at once and the card overflows — a store
+     listing that runs off the bottom of the screen cannot be tapped.
+     The floors below are set for the narrowest frame the host mounts. */
+  padding: clamp(30px, 9vh, 34px) clamp(14px, 6vw, 24px) clamp(16px, 4vh, 26px);
   text-align: center;
   background: linear-gradient(178deg, var(--cream) 0%, var(--cream-deep) 100%);
   animation: gFade 0.45s ease both;
@@ -210,9 +259,9 @@ body {
 }
 
 .g-app-icon {
-  inline-size: clamp(78px, 24vw, 104px);
-  block-size: clamp(78px, 24vw, 104px);
-  border-radius: clamp(19px, 6vw, 25px);
+  inline-size: clamp(54px, 24vw, 104px);
+  block-size: clamp(54px, 24vw, 104px);
+  border-radius: clamp(13px, 6vw, 25px);
   background: linear-gradient(155deg, #ffc768 0%, var(--amber) 100%);
   box-shadow:
     0 12px 28px rgba(120, 80, 12, 0.28),
@@ -233,7 +282,7 @@ body {
 
 .g-app-name {
   margin: 4px 0 0;
-  font-size: clamp(22px, 7vw, 30px);
+  font-size: clamp(17px, 7vw, 30px);
   font-weight: 800;
   letter-spacing: -0.015em;
   color: var(--ink-deep);
@@ -241,7 +290,7 @@ body {
 }
 .g-app-sub {
   margin: 0;
-  font-size: clamp(10px, 3vw, 12px);
+  font-size: clamp(8px, 3vw, 12px);
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -252,19 +301,23 @@ body {
 .g-stars {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 13px;
+  gap: clamp(4px, 2vw, 7px);
+  font-size: clamp(9.5px, 3.6vw, 13px);
   font-weight: 700;
   color: var(--ink-soft);
   animation: gRise 0.55s ease 0.13s both;
 }
 .g-star-row { display: flex; gap: 2px; }
 .g-star { display: flex; color: var(--gold); }
-.g-star svg { inline-size: 14px; block-size: 14px; display: block; }
+.g-star svg {
+  inline-size: clamp(10px, 4vw, 14px);
+  block-size: clamp(10px, 4vw, 14px);
+  display: block;
+}
 
 .g-end-head {
   margin: 6px 0 0;
-  font-size: clamp(17px, 5.4vw, 23px);
+  font-size: clamp(13px, 5.4vw, 23px);
   font-weight: 800;
   line-height: 1.2;
   color: var(--ink-deep);
@@ -273,7 +326,7 @@ body {
 .g-end-head em { font-style: normal; color: var(--amber-ink); }
 .g-end-rank {
   margin: 0;
-  font-size: 10.5px;
+  font-size: clamp(8px, 3.2vw, 10.5px);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--ink-soft);
@@ -283,16 +336,19 @@ body {
 /* The one CTA. It pulses because an end card's whole job is to be
    tapped — this is the only animated thing on the card. */
 .g-cta {
-  margin-block-start: 12px;
+  margin-block-start: clamp(6px, 1.6vh, 12px);
   border: 0;
   cursor: pointer;
   font-family: inherit;
-  font-size: clamp(16px, 4.8vw, 20px);
+  font-size: clamp(13px, 4.8vw, 20px);
   font-weight: 800;
   letter-spacing: 0.01em;
   color: #fff;
-  padding: clamp(15px, 4.4vw, 19px) clamp(44px, 13vw, 58px);
+  /* Never below the 44px tap floor, however narrow the frame gets. */
+  min-block-size: 44px;
+  padding: clamp(12px, 4.4vw, 19px) clamp(26px, 13vw, 58px);
   border-radius: 40px;
+  white-space: nowrap;
   background: linear-gradient(180deg, #2f7d86 0%, var(--teal-deep) 100%);
   box-shadow:
     0 10px 22px rgba(16, 74, 82, 0.38),
@@ -319,19 +375,23 @@ body {
   margin-block-start: 2px;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: clamp(4px, 2vw, 7px);
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: clamp(10px, 3.8vw, 12.5px);
   font-weight: 700;
   border: 0;
   background: rgba(255, 255, 255, 0.5);
   color: var(--ink-soft);
   cursor: pointer;
-  padding: 8px 15px;
+  padding: clamp(6px, 2vw, 8px) clamp(10px, 4.5vw, 15px);
   border-radius: 20px;
   animation: gRise 0.55s ease 0.29s both;
 }
-.g-replay svg { inline-size: 14px; block-size: 14px; display: block; }
+.g-replay svg {
+  inline-size: clamp(10px, 4vw, 14px);
+  block-size: clamp(10px, 4vw, 14px);
+  display: block;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .g-endcard,

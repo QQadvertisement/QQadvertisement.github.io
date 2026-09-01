@@ -96,6 +96,10 @@ export default function PlayableFrame({
 
   return (
     <div className="phone">
+      {/* Volume, action and side buttons. One node, four buttons, no
+          semantics — the device's parts, drawn so the frame reads as
+          hardware rather than as a rounded rectangle. */}
+      <div className="phone__hardware" aria-hidden="true" />
       <div
         className="playable-stage"
         role={isControl ? "button" : undefined}
@@ -104,7 +108,7 @@ export default function PlayableFrame({
         onClick={isControl ? tapFrame : undefined}
         onKeyDown={isControl ? onKey : undefined}
       >
-        <div className="phone__notch" aria-hidden="true" />
+        <div className="phone__island" aria-hidden="true" />
 
         {/* --- loader layer ------------------------------------------ */}
         <div className="loader" data-hidden={running ? "true" : undefined}>
@@ -184,6 +188,11 @@ export default function PlayableFrame({
             <span>SOUND OFF</span>
           </div>
         )}
+
+        {/* The home indicator is the DEVICE's, so unlike the chrome
+            above it stays through play — a handset does not retract
+            it when an ad starts. */}
+        <div className="phone__home" aria-hidden="true" />
       </div>
     </div>
   );

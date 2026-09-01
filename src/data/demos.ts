@@ -61,6 +61,21 @@ export interface Demo {
    *  the visitor's own as they read. */
   beats: { name: string; note: string }[];
   /** true when the build is an ad unit a network cap applies to */
+  /* --- taxonomy, for the `/work` filter bar (wireframe `1g`) -----
+     Facts about the build, never about its performance: what it is,
+     who it was made for, which networks it was QA'd against. Nothing
+     here is a campaign claim, so nothing here needs a source. A
+     campaign metric on a card comes from content/metrics.ts and is
+     gated separately. -------------------------------------------- */
+  /** which lane's page this build belongs on */
+  audience: "games" | "brands";
+  /** the client's category, not ours */
+  vertical: string;
+  /** the mechanic class — how it plays, in one or two words */
+  format: string;
+  /** ids from site.ts `networks` this build was QA'd against. Empty
+   *  for builds that are not ad units and carry no network cap. */
+  networks: readonly string[];
   networkGraded: boolean;
   complianceNote?: string;
   changeNote: string;
@@ -83,6 +98,10 @@ export const demos: Demo[] = [
     lede:
       "A quiz you answer by dragging: three phase-matched cards go into three slots under a cycle ring. Everything below is read from the shipped file — and the session block is reading you, right now.",
     orientation: "Portrait · responsive",
+    audience: "brands",
+    vertical: "Health & fitness",
+    format: "Quiz",
+    networks: ["meta", "tiktok", "google"],
     cardVariant: "play",
     thumb: "/assets/casestudies/atta-sync-your-day.jpg",
     thumbAlt:
@@ -132,6 +151,13 @@ export const demos: Demo[] = [
     lede:
       "A ten-second tap challenge with the survey placed where motivation peaks — after 'time's up' and before the score reveal. It is a mobile web build, not an ad unit, so no network cap applies to it.",
     orientation: "Portrait · mobile web",
+    audience: "brands",
+    vertical: "Food & beverage",
+    format: "Timed tap",
+    /* Not an ad unit — a mobile web page. No network cap applies, so
+       it is QA'd against none of them and filters out of every
+       network facet rather than claiming a pass it never took. */
+    networks: [],
     cardVariant: "teardown",
     thumb: "/assets/casestudies/Friends Ramen/friendsramen.webp",
     thumbAlt:

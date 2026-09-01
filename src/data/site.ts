@@ -18,6 +18,18 @@
    ============================================================ */
 
 export const BOOKING_URL = "https://calendly.com/hello-qqstudio1/30min";
+
+/** The low-commitment path, present in every CTA pair beside the
+ *  booking link. Lands on the brief form rather than a calendar, which
+ *  is the whole point of carrying two paths: a reader who will not
+ *  give up a slot still has somewhere to go.
+ *
+ *  A ROUTE, not an anchor, since 2026-08-20: the form came off the
+ *  homepage when `1b` cut it, so this had to stop being "/#contact".
+ *  It is better as a route anyway — a destination can be linked to
+ *  from an email, and it does not make every CTA on the site a jump
+ *  to the bottom of a page the reader is already reading. */
+export const QUOTE_HREF = "/quote";
 export const CONTACT_EMAIL = "hello@qqadvertisement.com";
 
 export const site = {
@@ -28,16 +40,27 @@ export const site = {
   year: new Date().getFullYear(),
 };
 
-/** The six networks every build is QA'd against, with their published
+/** The three networks every build is QA'd against, with their published
  *  weight caps. Caps are the networks' own published limits — used to
- *  compute PASS/FAIL against a measured file weight, never asserted. */
+ *  compute PASS/FAIL against a measured file weight, never asserted.
+ *
+ *  Narrowed from six to three on 2026-08-05, at the owner's call: the
+ *  four dropped (AppLovin, Unity, ironSource, Mintegral) were listed
+ *  without the operating experience to back them up, and a list you
+ *  cannot answer questions about is a liability in a sales call, not
+ *  an asset. Adding one back means adding its real published cap here
+ *  — every PASS/FAIL badge on a demo page is computed from this array,
+ *  so a guessed cap becomes a printed lie.
+ *
+ *  Google is Google Ads / AdMob app campaigns, NOT AdSense. AdSense is
+ *  publisher-side display monetisation and does not run playables; the
+ *  distinction is one a UA buyer will know on sight. Google's store
+ *  handoff is its own Exit API rather than MRAID, which is why the
+ *  chip reads differently from the other two. */
 export const networks = [
   { id: "meta", name: "Meta", capMb: 5, spec: "5 MB CAP · 2 S TTI" },
   { id: "tiktok", name: "TikTok", capMb: 2, spec: "2 MB CAP · MRAID 3" },
-  { id: "applovin", name: "AppLovin", capMb: 5, spec: "5 MB CAP · SINGLE FILE" },
-  { id: "unity", name: "Unity", capMb: 5, spec: "5 MB CAP · ORIENTATION" },
-  { id: "ironsource", name: "ironSource", capMb: 3, spec: "3 MB CAP · DAPI" },
-  { id: "mintegral", name: "Mintegral", capMb: 2, spec: "2 MB CAP · MRAID 3" },
+  { id: "google", name: "Google Ads", capMb: 5, spec: "5 MB CAP · EXIT API" },
 ] as const;
 
 export const claims = {
@@ -47,9 +70,9 @@ export const claims = {
     title: "If the first build misses the spec, you don't pay for it.",
     body: "Under 2 MB, interactive in under a second, and passing on every network you named in the brief. Those are the terms we're measured against — and the numbers on every demo page are pulled from the shipped file, not typed in by us.",
     stats: [
-      { value: "<2 MB", caption: "Every build, no exceptions" },
-      { value: "<1 S", caption: "To first interaction" },
-      { value: "6", caption: "Networks QA'd per build" },
+      { value: "<2 MB", caption: "Never bounced for size" },
+      { value: "<1 S", caption: "Playing before they scroll past" },
+      { value: "3", caption: "Networks it's tested on before you see it" },
     ],
   },
 
@@ -94,49 +117,75 @@ export const claims = {
      NETWORKS · ZERO TEMPLATES"; the tenure is unverifiable here and has
      been dropped. This is the claim the chips substantiate — it is not
      a label, and it is never "AS SEEN ON". */
-  networkWallClaim: "Six networks · one codebase · zero templates",
+  networkWallClaim: "Three networks · one build · written for your game, not reskinned",
 } as const;
 
+/** Six items, per the wireframes' header. Two audience lanes first —
+ *  the reader self-selects before anything else — then the proof, the
+ *  process, the price. About drops out of the bar and stays in the
+ *  footer: it is the last thing a UA buyer reads, not the first.
+ *
+ *  FIVE items, not six — "How It Works" was cut on 2026-08-20 as
+ *  repetitive: it pointed at a home-page anchor whose content was
+ *  also the spine of /for-game-studios. The home section stays; the
+ *  nav item that duplicated it does not. */
 export const navItems = [
-  { label: "Demos", to: "/demos" },
-  { label: "What we build", to: "/#what-we-build" },
-  { label: "For Studios", to: "/for-studios" },
-  { label: "For Agencies", to: "/for-agencies" },
-  { label: "Playables 101", to: "/playable-ads-explained" },
-  { label: "About", to: "/about" },
+  { label: "For Game Studios", to: "/for-game-studios" },
+  { label: "For Brands", to: "/for-brands" },
+  { label: "Work", to: "/work" },
+  { label: "Pricing", to: "/pricing" },
+  { label: "Resources", to: "/resources" },
 ];
 
+/** Four columns, matching the sitemap's own grouping. The legal row
+ *  and the conversion endpoints are rendered separately by SiteFooter
+ *  — they are not a category of content. */
 export const footerColumns = [
   {
     head: "Work",
     links: [
-      { label: "Demos", to: "/demos" },
-      { label: "Teardowns", to: "/demos" },
-    ],
-  },
-  {
-    head: "What we build",
-    links: [
-      { label: "Playable ads", to: "/#what-we-build" },
-      { label: "End cards", to: "/#what-we-build" },
-      { label: "Variant sets", to: "/#what-we-build" },
+      { label: "Playable library", to: "/work" },
+      { label: "By industry", to: "/work/industries" },
+      { label: "Game case studies", to: "/work?a=games" },
+      { label: "Brand case studies", to: "/work?a=brands" },
     ],
   },
   {
     head: "Who we serve",
     links: [
-      { label: "For Studios", to: "/for-studios" },
-      { label: "For Agencies", to: "/for-agencies" },
+      { label: "For Game Studios", to: "/for-game-studios" },
+      { label: "Creative testing", to: "/for-game-studios/testing" },
+      { label: "For Brands", to: "/for-brands" },
+      { label: "Interactive demos", to: "/for-brands/demos" },
+    ],
+  },
+  {
+    head: "Resources",
+    links: [
+      { label: "Playables 101", to: "/playable-ads-explained" },
+      { label: "Benchmarks", to: "/resources/benchmarks" },
+      { label: "Glossary", to: "/glossary" },
+      { label: "Blog", to: "/blog" },
+      { label: "FAQ", to: "/faq" },
     ],
   },
   {
     head: "Company",
     links: [
-      { label: "Process", to: "/#process" },
+      { label: "Pricing", to: "/pricing" },
       { label: "About", to: "/about" },
-      { label: "FAQ", to: "/#faq" },
+      { label: "Careers", to: "/careers" },
+      { label: "Contact", to: "/contact" },
     ],
   },
+];
+
+/** The sitemap's legal row. Rendered as one line in the footer base,
+ *  not as a fifth content column. */
+export const legalLinks = [
+  { label: "Privacy", to: "/privacy" },
+  { label: "Terms", to: "/terms" },
+  { label: "Cookies", to: "/cookies" },
 ];
 
 export const faqs = [
@@ -150,7 +199,7 @@ export const faqs = [
   },
   {
     q: "Which networks do you QA against?",
-    a: "Meta, TikTok, AppLovin, Unity, ironSource and Mintegral by default. Each has a different weight cap, a different MRAID version and a different orientation contract, so the build carries flags rather than forks.",
+    a: "Meta, TikTok and Google Ads. Each one has its own weight cap, its own way of handing off to the store — Google uses its Exit API where the other two use MRAID — and its own orientation rules. One build carries flags for all three rather than forking into three files that drift apart.",
   },
   {
     q: "Who owns the files afterwards?",

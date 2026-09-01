@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { SpecList, SpecRow } from "./ui/Spec";
 import { claims, networks } from "../data/site";
@@ -15,9 +15,9 @@ import { claims, networks } from "../data/site";
    ON". Below 1024 it is dropped: at 350px it costs two lines and
    pushes the chips below the fold, so the chips carry it alone.
 
-   Wordmarks are deliberately not used. Six foreign brand marks
-   would import six colour systems into a two-colour palette, and
-   each needs its own usage rights and clear-space compliance.
+   Wordmarks are deliberately not used. Foreign brand marks would
+   import their colour systems into a two-colour palette, and each
+   needs its own usage rights and clear-space compliance.
    --------------------------------------------------------------- */
 export function NetworkWall() {
   return (
@@ -34,6 +34,57 @@ export function NetworkWall() {
         ))}
       </ul>
     </section>
+  );
+}
+
+/* ---------------------------------------------------------------
+   Component 12 — Comparison
+   The one section on the page that argues for the FORMAT rather
+   than for us, which is why it sits directly under the network
+   wall: the reader has just been told we ship everywhere, and has
+   not yet been told why the thing we ship is worth buying.
+
+   One two-column grid, not two lists side by side. The argument
+   lives in the difference between the two cells on a line, and
+   independent lists wrap to different heights, which leaves the
+   reader to pair them by eye.
+
+   It carries NO STATISTICS, and that is deliberate. The obvious
+   version of this section prints "3x retention, 40% lower CPA" —
+   figures that circulate between ad-platform blogs citing each
+   other, with no primary campaign underneath. One unverifiable
+   number here would sit a screen above measurements this site
+   reads off disk at build time, and a reader who doubts the first
+   discounts the second. If real numbers ever arrive from a client
+   campaign, they belong here as a fourth row, sourced.
+
+   Two columns at EVERY width. The cells are four or five words, so
+   they survive 160px; collapsing to one column would put the two
+   halves of a comparison on separate screens, which is the one
+   thing this component cannot do.
+
+   No teal — nothing here runs anything. The warm rule over the
+   right-hand column is a mark saying "look here", the only job
+   orange has.
+   --------------------------------------------------------------- */
+export function Comparison({
+  columns,
+  rows,
+}: {
+  columns: readonly [string, string];
+  rows: readonly { from: string; to: string }[];
+}) {
+  return (
+    <div className="compare">
+      <h3 className="compare__head compare__head--from">{columns[0]}</h3>
+      <h3 className="compare__head compare__head--to">{columns[1]}</h3>
+      {rows.map((r) => (
+        <Fragment key={r.to}>
+          <p className="compare__cell compare__cell--from">{r.from}</p>
+          <p className="compare__cell compare__cell--to">{r.to}</p>
+        </Fragment>
+      ))}
+    </div>
   );
 }
 

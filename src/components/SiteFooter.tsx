@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { BEAR_SRC } from "../lib/brand";
-import { CONTACT_EMAIL, footerColumns, site } from "../data/site";
+import { CONTACT_EMAIL, footerColumns, legalLinks, site } from "../data/site";
 
 /**
  * Component 12 — Footer.
@@ -8,7 +8,7 @@ import { CONTACT_EMAIL, footerColumns, site } from "../data/site";
  * Ground is --color-ground-deep, deeper than any section band, so it
  * reads as the page's floor.
  *
- * `showBrandMark` is forced false on /for-agencies. That page carries
+ * `showBrandMark` is forced false on /for-brands. That page carries
  * no bear at any size, including here: no playable on the page, so
  * neither reserved asset is permitted.
  */
@@ -72,6 +72,14 @@ export default function SiteFooter({
       <div className="footer__legal">
         <span>{legal}</span>
         <span className="footer__legal-links">
+          {/* The sitemap's legal row. One line in the base, not a
+              fifth content column — these are obligations, not
+              things anyone came here to read. */}
+          {legalLinks.map((l) => (
+            <Link className="footer__link" key={l.to} to={l.to}>
+              {l.label.toUpperCase()}
+            </Link>
+          ))}
           <a className="footer__link" href={`mailto:${CONTACT_EMAIL}`}>
             {CONTACT_EMAIL.toUpperCase()}
           </a>

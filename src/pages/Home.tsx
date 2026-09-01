@@ -1,32 +1,29 @@
 import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 import Atmosphere from "../components/Atmosphere";
-import ContactForm from "../components/ContactForm";
 import DemoCard, { NdaCard } from "../components/DemoCard";
 import Faq from "../components/ui/Faq";
 import PlayableFrame from "../components/PlayableFrame";
-import {
-  ForkCard,
-  GuaranteeBlock,
-  NetworkWall,
-  ProcessSteps,
-  RuleGrid,
-  Section,
-} from "../components/blocks";
-import { SpecList, SpecRow } from "../components/ui/Spec";
+import { NetworkWall, Section } from "../components/blocks";
+import CtaBand from "../components/ui/CtaBand";
+import ForkBand from "../components/ui/ForkBand";
+import { MetricRow } from "../components/ui/Metric";
 import { usePlayable } from "../hooks/usePlayable";
-import useScrollProgress from "../hooks/useScrollProgress";
-import { buildVolumeOptions, claims, faqs, networks } from "../data/site";
-import { demos, mb } from "../data/demos";
+import { BOOKING_URL, QUOTE_HREF, faqs } from "../data/site";
+import {
+  ctaBand,
+  fork,
+  hero as heroCopy,
+  howItWorks,
+  pricingTeaser,
+  proof,
+  shelf,
+} from "../content/home";
+import { tiers } from "../content/pricing";
+import { isApproved } from "../content/metrics";
+import { demos } from "../data/demos";
 import { measurements } from "../data/measurements.generated";
 import { KNEAD_URL } from "../data/playables";
-
-const whatWeBuild = [
-  { title: "Playable ads", body: "Portrait and landscape from one build, network-conditional at runtime." },
-  { title: "Interactive end cards", body: "Video-to-playable handoff without a second load or a white flash." },
-  { title: "Variant sets", body: "Hook, tutorial and end-card splits, built as one file with flags." },
-  { title: "Localisation", body: "Copy, layout and font swaps per market at the same file weight." },
-];
 
 /**
  * / — the homepage.
@@ -39,13 +36,26 @@ const whatWeBuild = [
  * puts the tap target inside thumb reach with no scroll, on a page
  * whose entire proposition is "play it".
  *
- * Teal census for this page: 3.
+ * Teal census for this page: 3 at rest.
  *   1. hero phone play button (with the loader rule and focus ring on
  *      the same playable surface)
- *   2. the one `play` demo card's button
+ *   2. the one `play` build tile's PLAY affordance — on a pointer
+ *      device it only exists while the tile is hovered, so most of
+ *      the time the census is 2
  *   3. the live readouts on the hero's measured panel
- * The nav CTA, "See all demos", the TEARDOWN → card and the form
+ * The nav CTA, "See all demos", the TEARDOWN → tile and the form
  * submit are all neutral. They lead to a playable; they are not one.
+ *
+ * The play lightbox is NOT a fourth region. It is modal: while it is
+ * open the page behind it is scrimmed and inert, so its play button
+ * (gate 1 again, on the same phone frame) and its measured stats (the
+ * documented teal-as-text exception on a dark ground) never share a
+ * screen with the three above. Counting it would be counting a
+ * different page.
+ *
+ * The "What we build" sequence deliberately holds NO teal — its
+ * figure marks in orange. See WhatWeBuild.tsx and the header of that
+ * section in pages.css for why.
  *
  * The stage's shader bloom (Atmosphere.tsx) is NOT a fourth region:
  * it is held below the amplitude at which it reads as a coloured
@@ -53,17 +63,22 @@ const whatWeBuild = [
  * tealGain.
  */
 export default function Home() {
+  /* The teaser prints a price only once one is approved. `1c` draws
+     "From $2,400 per playable"; until that number is real the band
+     falls back to the policy. See content/pricing.ts. */
+  const cheapest = tiers.find((t) => isApproved(t.price));
+  const priceLine = cheapest ? `From ${cheapest.price.amount} per playable` : null;
+
   /* The hero runs the house demo, so the hero measures the house demo.
      The loader fetches the same file the frame is about to run. */
   const knead = measurements.knead;
   const playable = usePlayable({ assetUrl: KNEAD_URL, fallbackBytes: knead.bytes });
-  const { ref: scrollerRef, width, offset } = useScrollProgress();
 
   return (
     <main className="main">
       <Seo
         title="Playable Ads for Mobile App User Acquisition | QQ Advertisement"
-        description="Custom HTML5 playable ads for Meta, TikTok, AppLovin, Unity, ironSource and Mintegral. We design and code the ad, not a template — and every number on a demo page is read off the shipped file."
+        description="Ads people play, not ads people skip. Custom HTML5 playable ads for Meta, TikTok and Google Ads — built by hand, tested on every network before it reaches you."
         path="/"
       />
 
@@ -87,7 +102,7 @@ export default function Home() {
       >
         <div className="hero">
           <p className="hero__kicker" data-reveal>
-            Custom HTML5 playables · New York
+            {heroCopy.kicker}
           </p>
 
           <div className="hero__playable" data-reveal style={{ ["--reveal-i" as string]: 1 }}>
@@ -99,41 +114,14 @@ export default function Home() {
                 ariaBuildName="Ready, Set, Knead"
               />
 
-              {/* The comp floats these measurements on a navy card
-                  overlapping the text column. In this build that card
-                  landed on top of the network table and hid it, so the
-                  claim stays and the collision goes: the strip sits
-                  under the phone, at every width, aligned to the frame
-                  it describes.
-
-                  "Aligned to the frame it describes" is the whole rule
-                  here. These numbers are the HOUSE DEMO's, because the
-                  house demo is what is playing above them. Printing the
-                  Atta unit's 25.5 KB under a frame running something
-                  else would be the same lie in a nicer typeface — the
-                  client build's numbers live on its own card and its
-                  teardown, where that build is the thing on screen.
-
-                  Weight is the total: document plus the sprites it
-                  pulls. The document alone is 9 KB and quoting that
-                  would be flattery. */}
-              <div className="hero__measured">
-                <p className="hero__measured-label">Measured, not claimed</p>
-                <dl className="hero__phone-stats">
-                  <div className="hero__phone-stat">
-                    <dt>Weight</dt>
-                    <dd>{mb(knead.totalBytes)}</dd>
-                  </div>
-                  <div className="hero__phone-stat">
-                    <dt>Sprites</dt>
-                    <dd>{mb(knead.assetBytes)}</dd>
-                  </div>
-                  <div className="hero__phone-stat">
-                    <dt>Requests</dt>
-                    <dd>{knead.requests}</dd>
-                  </div>
-                </dl>
-              </div>
+              {/* The weight/sprites/requests strip that used to sit
+                  here was removed on 2026-08-05: under the phone it
+                  read as a spec sheet bolted to the hero, and the hero
+                  now leads with what the ad does rather than what it
+                  weighs. The measurements are not lost — they are still
+                  live on each demo card and its teardown, where the
+                  build being measured is the one on screen, which was
+                  always the rule this strip had to obey. */}
             </div>
           </div>
 
@@ -144,228 +132,162 @@ export default function Home() {
               data-reveal
               style={{ ["--reveal-i" as string]: 1 }}
             >
-              Playables that survive the first eight seconds.
+              {heroCopy.title}
             </h1>
             <p
               className="hero__lede t-body-md t-body-lg-at-desktop"
               style={{ maxInlineSize: "41ch", ["--reveal-i" as string]: 2 }}
               data-reveal
             >
-              We design and code the ad, not a template. Every build ships under 2&nbsp;MB,
-              interactive inside the first second, and QA'd against each network's spec before it
-              leaves.
+              {heroCopy.lede}
             </p>
             <div
               className="hero__actions btn-pair"
               data-reveal
               style={{ ["--reveal-i" as string]: 3 }}
             >
-              <Link className="btn btn--on-ground btn--xl" to="/demos">
-                See all demos{" "}
-                <span className="btn__arrow" aria-hidden="true">
-                  →
-                </span>
+              <Link className="btn btn--accent btn--xl" to={QUOTE_HREF}>
+                Get a flat quote
               </Link>
-              <span className="t-body-xs c-body">
-                or{" "}
-                <a className="link-inline" href="#contact">
-                  send us the build
-                </a>
-              </span>
+              <a
+                className="btn btn--outline-on-ground btn--xl"
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Book a call
+              </a>
             </div>
 
-            <div className="hero__specs" data-reveal style={{ ["--reveal-i" as string]: 4 }}>
-              <h2 className="spec-group__head">Shipped and QA'd against</h2>
-              <SpecList density="compact">
-                {networks.slice(0, 5).map((n) => (
-                  <SpecRow key={n.id} label={n.name} value={n.spec} />
-                ))}
-              </SpecList>
-            </div>
+            {/* `1b` puts three numbers in the hero, under a hairline,
+                and gives the page no proof section at all. The rule is
+                drawn by MetricRow's own wrapper rather than here, so a
+                fold with nothing signed off does not ship a hairline
+                ruling off empty space. See content/metrics.ts.
+
+                The "Where these run" spec list that sat here is gone
+                with it: the network strip two sections down says the
+                same thing once, which is the point of this pass. */}
+            <MetricRow metrics={proof} className="hero__proof" />
           </div>
         </div>
       </Section>
 
-      {/* 2 · Network wall — full bleed */}
+      {/* 2 · The fork band — `1b` §4. The one decision on the screen
+          after the hero, made without reading anything else. */}
+      <ForkBand lanes={fork} />
+
+      {/* 3 · Network strip */}
       <NetworkWall />
 
-      {/* 3 · Gallery — the cards run off the right edge on purpose */}
-      <Section bleed padBlock={[68, 22]} labelledBy="gallery-head">
+      {/* 4 · Featured work — `1b` §5. Four wider cards in one row,
+          with the shelf's depth reported by the link rather than by
+          the grid: there are two builds, and a four-column grid with
+          two things in it says something the copy would have to
+          apologise for. The NDA tile is the third slot and the link
+          is the fourth. */}
+      <Section padBlock={[56, 56]} labelledBy="gallery-head">
         <div className="section-head-row" data-reveal>
-          <div className="section-head">
-            <p className="section-head__kicker t-mono t-mono-xs">
-              Selected builds · {String(demos.length).padStart(2, "0")}
-            </p>
-            <h2 id="gallery-head" className="t-display t-display-2xs t-display-xl-at-desktop">
-              Play them. They're the real files.
-            </h2>
-          </div>
-          <p className="section-head-row__note t-body-sm" style={{ maxInlineSize: "34ch" }}>
-            Not video captures. The same HTML that ran on the network, weight and timing included.
-          </p>
-        </div>
-      </Section>
-
-      {/* The reveal sits on the scroller's wrapper, not on each card:
-          the cards live on a horizontal axis, so staggering them would
-          animate the off-screen ones where nobody sees it and leave
-          the first one arriving alone. */}
-      <div style={{ paddingBlockEnd: 72 }} data-reveal>
-        <div className="scroller" ref={scrollerRef}>
-          {demos.map((d) => (
-            <DemoCard key={d.slug} demo={d} />
-          ))}
-          <NdaCard />
-        </div>
-        <div className="scroll-progress">
-          <span className="t-mono t-mono-2xs c-muted u-upper">
-            Swipe · {String(demos.length).padStart(2, "0")} builds
-          </span>
-          <span className="scroll-progress__track">
-            <span
-              className="scroll-progress__thumb"
-              style={{ inlineSize: `${width}%`, transform: `translateX(${offset}%)` }}
-            />
-          </span>
-        </div>
-      </div>
-
-      {/* 4 · The fork — both cards must be co-visible without scrolling */}
-      <Section padBlock={[0, 64]} labelledBy="fork-head">
-        <h2 id="fork-head" className="u-visually-hidden">
-          Who we work with
-        </h2>
-        <div className="fork" data-reveal>
-          <ForkCard
-            kicker="01 · You make the game"
-            title="I'm a game studio"
-            body="We read your core loop and build a playable that keeps the mechanic honest — not a mini-game wearing your art."
-            action="For Studios"
-            to="/for-studios"
-          />
-          <ForkCard
-            kicker="02 · You buy the media"
-            title="I'm a UA agency"
-            body="Concurrent titles, 48-hour variant turns, delivered under your brand. We stay invisible to your client."
-            action="For Agencies"
-            to="/for-agencies"
-          />
-        </div>
-      </Section>
-
-      {/* 5 · What we build */}
-      <Section id="what-we-build" padBlock={[0, 60]} labelledBy="build-head">
-        <div className="section-head-row" style={{ marginBlockEnd: 24 }} data-reveal>
-          <h2 id="build-head" className="t-display t-display-2xs t-display-xl-at-desktop">
-            What we build
+          <h2 id="gallery-head" className="t-display t-display-2xs t-display-xl-at-desktop">
+            {shelf.title}
           </h2>
-          <p className="section-head-row__note t-mono t-mono-xs c-muted u-upper">
-            Four formats · one codebase
-          </p>
+          <Link className="section-head-row__note t-mono t-mono-xs u-upper" to="/work">
+            All playables →
+          </Link>
         </div>
-        <div data-reveal style={{ ["--reveal-i" as string]: 1 }}>
-          <RuleGrid items={whatWeBuild} />
-        </div>
-      </Section>
 
-      {/* 6 · Process — navy stage, full bleed */}
-      <Section
-        id="process"
-        ground="dark"
-        bleed
-        className="section--atmos"
-        padBlock={[64, 64]}
-        labelledBy="process-head"
-      >
-        <div className="section-head-row" style={{ marginBlockEnd: 26 }} data-reveal>
-          <h2 id="process-head" className="t-display t-display-2xs t-display-xl-at-desktop c-primary">
-            {claims.processTitle}
-          </h2>
-          <p className="section-head-row__note t-mono t-mono-xs c-muted u-upper">
-            Durations are commitments
-          </p>
-        </div>
-        <div data-reveal style={{ ["--reveal-i" as string]: 1 }}>
-          <ProcessSteps steps={claims.process} />
-        </div>
-      </Section>
-
-      {/* 7 · How we work */}
-      <Section padBlock={[60, 64]} labelledBy="how-head">
-        <div className="offset offset--prose" data-reveal>
-          <h2 id="how-head" className="offset__label">
-            How we work
-          </h2>
-          <div className="offset__body">
-            <p className="t-quote t-quote-at-desktop" style={{ fontSize: 21, marginBlockEnd: 18 }}>
-              One thread, one build owner, and the source files at the end of it. No account layer
-              between you and the person writing the code.
-            </p>
-            <p className="t-body-md c-body" style={{ lineHeight: 1.65 }}>
-              Weekly builds land in your inbox as a link, not a zip. Feedback goes in one thread and
-              gets versioned. When the campaign ends you keep the repository, the sprites and the
-              spec sheet — including the parts that didn't win, so the next studio you hire doesn't
-              retest them.
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      {/* 8 · Guarantee — the panel overlaps the navy band above it */}
-      <GuaranteeBlock />
-
-      {/* 9 · FAQ */}
-      <Section id="faq" padBlock={[44, 64]} labelledBy="faq-head">
-        <div style={{ maxInlineSize: 820, marginInline: "auto" }}>
-          <h2
-            id="faq-head"
-            className="t-display t-display-2xs t-display-xl-at-desktop"
-            style={{ marginBlockEnd: 24 }}
-            data-reveal
-          >
-            Questions we get weekly
-          </h2>
-          <div data-reveal style={{ ["--reveal-i" as string]: 1 }}>
-            <Faq items={faqs} defaultOpen={0} />
-          </div>
-        </div>
-      </Section>
-
-      {/* 10 · Contact */}
-      <Section id="contact" padBlock={[56, 64]} labelledBy="contact-head" className="section--rule">
-        <div className="split split--wide-gap" style={{ ["--side" as string]: "560px" }} data-reveal>
-          <div className="split__main">
-            <h2
-              id="contact-head"
-              className="t-display t-display-2xs t-display-lg-at-desktop"
-              style={{ marginBlockEnd: 16 }}
-            >
-              <span style={{ display: "block" }}>Send us the build.</span>
-              <span style={{ display: "block" }}>We'll send back a plan.</span>
-            </h2>
-            <p className="t-body-md c-body" style={{ maxInlineSize: "42ch", marginBlockEnd: 28 }}>
-              Tell us the title, the networks and the volume. We reply within one business day with
-              a mechanic recommendation and a date.
-            </p>
-            <div style={{ maxInlineSize: 340 }}>
-              <SpecList density="compact" variant="top-ruled">
-                {claims.replyRows.map((r) => (
-                  <SpecRow key={r.label} label={r.label} value={r.value} />
-                ))}
-              </SpecList>
+        <div className="build-grid build-grid--wide" style={{ marginBlockStart: 30 }}>
+          {demos.map((d, i) => (
+            <div key={d.slug} data-reveal style={{ ["--reveal-i" as string]: i + 1 }}>
+              <DemoCard demo={d} />
             </div>
-          </div>
-          <div className="split__side">
-            <ContactForm
-              volumeLabel="Monthly build volume"
-              volumeOptions={buildVolumeOptions}
-              detailLabel="What are you running now?"
-              detailPlaceholder="Store link or a build we can play is enough."
-              submitLabel="Send brief"
-            />
+          ))}
+          <div data-reveal style={{ ["--reveal-i" as string]: demos.length + 1 }}>
+            <NdaCard />
           </div>
         </div>
       </Section>
+
+      {/* The "What we build" pinned sequence that sat here moved to
+          /for-brands on 2026-08-20, where `2b` §4 has a section for it
+          ("Formats we build") and `1c` has none. It also lost its pin
+          on the way — see WhatWeBuild.tsx. */}
+
+      {/* 5 · How it works, sharing its row with the pricing teaser —
+          `1b` §6 + §7. They share the row explicitly to keep the page
+          short: the reader gets the shape of the engagement and its
+          price in one screen instead of two.
+
+          The four-step timeline in site.ts `claims.process` is still
+          the canonical one and /for-studios renders it in full. This
+          is the same commitment folded to three lines. */}
+      <Section id="how-it-works" padBlock={[0, 56]} labelledBy="how-head" className="section--rule">
+        <div className="how-row">
+          <div>
+            <h2
+              id="how-head"
+              className="t-display t-display-2xs t-display-xl-at-desktop"
+              style={{ marginBlockEnd: 24 }}
+              data-reveal
+            >
+              How it works
+            </h2>
+            <ol className="steps" data-reveal style={{ ["--reveal-i" as string]: 1 }}>
+              {howItWorks.map((step, i) => (
+                <li className="steps__item" key={step.title}>
+                  <span className="steps__num t-mono t-mono-2xs" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className="steps__title t-body-lg t-semibold">
+                      {step.title} <span className="steps__day t-mono t-mono-2xs u-upper">{step.day}</span>
+                    </h3>
+                    <p className="steps__body t-body-sm">{step.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          {/* The teaser prints a price only once one is approved.
+              `1b` draws "From $2,400"; until that number is real the
+              card states the policy, which is true today and is most
+              of what this slot is for — the reader learns they will
+              not have to sit through a call to find out the number.
+              See content/pricing.ts. */}
+          <aside className="teaser" data-reveal style={{ ["--reveal-i" as string]: 2 }}>
+            <p className="teaser__label t-mono t-mono-2xs u-upper">{pricingTeaser.kicker}</p>
+            <p className="teaser__price t-display t-display-xs t-display-sm-at-desktop">
+              {priceLine ?? pricingTeaser.fallbackTitle}
+            </p>
+            <p className="teaser__body t-body-sm">{pricingTeaser.body}</p>
+            <div className="btn-pair">
+              <Link className="btn btn--accent btn--lg" to="/pricing">
+                See pricing
+              </Link>
+              <Link className="btn btn--outline btn--lg" to={QUOTE_HREF}>
+                Get a flat quote
+              </Link>
+            </div>
+          </aside>
+        </div>
+      </Section>
+
+      {/* 6 · FAQ — four rows in two columns, first one open. `1b` cuts
+          this to four; the fifth lives on /pricing with the rest of the
+          money questions. */}
+      <Section id="faq" padBlock={[0, 56]} labelledBy="faq-head">
+        <h2 id="faq-head" className="u-visually-hidden">
+          Questions we get weekly
+        </h2>
+        <div data-reveal>
+          <Faq items={faqs.slice(0, 4)} defaultOpen={0} columns={2} />
+        </div>
+      </Section>
+
+      {/* 11 · The closer. Every page ends in one, and it always
+          carries both paths. */}
+      <CtaBand title={ctaBand.title} variant="secondary" />
     </main>
   );
 }

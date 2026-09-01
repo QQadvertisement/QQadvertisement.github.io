@@ -401,3 +401,23 @@ a {
   /* Progress bars report data — they keep their transition. */
   .loader__fill { transition-duration: var(--duration-instant) !important; }
 }
+
+/* A zero-size anchor target. Used where published addresses point at a
+   block that has no element of its own to carry the id
+   (/pricing#studios and /pricing#brands both land on the tier grid).
+
+   `position: absolute` is not decoration — it takes the span out of
+   normal flow so it can never become a grid or flex item. One of
+   these inside a grid silently consumes a cell and shifts every
+   sibling along; scroll-margin keeps the sticky nav off the target. */
+.u-anchor {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  overflow: hidden;
+  /* Clears the sticky nav AND anything a section hangs above its own
+     top edge — the flagged pricing tier's "most studios pick this"
+     pill sits half outside the card, and at a tighter offset the
+     anchor scroll parked it under the bar. */
+  scroll-margin-block-start: calc(var(--nav-height-default) + var(--space-12));
+}

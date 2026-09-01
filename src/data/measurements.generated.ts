@@ -1,6 +1,6 @@
 /**
  * GENERATED — do not edit by hand.
- * Written by scripts/measure-builds.mjs on 2026-08-04.
+ * Written by scripts/measure-builds.mjs on 2026-08-20.
  *
  * These are the only numbers on a demo page permitted to appear in
  * monospace, because these are the only ones actually measured.
@@ -23,7 +23,7 @@ export interface FileMeasurement {
   hasWebviewFallback: boolean;
 }
 
-export const measuredAt = "2026-08-04";
+export const measuredAt = "2026-08-20";
 
 export const measurements: Record<string, FileMeasurement> = {
   "atta": {
@@ -42,10 +42,10 @@ export const measurements: Record<string, FileMeasurement> = {
   },
   "knead": {
     "id": "knead",
-    "bytes": 15322,
-    "gzipBytes": 4989,
+    "bytes": 19692,
+    "gzipBytes": 6698,
     "assetBytes": 2023811,
-    "totalBytes": 2039133,
+    "totalBytes": 2043503,
     "requests": 4,
     "inlineSvgCount": 2,
     "rasterCount": 0,

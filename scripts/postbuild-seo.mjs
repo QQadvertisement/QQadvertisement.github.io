@@ -8,9 +8,11 @@
  *
  * Keep ROUTES in sync with src/App.tsx and each page's <Seo> props.
  *
- * /our-work was superseded by /demos in the redesign. It still gets a
- * pre-rendered page here so the indexed URL keeps returning 200; the
- * app then redirects it to /demos client-side.
+ * SUPERSEDED ROUTES still get a pre-rendered page here, so an indexed
+ * URL keeps returning 200 and the app redirects it client-side. As of
+ * the 2026-08-20 rebuild there are four: /our-work and /demos both go
+ * to /work, /demos/[slug] to /work/[slug], and /for-agencies to
+ * /for-brands. See docs/rebuild-brief.md, "Route map".
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -23,37 +25,141 @@ const ROUTES = [
     path: "/",
     title: "Playable Ads for Mobile App User Acquisition | QQ Advertisement",
     description:
-      "Custom HTML5 playable ads for Meta, TikTok, AppLovin, Unity, ironSource and Mintegral. We design and code the ad, not a template — and every number on a demo page is read off the shipped file.",
+      "Ads people play, not ads people skip. Custom HTML5 playable ads for Meta, TikTok and Google Ads — built by hand, tested on every network before it reaches you.",
   },
   {
-    path: "/demos",
-    title: "Playable Ad Demos and Teardowns | QQ Advertisement",
+    path: "/work",
+    title: "Playable Ad Library | QQ Advertisement",
     description:
-      "Live playable ad demos with full teardowns: the shipped file's measured weight, its instrumented beats, per-network compliance, and what we'd change next time.",
+      "Every playable ad build we can publish, running in the browser. Each one opens the shipped file and its full teardown — measured weight, instrumented beats, per-network compliance.",
   },
   {
-    path: "/demos/atta-sync-your-day",
+    path: "/work/atta-sync-your-day",
     title: "Sync Your Day — Atta Playable Teardown | QQ Advertisement",
     description:
       "A full teardown of Sync Your Day for Atta: the shipped single-file playable's measured weight, gzip size, request count, instrumented beats and per-network compliance.",
   },
   {
-    path: "/demos/ramen-slurping-challenge",
+    path: "/work/ramen-slurping-challenge",
     title: "Ramen Slurping Challenge — Friends Ramen Teardown | QQ Advertisement",
     description:
       "A full teardown of the Ramen Slurping Challenge for Friends Ramen: a ten-second tap loop with the survey placed where motivation peaks, built as a mobile web page rather than an ad unit.",
   },
   {
-    path: "/for-studios",
+    path: "/for-game-studios",
     title: "Playable Ads for Game Studios | QQ Advertisement",
     description:
-      "We read your core loop and build a playable that keeps the mechanic honest — not a mini-game wearing your art. Under 2 MB, QA'd against six networks, and you keep the source.",
+      "We play your game first, then build an ad that feels like it — not a mini-game wearing your art. Under 2 MB, tested on Meta, TikTok and Google Ads, and you keep the source.",
   },
   {
-    path: "/for-agencies",
-    title: "White-Label Playable Ads for UA Agencies | QQ Advertisement",
+    path: "/for-brands",
+    title: "Playable Ads for Brands | QQ Advertisement",
     description:
-      "Concurrent titles, 48-hour variant turns and deliverables under your naming. Retainer throughput, SLA terms and what lands in your drive — the operating numbers a UA agency needs before committing capacity.",
+      "Product demos, try-ons and configurators built as single files that run inside the ad slot, instrument every tap, and hand the event data back to the buyer. White-label delivery for agencies.",
+  },
+  {
+    path: "/pricing",
+    title: "Playable Ad Pricing | QQ Advertisement",
+    description:
+      "What a custom HTML5 playable costs, what moves the number, and what every build includes: concepts, revisions, variants and per-network QA.",
+  },
+  {
+    path: "/for-game-studios/testing",
+    title: "Creative Testing for Game Studios | QQ Advertisement",
+    description:
+      "How to run a playable creative test that produces a decision: how many concepts, how many variants, what to hold constant and when to call it.",
+  },
+  {
+    path: "/for-brands/demos",
+    title: "Interactive Product Demos | QQ Advertisement",
+    description:
+      "Product demos, try-ons and configurators that run inside the ad slot — what each format is for, and which one fits the thing you're selling.",
+  },
+  {
+    path: "/work/industries",
+    title: "Playable Ads by Industry | QQ Advertisement",
+    description:
+      "The playable library grouped by the client's category — every build we can publish, in the vertical it shipped for.",
+  },
+  {
+    path: "/resources",
+    title: "Playable Ad Resources | QQ Advertisement",
+    description:
+      "Playables explained, per-network benchmarks, a UA glossary, teardowns and the questions we get weekly — the reference material behind the builds.",
+  },
+  {
+    path: "/resources/benchmarks",
+    title: "Playable Ad Benchmarks by Network | QQ Advertisement",
+    description:
+      "What good looks like per network: file weight caps, time to interaction, and the metrics a playable is judged on before it's allowed to run.",
+  },
+  {
+    path: "/blog",
+    title: "Notes on Playable Ads | QQ Advertisement",
+    description:
+      "Teardowns of builds that aren't ours, notes on what tested badly, and the occasional argument about creative testing.",
+  },
+  {
+    path: "/glossary",
+    title: "Playable Ads and UA Glossary | QQ Advertisement",
+    description:
+      "IPM, CPI, D7 ROAS, MRAID, exit API, end card, playable — the vocabulary a user-acquisition conversation assumes you already have.",
+  },
+  {
+    path: "/faq",
+    title: "Playable Ads FAQ | QQ Advertisement",
+    description:
+      "How we work, what we need to start, which networks we QA against, who owns the files, what a build costs and what counts as a revision.",
+  },
+  {
+    path: "/quote",
+    title: "Get a Flat Quote | QQ Advertisement",
+    description:
+      "Tell us the title, the networks and the volume. We reply within one business day with a mechanic recommendation, a flat price and a start date.",
+  },
+  {
+    path: "/book-a-call",
+    title: "Book a Call | QQ Advertisement",
+    description:
+      "Thirty minutes with the people who build the playables. Bring the creative that's winning now and we'll tell you what we'd test against it.",
+  },
+  {
+    path: "/careers",
+    title: "Careers | QQ Advertisement",
+    description:
+      "How we work, what we hire for, and how to reach us if you build things that run in 2 MB.",
+  },
+  {
+    path: "/privacy",
+    title: "Privacy Policy | QQ Advertisement",
+    description:
+      "What data this site collects, what the playables collect, how long it is kept and who it is shared with.",
+  },
+  {
+    path: "/terms",
+    title: "Terms of Service | QQ Advertisement",
+    description:
+      "The terms covering work commissioned from QQ Advertisement: scope, revisions, ownership, payment and the build guarantee.",
+  },
+  {
+    path: "/cookies",
+    title: "Cookie Policy | QQ Advertisement",
+    description:
+      "Which cookies this site sets, what each one does, and how to refuse them.",
+  },
+  {
+    path: "/thank-you",
+    /* Reachable only from a submission, so it is pre-rendered for a
+       200 but kept out of the sitemap. */
+    redirectOnly: true,
+    title: "Brief received | QQ Advertisement",
+    description: "Your brief is in. Here is what happens next and when.",
+  },
+  {
+    path: "/contact",
+    title: "Contact QQ Advertisement",
+    description:
+      "Reach the team that builds the playables — email, a call, or a scoped brief. We reply within one business day.",
   },
   {
     path: "/about",
@@ -81,22 +187,77 @@ const ROUTES = [
   },
   {
     path: "/our-work",
+    redirectOnly: true,
+    supersededBy: "/work",
+    title: "Our Work — Playable Ads and Gamified Surveys | QQ Advertisement",
+    description:
+      "Playable ads and gamified surveys built by QQ Advertisement. This page has moved to /work, where each build gets a full teardown of the shipped file.",
+  },
+  {
+    path: "/demos",
+    redirectOnly: true,
+    supersededBy: "/work",
     title: "Playable Ad Demos and Teardowns | QQ Advertisement",
     description:
-      "Playable ads and gamified surveys built by QQ Advertisement. This page has moved to /demos, where each build gets a full teardown of the shipped file.",
-    redirectOnly: true,
+      "Playable ad demos with full teardowns. This page has moved to /work, where every build we can publish runs in the browser.",
   },
+  {
+    path: "/demos/atta-sync-your-day",
+    redirectOnly: true,
+    supersededBy: "/work/atta-sync-your-day",
+    title: "Sync Your Day — Atta Playable Teardown | QQ Advertisement",
+    description:
+      "A full teardown of Sync Your Day for Atta. This page has moved to /work/atta-sync-your-day.",
+  },
+  {
+    path: "/demos/ramen-slurping-challenge",
+    redirectOnly: true,
+    supersededBy: "/work/ramen-slurping-challenge",
+    title: "Ramen Slurping Challenge — Friends Ramen Teardown | QQ Advertisement",
+    description:
+      "A full teardown of the Ramen Slurping Challenge for Friends Ramen. This page has moved to /work/ramen-slurping-challenge.",
+  },
+  {
+    path: "/for-studios",
+    redirectOnly: true,
+    supersededBy: "/for-game-studios",
+    title: "Playable Ads for Game Studios | QQ Advertisement",
+    description:
+      "We play your game first, then build an ad that feels like it. This page has moved to /for-game-studios.",
+  },
+  {
+    path: "/work/playables",
+    redirectOnly: true,
+    supersededBy: "/work",
+    title: "Playable Library | QQ Advertisement",
+    description:
+      "Every playable ad build we can publish, running in the browser. This page has moved to /work.",
+  },
+  {
+    path: "/for-agencies",
+    redirectOnly: true,
+    supersededBy: "/for-brands",
+    title: "White-Label Playable Ads for UA Agencies | QQ Advertisement",
+    description:
+      "Concurrent titles, 48-hour variant turns and deliverables under your naming. This page has moved to /for-brands, which carries the same operating numbers.",
+  },
+
 ];
 
 const esc = (s) => s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll('"', "&quot;");
 const base = readFileSync(join(DIST, "index.html"), "utf8");
 
-function htmlFor({ path, title, description }) {
+function htmlFor({ path, title, description, supersededBy }) {
   const url = `${SITE}${path === "/" ? "/" : path}`;
+  /* A superseded URL still returns 200 so the indexed link keeps
+     working, but it points its canonical at the route that replaced
+     it — otherwise the old and new pages compete for the same query
+     and the redirect target never inherits the history. */
+  const canonical = supersededBy ? `${SITE}${supersededBy}` : url;
   return base
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
     .replace(/(<meta name="description" content=")[^"]*(")/, `$1${esc(description)}$2`)
-    .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`)
+    .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${canonical}$2`)
     .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${esc(title)}$2`)
     .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${esc(description)}$2`)
     .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${url}$2`);

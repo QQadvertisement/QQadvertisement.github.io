@@ -56,7 +56,16 @@ const html = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- user-scalable=no is scoped to THIS document, never to the site
+         that frames it. A tap game gets double-tap-zoomed by the browser
+         within ~300ms of two taps, which is well inside the tap rate the
+         mechanic asks for — so on this document the zoom gesture is the
+         bug, not an affordance. The site's own index.html keeps pinch
+         zoom, because there the gesture is real. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
     <title>Ready, Set, Knead — QQ house demo</title>
     <style>
 ${css}
@@ -66,6 +75,16 @@ ${css}
          frame, so it fills its viewport and draws no device of its own. */
       html, body { block-size: 100%; }
       body { background: #f5a727; }
+      /* The document is a fixed-size play surface inside a frame, so
+         nothing in it scrolls and no touch on it may reach the page
+         that hosts it. touch-action:none is what stops a fast tap
+         streak turning into a double-tap zoom or a page pan. */
+      html, body {
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        -webkit-text-size-adjust: 100%;
+      }
       .page { min-block-size: 0; display: block; padding: 0; block-size: 100%; }
       .phone {
         inline-size: 100%;

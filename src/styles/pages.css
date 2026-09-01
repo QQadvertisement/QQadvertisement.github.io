@@ -133,56 +133,12 @@
    rules in components.css. */
 .hero__specs { max-inline-size: 470px; }
 
-/* The three measurements, under the phone at every width, tied to the
-   frame they describe rather than floating over the text column. */
-/* On the stage this stopped being a caption and became an instrument
-   readout: a raised panel with a lit top edge, sitting on the navy
-   directly under the frame it describes. */
-.hero__measured {
-  inline-size: 100%;
-  max-inline-size: 350px;
-  margin-inline: auto;
-  margin-block-start: var(--space-05);
-  background: rgb(14 27 49 / 0.44);
-  border: var(--border-hairline) solid var(--color-border-on-ground);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--edge-lit-on-ground), var(--elev-on-ground-2);
-  padding: var(--space-04) var(--space-05) var(--space-02);
-}
-.hero__measured-label {
-  font-family: var(--font-mono);
-  font-size: var(--text-mono-3xs);
-  letter-spacing: var(--text-mono-3xs-ls);
-  color: var(--color-text-muted-on-ground);
-  text-transform: uppercase;
-  margin-block-end: var(--space-02);
-}
-.hero__phone-stats {
-  display: flex;
-  margin-block-start: 0;
-  border-block-start: var(--border-hairline) solid var(--color-border-on-ground-strong);
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-}
-.hero__phone-stat { flex: 1; padding-block: 10px; }
-.hero__phone-stat + .hero__phone-stat {
-  padding-inline-start: 14px;
-  border-inline-start: var(--border-hairline) dotted var(--color-border-on-ground);
-}
-.hero__phone-stat dt {
-  color: var(--color-text-muted-on-ground);
-  letter-spacing: 0.1em;
-  font-size: var(--text-mono-4xs);
-  margin-block-end: var(--space-01);
-  text-transform: uppercase;
-}
-.hero__phone-stat dd {
-  font-weight: var(--font-weight-medium);
-  font-size: var(--text-mono-md);
-  /* TEAL GATE — measured values on a navy ground, the documented
-     teal-as-text exception. Same claim class as the loader readout. */
-  color: var(--color-action-playable-measure);
-}
+/* The measured strip that sat under the phone (.hero__measured and
+   .hero__phone-stat*) was removed on 2026-08-05 along with its markup.
+   It carried one of the three legal teal regions on `/` — the
+   teal-as-text-on-navy exception — so the census on this route is now
+   two: the hero playable surface and the demo card's PLAY. That leaves
+   a slot free, which is a budget, not an invitation. */
 
 /* AUDIT A3, RISK 3 — the hero phone.
    The comp exists at 1440 and at 390, and nowhere between. A 600px
@@ -196,6 +152,16 @@
   /* Grid rather than flex, so the kicker can sit above the headline in
      the text column while the phone spans both rows of the fluid one —
      without duplicating the kicker in the markup for each breakpoint. */
+  /* COLUMN ORDER. `1b` is explicit — "hero · left copy / right live
+     playable" — so the text keeps the left column and the device the
+     right, which is also where they started. The `1c` flip that briefly
+     swapped them is reverted.
+
+     The device is NOT sticky. `1b` says "no scrolling required": the
+     fold is self-contained, the fork band below it is the next thing,
+     and a device that travels alongside a scrolling column implies
+     there is something further down to read against it. There is not.
+     This leaves the site with no scroll-linked behaviour at all. */
   .hero {
     display: grid;
     grid-template-columns: 640px 1fr;
@@ -215,8 +181,27 @@
     position: relative;
     display: block;
     padding-block-end: 0;
-    /* Room for the taller hero device plus the panel beneath it. */
-    min-block-size: 880px;
+    /* How far the device rises above the top of this column. Used
+       twice — in the reserved height below and in the device's own
+       inset-block-start — so it is a value, not a literal in two
+       places that can drift apart. */
+    --hero-phone-rise: 28px;
+    /* The device is absolutely positioned, so this column has no
+       natural height and has to reserve it.
+
+       This was a flat 880px, sized for the device PLUS the measured
+       panel that used to sit under it. With the panel gone that left
+       roughly 200px of empty navy under the phone and the stage ran
+       on past its own content.
+
+       It is now derived from the same three values the device is,
+       so the two can never drift again: screen height, both bezels,
+       less the distance the device rises above the column's top
+       edge. Changing --phone-screen-h below re-sizes the stage with
+       it — do not put a literal back here. */
+    min-block-size: calc(
+      var(--phone-screen-h) + var(--phone-bezel) * 2 - var(--hero-phone-rise)
+    );
     /* .hero-stage clips this column, which is what keeps any overhang
        from adding a horizontal scrollbar. */
     overflow: visible;
@@ -232,30 +217,47 @@
      navy on the other. Centring spends that space evenly on both sides
      of the device at every width, so the column reads as a column
      instead of as text with something parked next to it. */
+  /* The hero device runs larger than the system default. Centring
+     alone did not settle the composition: 640px of dense text cannot
+     be balanced by a device barely half its width, and the column kept
+     reading as empty navy with something small in it. The extra size
+     is weight, and it is spent here only — the teardown and the demo
+     cards keep the system default.
+
+     It is now spent as HEIGHT. The device derives its width from the
+     19.5:9 ratio, so the wrapper can no longer be handed a flat 396px:
+     that would leave the measured panel wider than the frame it is
+     meant to describe, which is the one thing this block exists to
+     prevent. Wrapper and device read the same pair of values, and the
+     wrapper's width is the expression the device resolves internally.
+
+     Restated on .phone rather than left to inherit, because .phone
+     declares its own defaults and a declaration on the element beats
+     an inherited value. */
+  /* Declared on the COLUMN, not on the device, so the column can size
+     itself from the same numbers (see min-block-size above). The
+     restatement on .phone is still required: .phone declares its own
+     defaults and a declaration on the element beats an inherited
+     value. */
+  .hero__playable,
+  .hero__phone-abs .phone {
+    --phone-screen-h: min(72vh, 660px);
+    --phone-screen-h: min(72svh, 660px);
+    --phone-bezel: 13px;
+  }
   .hero__phone-abs {
     position: absolute;
     inset-inline-start: 50%;
     transform: translateX(-50%);
-    inset-block-start: -28px;
-    /* The hero device runs larger than the 344px system default.
-       Centring alone did not settle the composition: 640px of dense
-       text cannot be balanced by a device barely half its width, and
-       the column kept reading as empty navy with something small in
-       it. The extra 52px is weight, and it is spent here only — the
-       teardown and demo cards keep the system size.
-
-       min() rather than a flat value so the device can never exceed
-       its own column: below ~1330 the column is narrower than 396,
-       and a fixed width would be clipped by .hero-stage. */
-    inline-size: min(396px, 100%);
+    inset-block-start: calc(var(--hero-phone-rise) * -1);
+    /* min() so the device can never exceed its own column: below
+       ~1330 the column is narrower than the derived width, and an
+       unclamped value would be clipped by .hero-stage. */
+    inline-size: min(
+      calc(var(--phone-screen-h) * 9 / 19.5 + var(--phone-bezel) * 2),
+      100%
+    );
   }
-  /* The device and its readout both fill that wrapper, so the panel
-     stays aligned to the frame it describes at every width. */
-  .hero__phone-abs .phone {
-    inline-size: 100%;
-    max-inline-size: none;
-  }
-  .hero__measured { max-inline-size: none; }
 }
 
 /* ------------------------------------------------------------
@@ -637,3 +639,198 @@
   border-radius: var(--radius-xl);
   background: var(--color-surface-raised);
 }
+
+/* ============================================================
+   WHAT WE BUILD — the formats grid
+
+   Was a pinned scroll sequence; unpinned on 2026-08-20. The stacked
+   composition it fell back to below 1024 and under reduced motion had
+   always been written as a full second design rather than a cut-down,
+   so removing the pin cost nothing but the track, the rail and the
+   scroll handler. See docs/rebuild-brief.md, "Motion".
+
+   GROUND AND ACCENT. This stays on paper, and the figure's screens
+   are drawn as raised white wireframes rather than navy fills — the
+   fork cards are the only navy-filled objects on a light ground and
+   they earn that by being the page's audience split. A diagram does
+   not outrank them.
+
+   The one accent in the figure is AMBER, not teal, and that is the
+   documented split doing its job: the bar marks the part of each
+   screen that differs per format. It points, it does not run, and
+   nothing in this figure can be pressed. Teal means the reader can
+   press it; a drawing cannot be pressed.
+   ============================================================ */
+
+.wb-list {
+  display: grid;
+  gap: var(--space-12);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 768px) {
+  .wb-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-14); }
+}
+.wb-list__item { display: flex; flex-direction: column; gap: var(--space-03); }
+.wb-list__item .wb-body { margin-block-end: var(--space-02); }
+
+.wb-num { color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+.wb-title { color: var(--color-text-primary); }
+.wb-body { color: var(--color-text-body); max-inline-size: 46ch; }
+.wb-note { color: var(--color-accent-emphasis-ink); letter-spacing: 0.14em; }
+
+/* --- the figure -------------------------------------------------
+   A size container, so the figure scales off THIS COLUMN rather than
+   off the viewport. That distinction is the difference between the
+   figure fitting and not: at two columns a vw-derived unit produced a
+   landscape screen wider than the cell it had to sit in.
+   ----------------------------------------------------------------- */
+.wb-stage {
+  position: relative;
+  inline-size: 100%;
+  block-size: 300px;
+  margin-block-start: var(--space-04);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  container-type: size;
+  container-name: wbstage;
+}
+
+/* One unit drives the whole figure: screen width, and every offset the
+   arrangements below use. Written as multiples of the unit rather than
+   in px, so the spreads stay correct in proportion when the figure
+   scales instead of flying apart at the top of the clamp. */
+.wb-figure {
+  position: absolute;
+  inset: 0;
+  --u: clamp(76px, 24cqw, 132px);
+}
+
+.wb-screen {
+  --tx: 0px;
+  --ty: 0px;
+  --rot: 0deg;
+  --sc: 1;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--u);
+  aspect-ratio: 9 / 19.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-02);
+  padding:
+    calc(var(--u) * 0.11)
+    calc(var(--u) * 0.08)
+    calc(var(--u) * 0.14);
+  background: var(--color-surface-raised);
+  border-radius: calc(var(--u) * 0.075);
+  box-shadow: var(--elev-3);
+  transform:
+    translate(-50%, -50%)
+    translate(var(--tx), var(--ty))
+    rotate(var(--rot))
+    scale(var(--sc));
+  /* No transition: each figure now renders once inside its own cell
+     and never rearranges. The arrangements below are static states,
+     not keyframes of one moving object. */
+}
+.wb-screen__bar {
+  inline-size: 62%;
+  block-size: calc(var(--u) * 0.024);
+  min-block-size: 3px;
+  border-radius: 999px;
+  /* The marked part — what differs per format. */
+  background: var(--color-accent-emphasis-fill);
+}
+.wb-screen__glyph {
+  margin-block: auto;
+  inline-size: calc(var(--u) * 0.19);
+  block-size: calc(var(--u) * 0.19);
+  border-radius: var(--radius-full);
+  border: calc(var(--u) * 0.017) solid var(--color-border-strong);
+}
+.wb-screen__label {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, calc(var(--u) * 0.058), 12px);
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+.wb-figure__arrow {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: clamp(20px, calc(var(--u) * 0.16), 34px);
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity var(--duration-enter) var(--ease-out);
+}
+
+/* 01 — one build, both orientations. The landscape screen is the same
+   element rotated, which is the claim the copy makes. */
+/* 01 is the tightest arrangement in the set and sets the unit's
+   ceiling: rotating a 9:19.5 screen makes it 2.17 units WIDE, so screen
+   b alone spans more than twice what an upright one does. The offsets
+   below keep the pair inside the column at every width the panel has.
+   The 0.84 scale is what buys the last of that room; it also reads
+   correctly, since a landscape placement is the shorter dimension. */
+[data-figure="one-build"] .wb-screen--a { --tx: calc(var(--u) * -0.80); }
+[data-figure="one-build"] .wb-screen--b {
+  --tx: calc(var(--u) * 0.54);
+  --rot: 90deg;
+  --sc: 0.84;
+}
+[data-figure="one-build"] .wb-screen--c { opacity: 0; }
+
+/* 02 — video hands off to playable, no second load. */
+[data-figure="handoff"] .wb-screen--a { --tx: calc(var(--u) * -0.70); }
+[data-figure="handoff"] .wb-screen--b { --tx: calc(var(--u) * 0.70); }
+[data-figure="handoff"] .wb-screen--c { opacity: 0; }
+[data-figure="handoff"] .wb-figure__arrow { opacity: 1; }
+/* The video screen's glyph is a transport control, not a tap ring. */
+[data-figure="handoff"] .wb-screen--a .wb-screen__glyph {
+  border-radius: 0;
+  border: 0;
+  inline-size: 0;
+  block-size: 0;
+  border-block-start: 11px solid transparent;
+  border-block-end: 11px solid transparent;
+  border-inline-start: 17px solid var(--color-border-strong);
+}
+/* A timeline runs the full width; a loader does not. */
+[data-figure="handoff"] .wb-screen--a .wb-screen__bar { inline-size: 76%; }
+
+/* 03 — one file, three hooks, split by flag. */
+[data-figure="variants"] .wb-screen--a { --tx: calc(var(--u) * -0.95); --rot: -5deg; }
+[data-figure="variants"] .wb-screen--b { --tx: 0px; }
+[data-figure="variants"] .wb-screen--c { --tx: calc(var(--u) * 0.95); --rot: 5deg; }
+
+/* 04 — same build, same weight, different market. Overlapping rather
+   than spread: these are not alternatives, they are one build. */
+/* Offset far enough that all three captions clear the card in front
+   of them — an overlap that hides two of the three labels is showing
+   one screen, not three. */
+[data-figure="localisation"] .wb-screen--a { --tx: calc(var(--u) * -0.52); --ty: calc(var(--u) * 0.10); --rot: -8deg; --sc: 0.94; }
+[data-figure="localisation"] .wb-screen--b { --tx: 0px; --ty: calc(var(--u) * -0.05); }
+[data-figure="localisation"] .wb-screen--c { --tx: calc(var(--u) * 0.52); --ty: calc(var(--u) * 0.10); --rot: 8deg; --sc: 0.94; }
+
+/* --- the hero's proof row — `1b` §2 -----------------------------
+   Three numbers under a hairline, directly below the CTA pair. The
+   RULE IS PART OF THIS BLOCK, not of the block above it: a fold with
+   no signed-off metric renders no MetricRow at all, and a hairline
+   left behind would rule off empty space.
+   ---------------------------------------------------------------- */
+.hero__proof {
+  margin-block-start: var(--space-08);
+  padding-block-start: var(--space-06);
+  border-block-start: 1px solid var(--color-border-on-ground);
+  gap: var(--space-06) var(--space-12);
+}
+.section--atmos .hero__proof .metric-big__value { color: var(--color-text-primary-on-ground); }
+.section--atmos .hero__proof .metric-big__label { color: var(--color-text-muted-on-ground); }
+
+

@@ -1,162 +1,176 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { BEAR_SRC } from "../lib/brand";
-import { SpecList, SpecRow } from "./ui/Spec";
-import PlayableGame from "./PlayableGame";
-import { playables } from "../data/playables";
-import { usePlayable } from "../hooks/usePlayable";
+import { Link, useSearchParams } from "react-router-dom";
+import PlayableLightbox from "./PlayableLightbox";
 import type { Demo } from "../data/demos";
 import { measurements } from "../data/measurements.generated";
 
 /**
- * Component 3 — Demo Card.
+ * Component 3 — Build Tile.
  *
- * The action button is the card's variant axis, and the choice is
- * semantic, not decorative:
+ * WHAT CHANGED AND WHY. This was a bordered paper card: a 190px
+ * thumbnail with a scrim, a button floating on the artwork, then a
+ * title, a subtitle and a three-row spec table stacked underneath, all
+ * inside a horizontal scroller. Two real builds and an NDA notice do
+ * not fill a scroller, so the row's run-off affordance pointed at
+ * nothing, and every card carried four separate pieces of chrome
+ * competing with the one thing worth looking at — the artwork.
  *
- *   play      the playable runs inline on tap   -> TEAL fill
- *   teardown  tap navigates to /demos/[slug]    -> NEUTRAL outline
+ * The tile is now the artwork. Everything else either drops to a
+ * single quiet line beneath it or waits for intent:
  *
- * Never both. A card is one or the other. `Teardown →` leads to a
- * playable; it is not one, so it stays neutral.
+ *   at rest    art, then title and one measured line. Nothing else.
+ *   on hover   a floating panel with the file's numbers and the action
+ *   on touch   no hover to wait for, so the action alone is pinned on
+ *              the tile and the panel never renders
+ *
+ * The action axis is unchanged and still semantic, not decorative:
+ *
+ *   play      opens the build full size in PlayableLightbox -> TEAL
+ *   teardown  navigates to /work/[slug]                    -> NEUTRAL
+ *
+ * Never both. `Teardown →` leads to a playable; it is not one, so it
+ * stays neutral. What DID change is where `play` puts the build: in
+ * the lightbox, at the largest size the viewport allows, rather than
+ * inside the thumbnail — see PlayableLightbox for that argument.
+ *
+ * WHICH BUILD IS OPEN IS URL STATE, not component state (`?play=slug`).
+ * Three things fall out of that and none of them are free otherwise:
+ * a running build is a link someone can send, Back closes the modal
+ * instead of leaving the page, and any card on any page opens it the
+ * same way without a context or a store in between. Opening PUSHES a
+ * history entry so Back is the same gesture as Escape; closing
+ * REPLACES, so the closed state does not stack up behind the reader.
  */
 
 const kb = (b: number) => `${(b / 1024).toFixed(1)} KB`;
 
-/** The in-thumbnail playable: bear loader, then the real build.
- *
- *  What runs here is the shipped file itself, mounted by PlayableGame —
- *  the card is a smaller frame around the same build the teardown runs,
- *  not a trimmed-down imitation of it. It therefore has no run length
- *  of its own: the build ends when the build ends. */
-function InlinePlayable({ demo, onDone }: { demo: Demo; onDone: () => void }) {
-  const m = demo.measurementId ? measurements[demo.measurementId] : undefined;
-  const playable = usePlayable({
-    assetUrl: demo.measurementId ? "/playables/atta-sync-your-day.html" : BEAR_SRC,
-    fallbackBytes: m?.bytes ?? 26122,
-  });
-  const { phase, received, progressPct, tapFrame } = playable;
-
-  if (phase === "loading" || phase === "ready") {
-    return (
-      <button
-        type="button"
-        className="card-play card-play--loader"
-        onClick={tapFrame}
-        aria-label={phase === "loading" ? `Loading ${demo.title}` : `Play ${demo.title}`}
-      >
-        <img className="card-play__bear" src={BEAR_SRC} alt="" data-settled={phase === "ready"} />
-        <span
-          className="loader__track"
-          role="progressbar"
-          aria-valuenow={Math.round(progressPct)}
-          aria-valuemin={0}
-          aria-valuemax={100}
-        >
-          <span className="loader__fill" style={{ inlineSize: `${progressPct.toFixed(2)}%` }} />
-        </span>
-        <span className="card-play__readout t-mono t-mono-2xs">
-          {phase === "loading" ? `LOADING · ${kb(received)}` : "READY · TAP TO PLAY"}
-        </span>
-      </button>
-    );
-  }
-
-  return (
-    <div className="card-play card-play--live">
-      {demo.embedGame ? (
-        <PlayableGame
-          src={playables[demo.embedGame].src}
-          title={playables[demo.embedGame].title}
-        />
-      ) : null}
-      <button
-        type="button"
-        className="card-play__reset t-mono t-mono-2xs"
-        onClick={onDone}
-        aria-label={`Close ${demo.title}`}
-      >
-        CLOSE
-      </button>
-    </div>
-  );
-}
-
 export default function DemoCard({ demo }: { demo: Demo }) {
-  const [playing, setPlaying] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const playing = params.get("play") === demo.slug;
+
+  const setPlaying = (open: boolean) => {
+    const next = new URLSearchParams(params);
+    if (open) next.set("play", demo.slug);
+    else next.delete("play");
+    setParams(next, { replace: !open });
+  };
   const m = demo.measurementId ? measurements[demo.measurementId] : undefined;
 
-  const specs: { label: string; value: string }[] = m
+  /* A tile plays only if there is a build to mount. `cardVariant` says
+     what the design wants; `embedGame` says what is actually possible,
+     and the second one wins — Friends Ramen writes to a production
+     database, so it is never framed. */
+  const canPlay = demo.cardVariant === "play" && Boolean(demo.embedGame);
+
+  /* The line under the title, in the same register as the reference's
+     "06 elements": orientation, then the file's real cost. Where there
+     is no measurement there is no number — the mechanic goes there
+     instead of an invented figure. */
+  const meta = m
+    ? `${demo.orientation.split(" · ")[0]} · ${kb(m.bytes)} · ${m.requests} request${
+        m.requests === 1 ? "" : "s"
+      }`
+    : /* No orientation prefix here: without a weight to follow it the
+         line has nothing to say, and the mechanic alone keeps it to
+         one line at the tile's width. */
+      demo.mechanic;
+
+  const panelStats = m
     ? [
         { label: "Weight", value: kb(m.bytes) },
+        { label: "Wire", value: kb(m.gzipBytes) },
         { label: "Requests", value: String(m.requests) },
-        { label: "Format", value: "Single file" },
       ]
     : [
         { label: "Format", value: "Mobile web" },
-        { label: "Loop", value: "10 s" },
+        { label: "Backend", value: "Supabase" },
         { label: "Status", value: "Live" },
       ];
 
   return (
-    <article className="demo-card">
-      <div className="demo-card__thumb">
-        {playing ? (
-          <InlinePlayable demo={demo} onDone={() => setPlaying(false)} />
-        ) : (
-          <>
-            {demo.thumb ? <img src={demo.thumb} alt={demo.thumbAlt ?? ""} /> : null}
-            <span className="demo-card__orientation">{demo.orientation.toUpperCase()}</span>
-            <span className="demo-card__action">
-              {demo.cardVariant === "play" ? (
-                /* TEAL GATE 2 — demo-card play button */
-                <button
-                  type="button"
-                  className="btn btn--playable btn--sm"
-                  onClick={() => setPlaying(true)}
-                >
-                  ▸ PLAY
-                </button>
-              ) : (
-                <Link className="btn btn--outline btn--sm" to={`/demos/${demo.slug}`}>
-                  TEARDOWN →
-                </Link>
-              )}
-            </span>
-          </>
-        )}
-      </div>
+    <>
+      <article className="build-tile">
+        <div className="build-tile__frame">
+          {demo.thumb ? (
+            <img className="build-tile__art" src={demo.thumb} alt={demo.thumbAlt ?? ""} />
+          ) : null}
 
-      <div className="demo-card__body">
-        <h3 className="demo-card__title t-body-lg t-semibold">
-          <Link to={`/demos/${demo.slug}`}>{demo.title}</Link>
-        </h3>
-        <p className="demo-card__subtitle t-body-xs">{demo.mechanic}</p>
-        <div className="demo-card__specs">
-          <SpecList density="dense">
-            {specs.map((s) => (
-              <SpecRow key={s.label} label={s.label} value={s.value} />
-            ))}
-          </SpecList>
+          {/* THE WHOLE TILE IS THE TARGET. One control, covering the
+              art, rather than a small button parked on top of it —
+              which is also what lets the artwork stay unobstructed at
+              rest. Its label is visually hidden because the title
+              below is already reading it out on screen. */}
+          {canPlay ? (
+            <button
+              type="button"
+              className="build-tile__hit"
+              onClick={() => setPlaying(true)}
+            >
+              <span className="u-visually-hidden">Play {demo.title}</span>
+            </button>
+          ) : (
+            <Link className="build-tile__hit" to={`/work/${demo.slug}`}>
+              <span className="u-visually-hidden">{demo.title} teardown</span>
+            </Link>
+          )}
+
+          {/* THE FLOATING PANEL. aria-hidden and unfocusable
+              throughout: every word in it is already announced by the
+              tile's control and the caption, and the button here is a
+              <span>, not a second tab stop pointing at the same
+              action. It is a rendering of state, not a control. */}
+          <div className="build-panel" aria-hidden="true">
+            <dl className="build-panel__stats">
+              {panelStats.map((s) => (
+                <div className="build-panel__stat" key={s.label}>
+                  <dt>{s.label}</dt>
+                  <dd>{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+            {canPlay ? (
+              /* TEAL GATE 2 — the build tile's play affordance. */
+              <span className="btn btn--playable btn--sm build-panel__action">▸ PLAY</span>
+            ) : (
+              <span className="btn btn--on-ground btn--sm build-panel__action">TEARDOWN →</span>
+            )}
+          </div>
         </div>
-      </div>
-    </article>
+
+        <div className="build-tile__caption">
+          <h3 className="build-tile__title t-body-lg t-semibold">
+            <Link to={`/work/${demo.slug}`}>{demo.title}</Link>
+          </h3>
+          <p className="build-tile__meta t-mono t-mono-sm">{meta}</p>
+        </div>
+      </article>
+
+      {/* `canPlay` is checked again here, not just on the button. The
+          open state comes from the URL now, and a hand-typed
+          ?play=ramen-slurping-challenge would otherwise mount a frame
+          for a build that must never be framed — see data/demos.ts. */}
+      {playing && canPlay ? (
+        <PlayableLightbox demo={demo} onClose={() => setPlaying(false)} />
+      ) : null}
+    </>
   );
 }
 
-/** The scroller's run-off affordance and the NDA empty state. Never a
- *  placeholder logo and never a fake client name. */
+/** The NDA empty state, in the reference's "add" slot — a tile-shaped
+ *  hole in the grid rather than a card pretending to be a build.
+ *  Never a placeholder logo and never a fake client name. */
 export function NdaCard() {
   return (
-    <article className="demo-card demo-card--nda" aria-label="Work under NDA">
-      <div className="demo-card__thumb demo-card__thumb--nda">
-        <span className="t-mono t-mono-2xs c-muted u-upper">Most work is under NDA</span>
+    <article className="build-tile build-tile--nda">
+      <div className="build-tile__frame build-tile__frame--empty">
+        <span className="build-tile__mark" aria-hidden="true">
+          ✳
+        </span>
+        <span className="build-tile__empty-note t-mono t-mono-2xs u-upper">Under NDA</span>
       </div>
-      <div className="demo-card__body">
-        <h3 className="demo-card__title t-body-lg t-semibold">The rest we can't show</h3>
-        <p className="demo-card__subtitle t-body-xs">
-          Most builds ship under an NDA that outlives the campaign. We'd rather leave the row short
-          than fill it with art we don't have the right to publish.
+      <div className="build-tile__caption">
+        <h3 className="build-tile__title t-body-lg t-semibold">The rest we can't show</h3>
+        <p className="build-tile__meta t-mono t-mono-sm">
+          Most builds ship under an NDA that outlives the campaign
         </p>
       </div>
     </article>

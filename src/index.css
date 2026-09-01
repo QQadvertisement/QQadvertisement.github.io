@@ -20,16 +20,10 @@
    PAGE-LEVEL ODDS AND ENDS
    ------------------------------------------------------------ */
 
-/* The demos index grid — the gallery scroller's static sibling. */
-.demo-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-04);
-}
-.demo-grid .demo-card { inline-size: 100%; }
-@media (min-width: 640px) {
-  .demo-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
-}
+/* The demos index used to need its own grid, because the homepage
+   ran the same cards through a horizontal scroller. Both now use
+   .build-grid (components.css), so there is one gallery layout and
+   nothing to keep in sync. */
 
 /* Body scale steps up at 1024, same pattern as the display scale. */
 @media (min-width: 1024px) {
@@ -54,7 +48,8 @@
   .teardown__rail,
   .teardown__conditions,
   .btn-pair,
-  .scroll-progress,
+  .build-panel,
+  .lightbox,
   .session-panel__status { display: none !important; }
 
   .teardown__sheet { padding: 0; }

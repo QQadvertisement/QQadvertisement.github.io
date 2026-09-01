@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { BOOKING_URL, CONTACT_EMAIL, navItems } from "../data/site";
+import { BOOKING_URL, CONTACT_EMAIL, QUOTE_HREF, navItems } from "../data/site";
 
 /**
  * Component 1 — Nav, all three variants.
@@ -12,8 +12,16 @@ import { BOOKING_URL, CONTACT_EMAIL, navItems } from "../data/site";
  *   1d over-stage transparent, on-ground ink — the at-rest state on
  *                 a page that opens on a navy stage
  *
- * The nav CTA is never teal. It leads somewhere; it does not run
- * anything, and teal promises "here", not "over there".
+ * The nav CTAs are never teal. They lead somewhere; they do not run
+ * anything, and teal promises "here", not "over there". This holds
+ * under the widened gate — "responds to the reader" still means the
+ * response happens in place.
+ *
+ * BOTH PATHS, ALWAYS. The bar carries the quote and the call together
+ * at every width and in every variant, because a reader who will not
+ * give up a calendar slot previously had nowhere else to go from the
+ * header. Below 600px the quote collapses to the sheet rather than
+ * being dropped — see .nav__quote.
  */
 
 export interface Breadcrumb {
@@ -105,6 +113,17 @@ export default function SiteNav({
             QQ
           </Link>
 
+          {/* The address sits with the WORDMARK, not with the actions.
+              It is identity — who you are writing to — and reads as
+              part of the mark. Grouped on the right it was the odd
+              item out: a piece of information wedged between the nav
+              links and the one button on the bar. */}
+          {isTeardown ? null : (
+            <a className="nav__contact" href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
+            </a>
+          )}
+
           {isTeardown && breadcrumbs?.length ? (
             <>
               <span className="nav__divider" aria-hidden="true" />
@@ -157,11 +176,19 @@ export default function SiteNav({
                   </Link>
                 ) : null}
               </>
-            ) : (
-              <a className="nav__contact" href={`mailto:${CONTACT_EMAIL}`}>
-                {CONTACT_EMAIL}
-              </a>
-            )}
+            ) : null}
+
+            {/* The quote is the lower-commitment path, so it takes the
+                outline and the call takes the fill — the same pairing
+                as every CtaBand on the site. */}
+            <Link
+              className={`btn btn--sm nav__quote ${
+                condensed || overStage ? "btn--outline-on-ground" : "btn--outline"
+              }`}
+              to={QUOTE_HREF}
+            >
+              Get a flat quote
+            </Link>
 
             <a
               className={`btn btn--sm ${
@@ -226,6 +253,9 @@ export default function SiteNav({
           </nav>
 
           <div className="sheet__foot">
+            <Link className="btn btn--xl btn--block btn--outline-on-ground" to={QUOTE_HREF}>
+              Get a flat quote
+            </Link>
             <a
               className="btn btn--xl btn--block btn--on-ground"
               href={BOOKING_URL}

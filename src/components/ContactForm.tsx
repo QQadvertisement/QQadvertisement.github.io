@@ -4,7 +4,7 @@ import { ChipGroup, SelectField, TextField } from "./ui/Field";
 import { BOOKING_URL, CONTACT_EMAIL, networks } from "../data/site";
 
 /**
- * The contact form, used on / and on /for-agencies.
+ * The contact form, used on / and on /for-brands.
  *
  * Validation is on blur, never per keystroke; errors clear on the next
  * input event. On submit failure focus moves to the first invalid field
@@ -129,7 +129,7 @@ export default function ContactForm({
             <dd className="spec-row__value">1 business day</dd>
           </div>
         </dl>
-        <a className="btn btn--outline" href="/demos/atta-sync-your-day">
+        <a className="btn btn--outline" href="/work/atta-sync-your-day">
           Read a teardown while you wait →
         </a>
       </div>

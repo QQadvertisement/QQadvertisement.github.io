@@ -1,5 +1,8 @@
 /* ============================================================
-   /for-agencies CONTENT
+   /for-brands CONTENT — the agency half
+
+   Carried over from /for-agencies, which /for-brands replaced on
+   2026-08-20. See docs/rebuild-audit.md §0 and §6.1.
 
    ⚠ EVERY NUMBER IN THIS FILE NEEDS YOUR SIGN-OFF BEFORE LAUNCH.
 
@@ -35,7 +38,7 @@ export const operatingNumbers = [
   { label: "First build, new title", value: "6 days" },
   { label: "Variant turn", value: "48 hours" },
   { label: "Hotfix, live campaign", value: "4 hours" },
-  { label: "Networks QA'd per build", value: "6" },
+  { label: "Networks QA'd per build", value: "3" },
   { label: "Capacity remaining", value: "Ask" },
 ];
 
@@ -115,7 +118,7 @@ export const sla = {
   commitments: [
     { label: "Variant turn", value: "48 h or credited" },
     { label: "File weight", value: "Under cap or free" },
-    { label: "Network QA", value: "All 6 or not shipped" },
+    { label: "Network QA", value: "All 3 or not shipped" },
     { label: "Client contact", value: "None, permanently" },
   ],
 };
@@ -137,7 +140,7 @@ export const whiteLabel = {
   blocks: ["Client A · art under NDA", "Client B · art under NDA", "Client C · art under NDA"],
   prose:
     "We can't show you the art, and you shouldn't want a partner who would. What we can show you in full is the one build that isn't under NDA — the file, the measurements and the parts we'd change — on its teardown page.",
-  cta: { label: "See a full teardown", to: "/demos/atta-sync-your-day" },
+  cta: { label: "See a full teardown", to: "/work/atta-sync-your-day" },
 };
 
 export const agenciesContact = {

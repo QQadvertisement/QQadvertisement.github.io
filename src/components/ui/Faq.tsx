@@ -18,16 +18,22 @@ export default function Faq({
   items,
   defaultOpen = 0,
   compact = false,
+  columns = 1,
 }: {
   items: { q: string; a: string }[];
   defaultOpen?: number;
   compact?: boolean;
+  /** `1b` lays the home page's four rows out two-up. Single-open
+   *  behaviour is unchanged across columns — opening a row on the
+   *  right still closes one on the left, because they are one
+   *  accordion that happens to wrap, not two lists. */
+  columns?: 1 | 2;
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const uid = useId();
 
   return (
-    <div className="faq">
+    <div className="faq" data-columns={columns}>
       {items.map((item, i) => {
         const isOpen = open === i;
         const panelId = `${uid}-panel-${i}`;
